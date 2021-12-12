@@ -13,14 +13,16 @@
 
 // #define __CONTROLLER_MODE
 
-u8 PEER_ADDRESSES[][6] = {
+const u8 ALL_PEERS_LEN = 2;
+u8 ALL_PEERS[][6] = {
   {0x18, 0xFE, 0x34, 0xD3, 0xF1, 0x21}, // White
   {0x18, 0xFE, 0x34, 0xD4, 0x82, 0x2A} // Blue
 };
-u8 PEER_ADDRESS_LEN = 2;
 
 u64 last_time = 0;
 u64 send_interval = 3000;
+u8 node_mac_address[6];
+u8 *peers[ALL_PEERS_LEN - 1];
 
 // Message data structure
 typedef struct message {
@@ -65,6 +67,9 @@ void setup() {
   LOG_DEBUG("Setting wifi to station mode");
   WiFi.mode(WIFI_AP_STA);
 
+  LOG_DEBUG("Reading current mac address");
+  WiFi.macAddress(node_mac_address);
+
   LOG_DEBUG("Initializing ESP-NOW")
   if (esp_now_init() != 0) {
     LOG_ERROR("Error initializing ESP-NOW");
@@ -77,8 +82,26 @@ void setup() {
   esp_now_register_recv_cb(on_data_received);
 
   LOG_DEBUG("Adding peers");
-  for (u8 peer_index = 0; peer_index < PEER_ADDRESS_LEN; peer_index++) {
-    esp_now_add_peer(PEER_ADDRESSES[peer_index], ESP_NOW_ROLE_SLAVE, 1, NULL, 0);
+  u8 peer_index = 0;
+  for (u8 all_peers_index = 0; all_peers_index < ALL_PEERS_LEN; all_peers_index++) {
+
+    bool is_self_address = true;
+    for (u8 byte_index=0; byte_index < 6; byte_index++) {
+      if (ALL_PEERS[all_peers_index][byte_index] != node_mac_address[byte_index]) {
+        is_self_address = false;
+      }
+    }
+
+    if (!is_self_address) {
+      if (peer_index >= ALL_PEERS_LEN - 1) {
+        LOG_ERROR("Found more than expected peers");
+        exit(1);
+      }
+      peers[peer_index] = ALL_PEERS[all_peers_index];
+      esp_now_add_peer(peers[peer_index], ESP_NOW_ROLE_SLAVE, 1, NULL, 0);
+
+      peer_index++;
+    }
   }
 
   LOG_INFO("Initialization complete");
@@ -93,9 +116,9 @@ void loop() {
     LOG_DEBUG("Preparing message");
     strcpy(messageData.text, "Hello");
 
-    for (u8 peer_index = 0; peer_index < PEER_ADDRESS_LEN; peer_index++) {
+    for (u8 peer_index = 0; peer_index < ALL_PEERS_LEN - 1; peer_index++) {
       LOG_DEBUG("Sending message to peer");
-      esp_now_send(PEER_ADDRESSES[peer_index], (u8 *) &messageData, sizeof(messageData));
+      esp_now_send(peers[peer_index], (u8 *) &messageData, sizeof(messageData));
 
       LOG_DEBUG("Message sent");
     }
