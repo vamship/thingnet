@@ -9,6 +9,7 @@
 #define LOG_ENABLED
 #define LOG_LEVEL LOG_LEVEL_DEBUG
 #include "log.h"
+#include "format_utils.h"
 
 // #define __CONTROLLER_MODE
 
@@ -36,14 +37,9 @@ message messageData;
  * @param status Whether or not the message was sent successfully
  */
 void on_data_sent(u8 *mac_addr, u8 status) {
-  LOG_INFO("Message delivery to [%02x:%02x:%02x:%02x:%02x:%02x] [%s]",
-            mac_addr[0],
-            mac_addr[1],
-            mac_addr[2],
-            mac_addr[3],
-            mac_addr[4],
-            mac_addr[5],
-            status==0? "ok": "err");
+  char buffer[18];
+  FORMAT_MAC(buffer, mac_addr);
+  LOG_INFO("Message delivery to [%s] [%s]", buffer, status==0?"ok":"err");
 }
 
 /**
