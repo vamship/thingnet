@@ -36,7 +36,14 @@ message messageData;
  * @param status Whether or not the message was sent successfully
  */
 void on_data_sent(u8 *mac_addr, u8 status) {
-  LOG_INFO(status == 0 ? "Message delivery succeeded" : "Message delivery failed");
+  LOG_INFO("Message delivery to [%02x:%02x:%02x:%02x:%02x:%02x] [%s]",
+            mac_addr[0],
+            mac_addr[1],
+            mac_addr[2],
+            mac_addr[3],
+            mac_addr[4],
+            mac_addr[5],
+            status==0? "ok": "err");
 }
 
 /**
