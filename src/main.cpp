@@ -98,7 +98,7 @@ void setup() {
         exit(1);
       }
       peers[peer_index] = ALL_PEERS[all_peers_index];
-      esp_now_add_peer(peers[peer_index], ESP_NOW_ROLE_SLAVE, 1, NULL, 0);
+      esp_now_add_peer(peers[peer_index], ESP_NOW_ROLE_COMBO, 1, NULL, 0);
 
       peer_index++;
     }
