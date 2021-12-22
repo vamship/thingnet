@@ -14,6 +14,7 @@ private:
     String mac_address;
     bool is_initialized;
     EspNowNode();
+    ~EspNowNode();
 
 public:
     /**

@@ -72,6 +72,14 @@ void __on_data_received(u8 *mac_addr, u8 *data, u8 length)
 
 EspNowNode::EspNowNode() {}
 
+EspNowNode::~EspNowNode() {
+    // Loop through all handlers and delete them.
+    for(int index = 0; index < __message_handler_count; index++) {
+        delete __message_handler_list[index];
+    }
+    __message_handler_count = 0;
+}
+
 EspNowNode &EspNowNode::get_instance()
 {
     static EspNowNode instance;
