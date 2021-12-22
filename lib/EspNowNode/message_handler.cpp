@@ -4,7 +4,14 @@
 #include "log.h"
 #include "format_utils.h"
 
-MessageHandler::MessageHandler() {}
+MessageHandler::MessageHandler()
+{
+}
+
+MessageHandler::~MessageHandler()
+{
+    // Nothing to release here.
+}
 
 bool MessageHandler::can_handle(PeerMessage *message)
 {

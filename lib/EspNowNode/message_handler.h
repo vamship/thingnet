@@ -48,6 +48,11 @@ public:
     MessageHandler();
 
     /**
+     * @brief Destroy the Message Handler object
+     */
+    virtual ~MessageHandler();
+
+    /**
      * @brief Returns a boolean value that determines whether or not the
      * handler can/will handle the message.
      *
