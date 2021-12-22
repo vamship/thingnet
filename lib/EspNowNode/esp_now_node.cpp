@@ -12,7 +12,7 @@
 #include "error_codes.h"
 
 const int MAX_HANDLER_COUNT = 255;
-MessageHandler __message_handler_list[MAX_HANDLER_COUNT];
+MessageHandler *__message_handler_list[MAX_HANDLER_COUNT];
 int __message_handler_count = 0;
 
 /**
@@ -48,14 +48,14 @@ void __on_data_received(u8 *mac_addr, u8 *data, u8 length)
     for (int index = 0; index < __message_handler_count; index++)
     {
 
-        MessageHandler processor = __message_handler_list[index];
-        if (!processor.can_handle(&message))
+        MessageHandler *processor = __message_handler_list[index];
+        if (!processor->can_handle(&message))
         {
             continue;
         }
 
         LOG_DEBUG("Processor [%d] can handle message", index);
-        ProcessingResult result = processor.process(&message);
+        ProcessingResult result = processor->process(&message);
 
         if (result == ProcessingResult::handled)
         {
@@ -101,7 +101,8 @@ int EspNowNode::init()
     esp_now_set_self_role(ESP_NOW_ROLE_COMBO);
 
     LOG_DEBUG("Initializing default message processor");
-    __message_handler_list[__message_handler_count] = MessageHandler();
+    MessageHandler *default_handler = new MessageHandler();
+    __message_handler_list[__message_handler_count] = default_handler;
     __message_handler_count++;
 
     LOG_DEBUG("Registering send/receive callbacks");
@@ -113,7 +114,7 @@ int EspNowNode::init()
     return RESULT_OK;
 }
 
-int EspNowNode::add_handler(MessageHandler handler)
+int EspNowNode::add_handler(MessageHandler *handler)
 {
     if (!this->is_initialized)
     {
@@ -121,16 +122,19 @@ int EspNowNode::add_handler(MessageHandler handler)
         return ERR_NODE_NOT_INITIALIZED;
     }
 
-    if(__message_handler_count >= MAX_HANDLER_COUNT) {
+    if (__message_handler_count >= MAX_HANDLER_COUNT)
+    {
         LOG_ERROR("Cannot add handler - maximum handler limit has been reached");
         return ERR_HANDLER_LIMIT_EXCEEDED;
     }
 
     LOG_INFO("Adding new handler to list");
-    for(int index = __message_handler_count; index > 0; index--) {
-        __message_handler_list[index] = __message_handler_list[index - 1];
-    }
-    __message_handler_list[0] = handler;
+
+    // Move the last handler (which should be the default handler to the end)
+    __message_handler_list[__message_handler_count] = __message_handler_list[__message_handler_count - 1];
+
+    // Insert the new handler just before the last one.
+    __message_handler_list[__message_handler_count - 1] = handler;
     __message_handler_count++;
 
     LOG_INFO("Handler added successfully. Total handlers: [%d]", __message_handler_count);

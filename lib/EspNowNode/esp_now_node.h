@@ -39,7 +39,7 @@ public:
      * @return int A non zero value will be returned if the add operation
      *         resulted in an error.
      */
-    int add_handler(MessageHandler handler);
+    int add_handler(MessageHandler *handler);
 
     // Singleton implementation.
     // See: https://stackoverflow.com/questions/1008019/c-singleton-design-pattern
