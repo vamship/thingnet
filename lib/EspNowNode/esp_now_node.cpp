@@ -108,6 +108,8 @@ int EspNowNode::init()
     esp_now_register_send_cb(__on_data_sent);
     esp_now_register_recv_cb(__on_data_received);
 
+    this->is_initialized = true;
+
     return RESULT_OK;
 }
 
