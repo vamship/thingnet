@@ -9,6 +9,7 @@
 #include "log.h"
 #include "format_utils.h"
 #include "esp_now_node.h"
+#include "peer_message_handler.h"
 
 const u8 ALL_PEERS_LEN = 2;
 u8 ALL_PEERS[][6] = {
@@ -56,6 +57,10 @@ void setup() {
         LOG_ERROR("Found more than expected peers");
         exit(1);
       }
+
+      PeerMessageHandler *handler = new PeerMessageHandler(ALL_PEERS[all_peers_index]);
+      node.add_handler((MessageHandler *)handler);
+
       peers[peer_index] = ALL_PEERS[all_peers_index];
       esp_now_add_peer(peers[peer_index], ESP_NOW_ROLE_COMBO, 1, NULL, 0);
 
