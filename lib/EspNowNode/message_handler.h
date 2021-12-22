@@ -9,7 +9,7 @@
 typedef struct PeerMessage
 {
     u8 sender[6];
-    char text[32];
+    u8 payload[250];
 } PeerMessage;
 
 /**

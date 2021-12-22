@@ -41,8 +41,8 @@ void __on_data_received(u8 *mac_addr, u8 *data, u8 length)
 
     LOG_DEBUG("Preparing message payload");
     PeerMessage message;
-    memcpy(&message, mac_addr, 6);
-    memcpy(&message + 6, data, length);
+    memcpy(&message.sender, mac_addr, 6);
+    memcpy(&message.payload, data, length);
 
     LOG_DEBUG("Processing message");
     for (int index = 0; index < __message_handler_count; index++)
