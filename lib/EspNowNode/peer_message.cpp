@@ -6,11 +6,13 @@
 
 MessageHandler::MessageHandler() {}
 
-bool MessageHandler::can_handle(PeerMessage *message) {
+bool MessageHandler::can_handle(PeerMessage *message)
+{
     return true;
 }
 
-ProcessingResult MessageHandler::process(PeerMessage *message) {
-  LOG_DEBUG("Processing message");
-  return ProcessingResult::handled;
+ProcessingResult MessageHandler::process(PeerMessage *message)
+{
+    LOG_DEBUG("Processing message");
+    return ProcessingResult::handled;
 }
