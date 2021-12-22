@@ -34,23 +34,23 @@ enum ProcessingResult {
 /**
  * @brief Processes a message received from another node.
  */
-class MessageProcessor {
+class MessageHandler {
 public:
   /**
-   * @brief Construct a new Message Processor object
+   * @brief Construct a new message handler object
    */
-  MessageProcessor();
+  MessageHandler();
   
   /**
    * @brief Returns a boolean value that determines whether or not the
-   * handler can/will process the message.
+   * handler can/will handle the message.
    * 
    * @param message A pointer to the message that the handler will
    *        receive.
-   * @return true If the handler wants to process the message.
-   * @return false If the handler does not want to process the message.
+   * @return true If the handler wants to handle the message.
+   * @return false If the handler does not want to handle the message.
    */
-  bool can_process(PeerMessage *message);
+  bool can_handle(PeerMessage *message);
   
   
   /**

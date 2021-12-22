@@ -10,7 +10,7 @@
 #include "log.h"
 #include "format_utils.h"
 
-MessageProcessor message_processor_list[10];
+MessageHandler message_processor_list[10];
 int message_processor_count = 0;
 
 /**
@@ -42,8 +42,8 @@ void __on_data_received(u8 *mac_addr, u8 *data, u8 length) {
 
   LOG_DEBUG("Processing message");
   for(int index = message_processor_count - 1; index >= 0; index--) {
-    MessageProcessor processor = message_processor_list[index];
-    if(processor.can_process(&message)) {
+    MessageHandler processor = message_processor_list[index];
+    if(processor.can_handle(&message)) {
       LOG_DEBUG("Processor [%d] can handle message", index);
       ProcessingResult result = processor.process(&message);
 
@@ -87,7 +87,7 @@ int EspNowNode::init() {
   esp_now_set_self_role(ESP_NOW_ROLE_COMBO);
 
   LOG_DEBUG("Initializing default message processor");
-  message_processor_list[message_processor_count] = MessageProcessor();
+  message_processor_list[message_processor_count] = MessageHandler();
   message_processor_count++;
 
   LOG_DEBUG("Registering send/receive callbacks");

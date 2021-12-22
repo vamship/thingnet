@@ -4,13 +4,13 @@
 #include "log.h"
 #include "format_utils.h"
 
-MessageProcessor::MessageProcessor() {}
+MessageHandler::MessageHandler() {}
 
-bool MessageProcessor::can_process(PeerMessage *message) {
+bool MessageHandler::can_handle(PeerMessage *message) {
     return true;
 }
 
-ProcessingResult MessageProcessor::process(PeerMessage *message) {
+ProcessingResult MessageHandler::process(PeerMessage *message) {
   LOG_DEBUG("Processing message");
   return ProcessingResult::handled;
 }
