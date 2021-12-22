@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <espnow.h>
+#include "peer_message.h"
 
 /**
  * @brief Represents a node that can communicate using ESP-NOW
@@ -29,6 +30,16 @@ public:
      * @return int
      */
     int init();
+
+    /**
+     * @brief Adds a message handler to the end of the list of available
+     * handlers for the node. 
+     * 
+     * @param handler The handler to add
+     * @return int A non zero value will be returned if the add operation
+     *         resulted in an error.
+     */
+    int add_handler(MessageHandler handler);
 
     // Singleton implementation.
     // See: https://stackoverflow.com/questions/1008019/c-singleton-design-pattern

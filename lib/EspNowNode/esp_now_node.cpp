@@ -9,10 +9,11 @@
 #include "peer_message.h"
 #include "log.h"
 #include "format_utils.h"
+#include "error_codes.h"
 
 const int MAX_HANDLER_COUNT = 255;
-MessageHandler message_processor_list[MAX_HANDLER_COUNT];
-int message_processor_count = 0;
+MessageHandler __message_handler_list[MAX_HANDLER_COUNT];
+int __message_handler_count = 0;
 
 /**
  * @brief Handles data send confirmation.
@@ -44,10 +45,10 @@ void __on_data_received(u8 *mac_addr, u8 *data, u8 length)
     memcpy(&message + 6, data, length);
 
     LOG_DEBUG("Processing message");
-    for (int index = 0; index < message_processor_count; index++)
+    for (int index = 0; index < __message_handler_count; index++)
     {
 
-        MessageHandler processor = message_processor_list[index];
+        MessageHandler processor = __message_handler_list[index];
         if (!processor.can_handle(&message))
         {
             continue;
@@ -82,7 +83,7 @@ int EspNowNode::init()
     if (this->is_initialized)
     {
         LOG_INFO("Node has already been initialized");
-        return 0;
+        return RESULT_OK;
     }
 
     LOG_DEBUG("Setting wifi to station mode");
@@ -100,12 +101,37 @@ int EspNowNode::init()
     esp_now_set_self_role(ESP_NOW_ROLE_COMBO);
 
     LOG_DEBUG("Initializing default message processor");
-    message_processor_list[message_processor_count] = MessageHandler();
-    message_processor_count++;
+    __message_handler_list[__message_handler_count] = MessageHandler();
+    __message_handler_count++;
 
     LOG_DEBUG("Registering send/receive callbacks");
     esp_now_register_send_cb(__on_data_sent);
     esp_now_register_recv_cb(__on_data_received);
 
-    return 0;
+    return RESULT_OK;
+}
+
+int EspNowNode::add_handler(MessageHandler handler)
+{
+    if (!this->is_initialized)
+    {
+        LOG_ERROR("Node has not been initialized");
+        return ERR_NODE_NOT_INITIALIZED;
+    }
+
+    if(__message_handler_count >= MAX_HANDLER_COUNT) {
+        LOG_ERROR("Cannot add handler - maximum handler limit has been reached");
+        return ERR_HANDLER_LIMIT_EXCEEDED;
+    }
+
+    LOG_INFO("Adding new handler to list");
+    for(int index = __message_handler_count; index > 0; index--) {
+        __message_handler_list[index] = __message_handler_list[index - 1];
+    }
+    __message_handler_list[0] = handler;
+    __message_handler_count++;
+
+    LOG_INFO("Handler added successfully. Total handlers: [%d]", __message_handler_count);
+
+    return RESULT_OK;
 }
