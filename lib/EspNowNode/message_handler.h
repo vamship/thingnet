@@ -56,7 +56,7 @@ public:
      * @return true If the handler wants to handle the message.
      * @return false If the handler does not want to handle the message.
      */
-    bool can_handle(PeerMessage *message);
+    virtual bool can_handle(PeerMessage *message);
 
     /**
      * @brief Processes a message and returns a result that reflects the
@@ -73,6 +73,7 @@ public:
      * @return ProcessingResult::error If there was an error processing the
      *         message.
      */
-    ProcessingResult process(PeerMessage *message);
+    virtual ProcessingResult process(PeerMessage *message);
 };
+
 #endif

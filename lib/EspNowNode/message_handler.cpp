@@ -8,11 +8,12 @@ MessageHandler::MessageHandler() {}
 
 bool MessageHandler::can_handle(PeerMessage *message)
 {
+    LOG_DEBUG("[MessageHandler] Checking if handler can process");
     return true;
 }
 
 ProcessingResult MessageHandler::process(PeerMessage *message)
 {
-    LOG_DEBUG("Processing message");
+    LOG_DEBUG("[MessageHandler] Processing message");
     return ProcessingResult::handled;
 }
