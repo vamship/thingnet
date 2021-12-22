@@ -5,11 +5,8 @@
   #include <ESP8266WiFi.h>
 #endif
 #include <espnow.h>
-
-#define LOG_ENABLED
-#define LOG_LEVEL LOG_LEVEL_DEBUG
-#include "log.h"
 #include "format_utils.h"
+#include "esp_now_node.h"
 
 // #define __CONTROLLER_MODE
 
