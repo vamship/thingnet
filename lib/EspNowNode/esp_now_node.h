@@ -1,4 +1,7 @@
-#include "Arduino.h"
+#ifndef __ESP_NOW_NODE_H
+#define __ESP_NOW_NODE_H
+
+#include <Arduino.h>
 #include <espnow.h>
 
 /**
@@ -32,3 +35,5 @@ public:
     EspNowNode(EspNowNode const &) = delete;
     void operator=(EspNowNode const &) = delete;
 };
+
+#endif

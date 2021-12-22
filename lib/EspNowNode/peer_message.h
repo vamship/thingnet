@@ -1,3 +1,6 @@
+#ifndef __PEER_MESSAGE_H
+#define __PEER_MESSAGE_H
+
 #include <Arduino.h>
 
 /**
@@ -72,3 +75,4 @@ public:
    */
     ProcessingResult process(PeerMessage *message);
 };
+#endif

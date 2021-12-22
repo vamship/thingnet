@@ -1,3 +1,6 @@
+#ifndef LOG_H
+#define LOG_H
+
 #include <Arduino.h>
 #include <espnow.h>
 
@@ -31,4 +34,6 @@
     #define LOG_DEBUG(message, ...) LOG("[DEBUG] ", message __VA_OPT__(,) __VA_ARGS__)
 #else
     #define LOG_DEBUG(...)
+#endif
+
 #endif
