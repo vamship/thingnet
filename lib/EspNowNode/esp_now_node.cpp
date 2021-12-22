@@ -1,7 +1,7 @@
 #ifdef ESP32
-  #include<Wifi.h>
+#include <Wifi.h>
 #else
-  #include <ESP8266WiFi.h>
+#include <ESP8266WiFi.h>
 #endif
 #include <espnow.h>
 
@@ -10,7 +10,8 @@
 #include "log.h"
 #include "format_utils.h"
 
-MessageHandler message_processor_list[10];
+const int MAX_HANDLER_COUNT = 255;
+MessageHandler message_processor_list[MAX_HANDLER_COUNT];
 int message_processor_count = 0;
 
 /**
@@ -19,10 +20,11 @@ int message_processor_count = 0;
  * @param mac_addr The mac address of the recipient
  * @param status Whether or not the message was sent successfully
  */
-void __on_data_sent(u8 *mac_addr, u8 status) {
+void __on_data_sent(u8 *mac_addr, u8 status)
+{
   char buffer[18];
   FORMAT_MAC(buffer, mac_addr);
-  LOG_INFO("Message delivery to [%s] [%s]", buffer, status==0?"ok":"err");
+  LOG_INFO("Message delivery to [%s] [%s]", buffer, status == 0 ? "ok" : "err");
 }
 
 /**
@@ -32,7 +34,8 @@ void __on_data_sent(u8 *mac_addr, u8 status) {
  * @param data The payload received from the sender
  * @param length The length of the payload
  */
-void __on_data_received(u8 *mac_addr, u8 *data, u8 length) {
+void __on_data_received(u8 *mac_addr, u8 *data, u8 length)
+{
   LOG_INFO("Message received from peer");
 
   LOG_DEBUG("Preparing message payload");
@@ -41,34 +44,43 @@ void __on_data_received(u8 *mac_addr, u8 *data, u8 length) {
   memcpy(&message + 6, data, length);
 
   LOG_DEBUG("Processing message");
-  for(int index = message_processor_count - 1; index >= 0; index--) {
-    MessageHandler processor = message_processor_list[index];
-    if(processor.can_handle(&message)) {
-      LOG_DEBUG("Processor [%d] can handle message", index);
-      ProcessingResult result = processor.process(&message);
+  for (int index = 0; index < message_processor_count; index++)
+  {
 
-      if(result == ProcessingResult::handled) {
-        LOG_INFO("Processing chain completed");
-        break;
-      } else if (result == ProcessingResult::chain) {
-        continue;
-      } else {
-        LOG_ERROR("Error processing message");
-        break;
-      }
+    MessageHandler processor = message_processor_list[index];
+    if (!processor.can_handle(&message))
+    {
+      continue;
+    }
+
+    LOG_DEBUG("Processor [%d] can handle message", index);
+    ProcessingResult result = processor.process(&message);
+
+    if (result == ProcessingResult::handled)
+    {
+      LOG_INFO("Processing chain completed");
+      break;
+    }
+    else if (result == ProcessingResult::error)
+    {
+      LOG_ERROR("Error processing message");
+      break;
     }
   }
 }
 
-EspNowNode::EspNowNode(){ }
+EspNowNode::EspNowNode() {}
 
-EspNowNode& EspNowNode::get_instance() {
-    static EspNowNode instance;
-    return instance;
+EspNowNode &EspNowNode::get_instance()
+{
+  static EspNowNode instance;
+  return instance;
 }
 
-int EspNowNode::init() {
-  if (this->is_initialized) {
+int EspNowNode::init()
+{
+  if (this->is_initialized)
+  {
     LOG_INFO("Node has already been initialized");
     return 0;
   }
@@ -80,7 +92,8 @@ int EspNowNode::init() {
   this->mac_address = WiFi.macAddress();
 
   LOG_DEBUG("Initializing ESP-NOW")
-  if (esp_now_init() != 0) {
+  if (esp_now_init() != 0)
+  {
     LOG_ERROR("Error initializing ESP-NOW");
     return 1;
   }
@@ -93,7 +106,6 @@ int EspNowNode::init() {
   LOG_DEBUG("Registering send/receive callbacks");
   esp_now_register_send_cb(__on_data_sent);
   esp_now_register_recv_cb(__on_data_received);
-
 
   return 0;
 }
