@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <espnow.h>
-#include "peer_message.h"
+#include "message_handler.h"
 
 /**
  * @brief Represents a node that can communicate using ESP-NOW

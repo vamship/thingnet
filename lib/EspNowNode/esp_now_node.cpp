@@ -6,7 +6,7 @@
 #include <espnow.h>
 
 #include "esp_now_node.h"
-#include "peer_message.h"
+#include "message_handler.h"
 #include "log.h"
 #include "format_utils.h"
 #include "error_codes.h"

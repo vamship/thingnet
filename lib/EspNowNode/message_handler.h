@@ -1,5 +1,5 @@
-#ifndef __PEER_MESSAGE_H
-#define __PEER_MESSAGE_H
+#ifndef __MESSAGE_HANDLER_H
+#define __MESSAGE_HANDLER_H
 
 #include <Arduino.h>
 
