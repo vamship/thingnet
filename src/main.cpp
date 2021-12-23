@@ -55,7 +55,7 @@ void setup() {
     }
 
     if (!is_self_address) {
-      ASSERT_TRUE(peer_index >= ALL_PEERS_LEN - 1);
+      ASSERT_TRUE(peer_index < ALL_PEERS_LEN - 1);
 
       PeerMessageHandler *handler = new PeerMessageHandler(ALL_PEERS[all_peers_index]);
       node.add_handler((MessageHandler *)handler);
