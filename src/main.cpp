@@ -41,7 +41,7 @@ void setup() {
   WiFi.macAddress(node_mac_address);
 
   LOG_DEBUG("Initializing default message processor");
-  ASSERT_OK(node.set_default_handler(new MessageHandler()));
+  ASSERT_OK(node.set_default_handler(new GenericMessageHandler(__add_new_peer)));
 
   LOG_DEBUG("Adding peers");
   u8 peer_index = 0;
@@ -57,8 +57,7 @@ void setup() {
     if (!is_self_address) {
       ASSERT_TRUE(peer_index < ALL_PEERS_LEN - 1);
 
-      PeerMessageHandler *handler = new PeerMessageHandler(ALL_PEERS[all_peers_index]);
-      node.add_handler((MessageHandler *)handler);
+      node.add_handler(new PeerMessageHandler(ALL_PEERS[all_peers_index]));
 
       peers[peer_index] = ALL_PEERS[all_peers_index];
       esp_now_add_peer(peers[peer_index], ESP_NOW_ROLE_COMBO, 1, NULL, 0);
