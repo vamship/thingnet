@@ -14,12 +14,6 @@
 #include "peer_message_handler.h"
 #include "generic_message_handler.h"
 
-ProcessingResult __add_new_peer(PeerMessage *message)
-{
-    LOG_DEBUG("============= Generic Handler! =============");
-    return ProcessingResult::handled;
-}
-
 const u8 ALL_PEERS_LEN = 2;
 u8 ALL_PEERS[][6] = {
     {0x18, 0xFE, 0x34, 0xD3, 0xF1, 0x21}, // White
@@ -36,49 +30,28 @@ EspNowNode &node = EspNowNode::get_instance();
 
 u64 last_time = 0;
 u64 send_interval = 3000;
-u8 node_mac_address[6];
-u8 *peers[ALL_PEERS_LEN - 1];
+// u8 *peers[ALL_PEERS_LEN - 1];
+
+ProcessingResult __add_new_peer(PeerMessage *message)
+{
+    LOG_INFO("Registering new peer");
+    node.add_handler(new PeerMessageHandler(message->sender));
+    esp_now_add_peer(message->sender, ESP_NOW_ROLE_COMBO, 1, NULL, 0);
+    return ProcessingResult::handled;
+}
 
 void setup()
 {
-
     Serial.begin(115200);
 
     LOG_DEBUG("Initializing GPIO pins");
     pinMode(LED_BUILTIN, OUTPUT);
 
+    LOG_DEBUG("Initializing node")
     ASSERT_OK(node.init());
-    WiFi.macAddress(node_mac_address);
 
     LOG_DEBUG("Initializing default message processor");
     ASSERT_OK(node.set_default_handler(new GenericMessageHandler(__add_new_peer)));
-
-    LOG_DEBUG("Adding peers");
-    u8 peer_index = 0;
-    for (u8 all_peers_index = 0; all_peers_index < ALL_PEERS_LEN; all_peers_index++)
-    {
-
-        bool is_self_address = true;
-        for (u8 byte_index = 0; byte_index < 6; byte_index++)
-        {
-            if (ALL_PEERS[all_peers_index][byte_index] != node_mac_address[byte_index])
-            {
-                is_self_address = false;
-            }
-        }
-
-        if (!is_self_address)
-        {
-            ASSERT_TRUE(peer_index < ALL_PEERS_LEN - 1);
-
-            node.add_handler(new PeerMessageHandler(ALL_PEERS[all_peers_index]));
-
-            peers[peer_index] = ALL_PEERS[all_peers_index];
-            esp_now_add_peer(peers[peer_index], ESP_NOW_ROLE_COMBO, 1, NULL, 0);
-
-            peer_index++;
-        }
-    }
 
     LOG_INFO("Initialization complete");
 }
