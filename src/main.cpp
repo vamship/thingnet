@@ -8,6 +8,7 @@
 
 #include "log.h"
 #include "format_utils.h"
+#include "error_codes.h"
 #include "esp_now_node.h"
 #include "peer_message_handler.h"
 
@@ -36,13 +37,11 @@ void setup() {
   LOG_DEBUG("Initializing GPIO pins");
   pinMode(LED_BUILTIN, OUTPUT);
 
-  if (node.init() != 0) {
-    exit(1);
-  }
+  ASSERT_OK(node.init());
   WiFi.macAddress(node_mac_address);
 
   LOG_DEBUG("Initializing default message processor");
-  node.set_default_handler(new MessageHandler());
+  ASSERT_OK(node.set_default_handler(new MessageHandler()));
 
   LOG_DEBUG("Adding peers");
   u8 peer_index = 0;
@@ -56,10 +55,7 @@ void setup() {
     }
 
     if (!is_self_address) {
-      if (peer_index >= ALL_PEERS_LEN - 1) {
-        LOG_ERROR("Found more than expected peers");
-        exit(1);
-      }
+      ASSERT_TRUE(peer_index >= ALL_PEERS_LEN - 1);
 
       PeerMessageHandler *handler = new PeerMessageHandler(ALL_PEERS[all_peers_index]);
       node.add_handler((MessageHandler *)handler);
