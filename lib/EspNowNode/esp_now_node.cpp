@@ -77,10 +77,12 @@ void __on_data_received(u8 *mac_addr, u8 *data, u8 length)
         LOG_DEBUG("Processing chain is still not complete");
         if (__default_handler != 0)
         {
-            LOG_DEBUG("Invoking default handler");
+            LOG_DEBUG("Checking if default handler will process the message");
             if (__default_handler->can_handle(&message))
             {
+                LOG_DEBUG("Invoking default handler");
                 ProcessingResult result = __default_handler->process(&message);
+
                 if (result == ProcessingResult::error)
                 {
                     LOG_ERROR("Error executing default handler [%d]", result);
