@@ -10,7 +10,14 @@
 #include "format_utils.h"
 #include "error_codes.h"
 #include "esp_now_node.h"
+#include "message_handler.h"
 #include "peer_message_handler.h"
+#include "generic_message_handler.h"
+
+ProcessingResult __add_new_peer(PeerMessage *message) {
+  LOG_DEBUG("============= Generic Handler! =============");
+  return ProcessingResult::handled;
+}
 
 const u8 ALL_PEERS_LEN = 2;
 u8 ALL_PEERS[][6] = {
@@ -75,15 +82,15 @@ void loop() {
 
     digitalWrite(LED_BUILTIN, HIGH);
 
-    LOG_DEBUG("Preparing message");
-    strcpy(message.text, "Hello");
+    // LOG_DEBUG("Preparing message");
+    // strcpy(message.text, "Hello");
 
-    for (u8 peer_index = 0; peer_index < ALL_PEERS_LEN - 1; peer_index++) {
-      LOG_DEBUG("Sending message to peer");
-      esp_now_send(peers[peer_index], (u8 *) &message, sizeof(message));
+    // for (u8 peer_index = 0; peer_index < ALL_PEERS_LEN - 1; peer_index++) {
+    //   LOG_DEBUG("Sending message to peer");
+    //   esp_now_send(peers[peer_index], (u8 *) &message, sizeof(message));
 
-      LOG_DEBUG("Message sent");
-    }
+    //   LOG_DEBUG("Message sent");
+    // }
 
     delay(1000);
   }
