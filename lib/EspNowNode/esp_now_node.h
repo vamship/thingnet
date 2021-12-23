@@ -43,6 +43,16 @@ public:
      */
     int add_handler(MessageHandler *handler);
 
+    /**
+     * @brief Adds a message handler to the end of the list of available
+     * handlers for the node. 
+     * 
+     * @param handler The handler to add
+     * @return int A non zero value will be returned if the add operation
+     *         resulted in an error.
+     */
+    int set_default_handler(MessageHandler *handler);
+
     // Singleton implementation.
     // See: https://stackoverflow.com/questions/1008019/c-singleton-design-pattern
     EspNowNode(EspNowNode const &) = delete;

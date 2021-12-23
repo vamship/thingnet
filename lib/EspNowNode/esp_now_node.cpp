@@ -13,6 +13,7 @@
 
 const int MAX_HANDLER_COUNT = 255;
 MessageHandler *__message_handler_list[MAX_HANDLER_COUNT];
+MessageHandler *__default_handler = 0;
 int __message_handler_count = 0;
 
 /**
@@ -44,6 +45,7 @@ void __on_data_received(u8 *mac_addr, u8 *data, u8 length)
     memcpy(&message.sender, mac_addr, 6);
     memcpy(&message.payload, data, length);
 
+    bool processing_complete = false;
     LOG_DEBUG("Processing message");
     for (int index = 0; index < __message_handler_count; index++)
     {
@@ -58,13 +60,40 @@ void __on_data_received(u8 *mac_addr, u8 *data, u8 length)
 
         if (result == ProcessingResult::handled)
         {
-            LOG_INFO("Processing chain completed");
+            processing_complete = true;
+            LOG_DEBUG("Processing chain completed");
             break;
         }
         else if (result == ProcessingResult::error)
         {
+            processing_complete = true;
             LOG_ERROR("Error processing message");
             break;
+        }
+    }
+
+    if (!processing_complete)
+    {
+        LOG_DEBUG("Processing chain is still not complete");
+        if (__default_handler != 0)
+        {
+            LOG_DEBUG("Invoking default handler");
+            if (!__default_handler->can_handle(&message))
+            {
+                ProcessingResult result = __default_handler->process(&message);
+                if (result == ProcessingResult::error)
+                {
+                    LOG_ERROR("Error executing default handler [%d]", result);
+                }
+            }
+            else
+            {
+                LOG_INFO("Default handler will not handle message");
+            }
+        }
+        else
+        {
+            LOG_INFO("Default handler has not been set. Skipping.");
         }
     }
 }
@@ -109,11 +138,6 @@ int EspNowNode::init()
     }
     esp_now_set_self_role(ESP_NOW_ROLE_COMBO);
 
-    LOG_DEBUG("Initializing default message processor");
-    MessageHandler *default_handler = new MessageHandler();
-    __message_handler_list[__message_handler_count] = default_handler;
-    __message_handler_count++;
-
     LOG_DEBUG("Registering send/receive callbacks");
     esp_now_register_send_cb(__on_data_sent);
     esp_now_register_recv_cb(__on_data_received);
@@ -139,14 +163,29 @@ int EspNowNode::add_handler(MessageHandler *handler)
 
     LOG_INFO("Adding new handler to list");
 
-    // Move the last handler (which should be the default handler to the end)
-    __message_handler_list[__message_handler_count] = __message_handler_list[__message_handler_count - 1];
-
-    // Insert the new handler just before the last one.
-    __message_handler_list[__message_handler_count - 1] = handler;
+    // Add handler to the end of the list.
+    __message_handler_list[__message_handler_count] = handler;
     __message_handler_count++;
 
     LOG_INFO("Handler added successfully. Total handlers: [%d]", __message_handler_count);
+
+    return RESULT_OK;
+}
+
+int EspNowNode::set_default_handler(MessageHandler *handler)
+{
+    if (!this->is_initialized)
+    {
+        LOG_ERROR("Node has not been initialized");
+        return ERR_NODE_NOT_INITIALIZED;
+    }
+
+    LOG_INFO("Setting default handler");
+
+    // Set default handler
+    __default_handler = handler;
+
+    LOG_INFO("Default handler has been set");
 
     return RESULT_OK;
 }

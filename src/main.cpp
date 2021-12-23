@@ -41,6 +41,9 @@ void setup() {
   }
   WiFi.macAddress(node_mac_address);
 
+  LOG_DEBUG("Initializing default message processor");
+  node.set_default_handler(new MessageHandler());
+
   LOG_DEBUG("Adding peers");
   u8 peer_index = 0;
   for (u8 all_peers_index = 0; all_peers_index < ALL_PEERS_LEN; all_peers_index++) {
