@@ -47,7 +47,6 @@ void __on_data_received(u8 *mac_addr, u8 *data, u8 length)
     LOG_DEBUG("Processing message");
     for (int index = 0; index < __message_handler_count; index++)
     {
-
         MessageHandler *processor = __message_handler_list[index];
         if (!processor->can_handle(&message))
         {
