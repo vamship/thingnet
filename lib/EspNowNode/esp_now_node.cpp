@@ -78,7 +78,7 @@ void __on_data_received(u8 *mac_addr, u8 *data, u8 length)
         if (__default_handler != 0)
         {
             LOG_DEBUG("Invoking default handler");
-            if (!__default_handler->can_handle(&message))
+            if (__default_handler->can_handle(&message))
             {
                 ProcessingResult result = __default_handler->process(&message);
                 if (result == ProcessingResult::error)
