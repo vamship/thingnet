@@ -29,7 +29,8 @@ public:
      * @brief Initializes the node and returns a non-zero value if the
      * initialization fails.
      *
-     * @return int
+     * @return int A non zero value will be returned if the initialization
+     *         fails.
      */
     int init();
 
