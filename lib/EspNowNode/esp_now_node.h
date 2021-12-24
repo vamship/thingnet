@@ -54,6 +54,16 @@ public:
      */
     int set_default_handler(MessageHandler *handler);
 
+    /**
+     * @brief Matches the input buffer against the mac address of the node. 
+     * 
+     * @param input_mac The mac address to compare with the current node.
+     * @return true If the input mac address matches the node's mac address
+     * @return false If the input mac address odes not match, or if the node has
+     *         not been initialized.
+     */
+    bool has_mac_address(u8 *input_mac);
+
     // Singleton implementation.
     // See: https://stackoverflow.com/questions/1008019/c-singleton-design-pattern
     EspNowNode(EspNowNode const &) = delete;

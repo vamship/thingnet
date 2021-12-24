@@ -196,3 +196,14 @@ int EspNowNode::set_default_handler(MessageHandler *handler)
 
     return RESULT_OK;
 }
+
+bool EspNowNode::has_mac_address(u8 *input_mac)
+{
+    if (!this->is_initialized)
+    {
+        LOG_ERROR("Node has not been initialized");
+        return false;
+    }
+
+    return memcmp(this->mac_address, input_mac, 6) == 0;
+}
