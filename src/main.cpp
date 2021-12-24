@@ -14,7 +14,7 @@
 #include "peer_message_handler.h"
 #include "generic_message_handler.h"
 
-const u8 SERVER_MAC[] = { 0x18, 0xfe, 0x34, 0xd4, 0x7e, 0x9a };
+const u8 SERVER_MAC[] = {0x18, 0xfe, 0x34, 0xd4, 0x7e, 0x9a};
 
 typedef struct MessageData
 {
@@ -31,6 +31,16 @@ u8 peer_count = 0;
 
 ProcessingResult __add_new_peer(PeerMessage *message)
 {
+    LOG_DEBUG("Checking if peer has previously been registered");
+    for (int index = 0; index < peer_count; index++)
+    {
+        if (memcmp(peer_list[index], message->sender, 6) == 0)
+        {
+            LOG_INFO("Peer already registered");
+            return ProcessingResult::handled;
+        }
+    }
+
     LOG_DEBUG("Adding peer to list");
     memcpy(peer_list[peer_count], message->sender, 6);
     peer_count++;
@@ -59,6 +69,17 @@ void setup()
     ASSERT_OK(node.set_default_handler(new GenericMessageHandler(__add_new_peer)));
 
     LOG_INFO("Initialization complete");
+
+    if (node.has_mac_address((u8 *)SERVER_MAC))
+    {
+        LOG_INFO("Running as SERVER");
+    }
+    else
+    {
+        LOG_INFO("Running as PEER")
+        memcpy(peer_list[peer_count], SERVER_MAC, 6);
+        peer_count++;
+    }
 }
 
 void loop()
