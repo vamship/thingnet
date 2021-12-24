@@ -146,6 +146,8 @@ int EspNowNode::init()
 
     this->is_initialized = true;
 
+    LOG_DEBUG("Node initialized: [%s]", this->mac_address.c_str());
+
     return RESULT_OK;
 }
 
