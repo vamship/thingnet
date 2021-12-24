@@ -126,11 +126,11 @@ int EspNowNode::init()
         return RESULT_OK;
     }
 
+    LOG_DEBUG("Reading current mac address");
+    WiFi.macAddress(this->mac_address);
+
     LOG_DEBUG("Setting wifi to station mode");
     WiFi.mode(WIFI_AP_STA);
-
-    LOG_DEBUG("Reading current mac address");
-    this->mac_address = WiFi.macAddress();
 
     LOG_DEBUG("Initializing ESP-NOW")
     if (esp_now_init() != 0)
@@ -146,7 +146,10 @@ int EspNowNode::init()
 
     this->is_initialized = true;
 
-    LOG_DEBUG("Node initialized: [%s]", this->mac_address.c_str());
+
+    char mac_addr_str[17];
+    FORMAT_MAC(mac_addr_str, this->mac_address);
+    LOG_DEBUG("Node initialized: [%s]", mac_addr_str);
 
     return RESULT_OK;
 }

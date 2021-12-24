@@ -11,7 +11,7 @@
 class EspNowNode
 {
 private:
-    String mac_address;
+    u8 mac_address[6];
     bool is_initialized;
 
     EspNowNode();
