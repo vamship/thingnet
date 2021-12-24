@@ -6,21 +6,21 @@
 #include "log.h"
 #include "format_utils.h"
 
-PeerMessageHandler::PeerMessageHandler(u8 peer_mac_address[6])
+PeerMessageHandler::PeerMessageHandler(u8 *peer_mac_address)
 {
     // Store the peer mac address for future comparison
-    memcpy(this->peer_mac_addres, peer_mac_addres, 6);
+    memcpy(this->peer_mac_address, peer_mac_address, 6);
 }
 
 bool PeerMessageHandler::can_handle(PeerMessage *message)
 {
-    if (memcmp(this->peer_mac_addres, message->sender, 6))
+    if (memcmp(this->peer_mac_address, message->sender, 6) == 0)
     {
         LOG_INFO("[PeerMessageHandler] will handle message");
         return true;
     };
     LOG_INFO("[PeerMessageHandler] **CANNOT** handle message");
-    return true;
+    return false;
 }
 
 ProcessingResult PeerMessageHandler::process(PeerMessage *message)

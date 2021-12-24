@@ -42,8 +42,8 @@ void __on_data_received(u8 *mac_addr, u8 *data, u8 length)
 
     LOG_DEBUG("Preparing message payload");
     PeerMessage message;
-    memcpy(&message.sender, mac_addr, 6);
-    memcpy(&message.payload, data, length);
+    memcpy(message.sender, mac_addr, 6);
+    memcpy(message.payload, data, length);
 
     bool processing_complete = false;
     LOG_DEBUG("Processing message");
@@ -145,7 +145,6 @@ int EspNowNode::init()
     esp_now_register_recv_cb(__on_data_received);
 
     this->is_initialized = true;
-
 
     char mac_addr_str[18];
     FORMAT_MAC(mac_addr_str, this->mac_address);

@@ -10,7 +10,7 @@
 class PeerMessageHandler : public MessageHandler
 {
 private:
-    u8 peer_mac_addres[6];
+    u8 peer_mac_address[6];
 
 public:
     /**
@@ -19,7 +19,7 @@ public:
      * @param peer_mac_address The mac address of the peer whose messages will
      *        be handled by this handler.
      */
-    PeerMessageHandler(u8 peer_mac_address[6]);
+    PeerMessageHandler(u8 *peer_mac_address);
 
     /**
      * @brief Returns true only if the message is from a peer that this handler
