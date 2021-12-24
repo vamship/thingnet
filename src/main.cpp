@@ -16,12 +16,6 @@
 
 const u8 SERVER_MAC[] = {0x18, 0xfe, 0x34, 0xd4, 0x7e, 0x9a};
 
-typedef struct MessageData
-{
-    char text[32];
-} MessageData;
-MessageData message;
-
 EspNowNode &node = EspNowNode::get_instance();
 
 u64 last_time = 0;
@@ -90,10 +84,12 @@ void loop()
 
         digitalWrite(LED_BUILTIN, HIGH);
 
+        u8 payload[250];
         if (peer_count > 0)
         {
             LOG_DEBUG("Preparing message");
-            strcpy(message.text, "Hello");
+            payload[0] = 5; // Length of the message (Hello)
+            strcpy((char *)payload + 1, "Hello");
         }
         else
         {
@@ -103,7 +99,7 @@ void loop()
         for (u8 peer_index = 0; peer_index < peer_count; peer_index++)
         {
             LOG_DEBUG("Sending message to peer");
-            esp_now_send(peer_list[peer_index], (u8 *)&message, sizeof(message));
+            esp_now_send(peer_list[peer_index], (u8 *)&payload, sizeof(payload));
 
             LOG_DEBUG("Message sent");
         }
