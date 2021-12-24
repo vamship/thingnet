@@ -147,7 +147,7 @@ int EspNowNode::init()
     this->is_initialized = true;
 
 
-    char mac_addr_str[17];
+    char mac_addr_str[18];
     FORMAT_MAC(mac_addr_str, this->mac_address);
     LOG_DEBUG("Node initialized: [%s]", mac_addr_str);
 
