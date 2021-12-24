@@ -14,11 +14,7 @@
 #include "peer_message_handler.h"
 #include "generic_message_handler.h"
 
-const u8 ALL_PEERS_LEN = 2;
-u8 ALL_PEERS[][6] = {
-    {0x18, 0xFE, 0x34, 0xD3, 0xF1, 0x21}, // White
-    {0x18, 0xFE, 0x34, 0xD4, 0x82, 0x2A}  // Blue
-};
+const u8 SERVER_MAC[] = { 0x18, 0xfe, 0x34, 0xd4, 0x7e, 0x9a };
 
 typedef struct MessageData
 {
@@ -30,7 +26,7 @@ EspNowNode &node = EspNowNode::get_instance();
 
 u64 last_time = 0;
 u64 send_interval = 3000;
-u8 peer_list[ALL_PEERS_LEN - 1][6];
+u8 peer_list[255][6];
 u8 peer_count = 0;
 
 ProcessingResult __add_new_peer(PeerMessage *message)
