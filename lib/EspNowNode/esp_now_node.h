@@ -11,7 +11,8 @@
 class EspNowNode
 {
 private:
-    u8 mac_address[6];
+    u8 sta_mac_address[6];
+    u8 ap_mac_address[6];
     bool is_initialized;
 
     EspNowNode();
