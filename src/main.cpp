@@ -9,19 +9,25 @@
 #include "log.h"
 #include "format_utils.h"
 #include "pulser.h"
+#include "timer.h"
 #include "error_codes.h"
 #include "esp_now_node.h"
 #include "message_handler.h"
 #include "peer_message_handler.h"
 #include "generic_message_handler.h"
 
+#define SEND_INTERVAL 6000
+#define SEND_INDICATION_INTERVAL 2000
+#define PULSE_LONG_DURATION 1000
+#define PULSE_SHORT_DURATION 500
+
 const u8 SERVER_MAC[] = {0x18, 0xfe, 0x34, 0xd4, 0x7e, 0x9a};
 
 EspNowNode &node = EspNowNode::get_instance();
 
 Pulser *led;
-u64 last_time = 0;
-u64 send_interval = 3000;
+Timer *send_timer;
+Timer *led_reset_timer;
 u8 peer_list[255][6];
 u8 peer_count = 0;
 
@@ -55,17 +61,11 @@ void setup()
 {
     Serial.begin(115200);
 
-    LOG_DEBUG("Initializing LED");
-    led = new Pulser(LED_BUILTIN, 2000);
-    led->init();
-
     LOG_DEBUG("Initializing node")
     ASSERT_OK(node.init());
 
     LOG_DEBUG("Initializing default message processor");
     ASSERT_OK(node.set_default_handler(new GenericMessageHandler(__add_new_peer)));
-
-    LOG_INFO("Initialization complete");
 
     if (node.has_mac_address((u8 *)SERVER_MAC))
     {
@@ -77,14 +77,24 @@ void setup()
         memcpy(peer_list[peer_count], SERVER_MAC, 6);
         peer_count++;
     }
+
+    LOG_DEBUG("Initializing LED");
+    led = new Pulser(LED_BUILTIN, PULSE_LONG_DURATION);
+    led->init();
+
+    LOG_DEBUG("Initialize timers");
+    send_timer = new Timer(SEND_INTERVAL);
+    led_reset_timer = new Timer(SEND_INDICATION_INTERVAL);
+
+    send_timer->start();
+
+    LOG_INFO("Initialization complete");
 }
 
 void loop()
 {
-    if ((millis() - last_time) > send_interval)
+    if (send_timer->is_complete())
     {
-        last_time = millis();
-
         u8 payload[250];
         if (peer_count > 0)
         {
@@ -104,6 +114,16 @@ void loop()
 
             LOG_DEBUG("Message sent");
         }
+
+        led->set_duration(PULSE_SHORT_DURATION);
+        led_reset_timer->start();
     }
+
+    if (led_reset_timer->is_complete())
+    {
+        led->set_duration(PULSE_LONG_DURATION);
+        send_timer->start();
+    }
+
     led->update();
 }
