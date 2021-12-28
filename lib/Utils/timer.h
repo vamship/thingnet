@@ -14,9 +14,22 @@ private:
     u64 duration;
     u64 last_time;
     bool is_started;
+    bool auto_restart;
 public:
+
     /**
      * @brief Construct a new Timer object
+     * 
+     * @param duration The duration of the timer
+     * @param auto_restart If set to true, automatically restart the timer once
+     *        it has been completed. Note that the restart will occur when
+     *        `is_complete()` is invoked and not when the timer expires.
+     */
+    Timer(u64 duration, bool auto_restart);
+
+    /**
+     * @brief Construct a new Timer object, defaulting the auto restart option
+     * to false.
      * 
      * @param duration The duration of the timer.
      */
