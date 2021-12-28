@@ -5,6 +5,10 @@
 #include "esp_now_node.h"
 #include "message_handler.h"
 #include "node_manager.h"
+#include "timer.h"
+
+#define __SERVER_NODE_MANAGER_ADVERTISE_DURATION 10000
+#define __SERVER_NODE_MANAGER_PRUNE_DURATION 60000
 
 /**
  * @brief A node manager implementation for server nodes. Provides basic server
@@ -17,6 +21,8 @@ private:
     EspNowNode *node;
     u8 peer_list[255][6];
     u8 peer_count;
+    Timer *advertise_timer;
+    Timer *prune_timer;
 
 public:
     /**
@@ -42,6 +48,14 @@ public:
      *         message.
      */
     ProcessingResult process(PeerMessage *message);
+
+    /**
+     * @brief Initializes the node manager by starting the appropriate timers.
+     * 
+     * @return int A non zero value will be returned if the initialization was
+     * not successful.
+     */
+    int init();
 
     /**
      * @brief Loops through each registered peer and allows the peer to perform

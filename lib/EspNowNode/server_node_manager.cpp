@@ -1,6 +1,7 @@
 #include <Arduino.h>
 
 #include "log.h"
+#include "timer.h"
 
 #include "error_codes.h"
 #include "esp_now_node.h"
@@ -12,6 +13,10 @@ ServerNodeManager::ServerNodeManager(EspNowNode *node)
 {
     this->node = node;
     this->peer_count = 0;
+    this->advertise_timer = new Timer(__SERVER_NODE_MANAGER_ADVERTISE_DURATION,
+                                      true);
+    this->prune_timer = new Timer(__SERVER_NODE_MANAGER_PRUNE_DURATION,
+                                  true);
 }
 
 ProcessingResult ServerNodeManager::process(PeerMessage *message)
@@ -40,28 +45,44 @@ ProcessingResult ServerNodeManager::process(PeerMessage *message)
     return ProcessingResult::handled;
 }
 
+int ServerNodeManager::init()
+{
+    this->advertise_timer->start();
+    this->prune_timer->start();
+    return RESULT_OK;
+}
+
 int ServerNodeManager::update()
 {
-    u8 payload[250];
-    if (this->peer_count > 0)
+    if (this->advertise_timer->is_complete())
     {
-        LOG_DEBUG("Preparing message");
-        payload[0] = 5; // Length of the message (Hello)
-        strcpy((char *)payload + 1, "Hello");
-    }
-    else
-    {
-        LOG_DEBUG("No peers registered");
+        LOG_INFO("Advertising server to peers");
     }
 
-    for (u8 peer_index = 0; peer_index < this->peer_count; peer_index++)
+    if (this->prune_timer->is_complete())
     {
-        u8 *peer_mac = this->peer_list[peer_index];
+        LOG_INFO("Pruning inactive peers");
+        //     // u8 payload[250];
+        //     // if (this->peer_count > 0)
+        //     // {
+        //     //     LOG_DEBUG("Preparing message");
+        //     //     payload[0] = 5; // Length of the message (Hello)
+        //     //     strcpy((char *)payload + 1, "Hello");
+        //     // }
+        //     // else
+        //     // {
+        //     //     LOG_DEBUG("No peers registered");
+        //     // }
 
-        LOG_DEBUG("Sending message to peer");
-        esp_now_send(peer_mac, (u8 *)&payload, sizeof(payload));
+        //     // for (u8 peer_index = 0; peer_index < this->peer_count; peer_index++)
+        //     // {
+        //     //     u8 *peer_mac = this->peer_list[peer_index];
 
-        LOG_DEBUG("Message sent");
+        //     //     LOG_DEBUG("Sending message to peer");
+        //     //     esp_now_send(peer_mac, (u8 *)&payload, sizeof(payload));
+
+        //     //     LOG_DEBUG("Message sent");
+        //     // }
     }
 
     return RESULT_OK;
