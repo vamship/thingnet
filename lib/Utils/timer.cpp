@@ -5,7 +5,8 @@ Timer::Timer(u64 duration, bool auto_restart)
 {
     this->duration = duration;
     this->auto_restart = auto_restart;
-    this->last_time = 0;
+    this->last_time = millis();
+    this->is_started = false;
 }
 
 Timer::Timer(u64 duration) : Timer(duration, false){};
