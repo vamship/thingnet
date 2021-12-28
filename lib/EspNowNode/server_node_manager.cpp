@@ -2,6 +2,7 @@
 
 #include "log.h"
 
+#include "error_codes.h"
 #include "esp_now_node.h"
 #include "message_handler.h"
 #include "peer_message_handler.h"
@@ -63,5 +64,5 @@ int ServerNodeManager::update()
         LOG_DEBUG("Message sent");
     }
 
-    return 0;
+    return RESULT_OK;
 }
