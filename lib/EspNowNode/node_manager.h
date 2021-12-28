@@ -31,6 +31,15 @@ public:
     virtual ~NodeManager();
 
     /**
+     * @brief Allows the node manager to initialize itself. This method will be
+     * called once at the start of the program.
+     * 
+     * @return int A non zero value will be returned if the update did not work
+     * as expected.
+     */
+    virtual int init();
+
+    /**
      * @brief Allows the node manager to update itself. This method will
      * typically be called from within a processing loop, and must be non
      * blocking.
