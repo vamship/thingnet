@@ -5,10 +5,12 @@
 #endif
 #include <espnow.h>
 
-#include "esp_now_node.h"
-#include "message_handler.h"
 #include "log.h"
 #include "format_utils.h"
+
+#include "esp_now_node.h"
+#include "node_manager.h"
+#include "message_handler.h"
 #include "error_codes.h"
 
 const int MAX_HANDLER_COUNT = 255;
@@ -90,12 +92,12 @@ void __on_data_received(u8 *mac_addr, u8 *data, u8 length)
             }
             else
             {
-                LOG_INFO("Default handler will not handle message");
+                LOG_ERROR("Default handler will not handle message");
             }
         }
         else
         {
-            LOG_INFO("Default handler has not been set. Skipping.");
+            LOG_ERROR("Default handler has not been set. Skipping.");
         }
     }
 }
@@ -185,7 +187,7 @@ int EspNowNode::add_handler(MessageHandler *handler)
     return RESULT_OK;
 }
 
-int EspNowNode::set_default_handler(MessageHandler *handler)
+int EspNowNode::set_node_manager(NodeManager *manager)
 {
     if (!this->is_initialized)
     {
@@ -193,10 +195,11 @@ int EspNowNode::set_default_handler(MessageHandler *handler)
         return ERR_NODE_NOT_INITIALIZED;
     }
 
-    LOG_INFO("Setting default handler");
+    LOG_INFO("Setting node manager");
+    this->manager = manager;
 
-    // Set default handler
-    __default_handler = handler;
+    LOG_DEBUG("Configuring default handler");
+    __default_handler = manager;
 
     LOG_INFO("Default handler has been set");
 
@@ -213,4 +216,16 @@ bool EspNowNode::has_mac_address(u8 *input_mac)
 
     return memcmp(this->sta_mac_address, input_mac, 6) == 0 ||
            memcmp(this->ap_mac_address, input_mac, 6) == 0;
+}
+
+int EspNowNode::update()
+{
+    if (!this->manager)
+    {
+        LOG_ERROR("Node manager has not been set");
+        return ERR_NODE_MANAGER_NOT_SET;
+    }
+    manager->update();
+
+    return RESULT_OK;
 }

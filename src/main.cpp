@@ -12,7 +12,6 @@
 #include "timer.h"
 #include "error_codes.h"
 #include "esp_now_node.h"
-#include "node_manager.h"
 #include "server_node_manager.h"
 
 #include "message_handler.h"
@@ -28,7 +27,6 @@
 const u8 SERVER_MAC[] = {0x1A, 0xFE, 0x34, 0xD4, 0x82, 0x2A};
 
 EspNowNode &node = EspNowNode::get_instance();
-NodeManager *manager = new ServerNodeManager(&node);
 
 Pulser *led;
 Timer *update_timer;
@@ -44,7 +42,7 @@ void setup()
     LOG_DEBUG("Determining run mode");
     if (node.has_mac_address((u8 *)SERVER_MAC))
     {
-        ASSERT_OK(node.set_default_handler(manager));
+        ASSERT_OK(node.set_node_manager(new ServerNodeManager(&node)));
         LOG_INFO("Running as SERVER");
     }
     else
@@ -71,7 +69,7 @@ void loop()
     if (update_timer->is_complete())
     {
         LOG_DEBUG("Running manager update");
-        manager->update();
+        node.update();
 
         led->set_duration(PULSE_SHORT_DURATION);
         led_reset_timer->start();
