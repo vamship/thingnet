@@ -1,6 +1,7 @@
 #include <Arduino.h>
 
 #include "log.h"
+#include "format_utils.h"
 #include "timer.h"
 
 #include "error_codes.h"
@@ -8,6 +9,29 @@
 #include "message_handler.h"
 #include "peer_message_handler.h"
 #include "server_node_manager.h"
+
+const u8 __broadcast_peer[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+
+int __register_peer(u8 *peer_address, esp_now_role role)
+{
+    char mac_addr_str[18];
+
+    FORMAT_MAC(mac_addr_str, peer_address);
+    LOG_DEBUG("Checking if peer exists: [%s]", mac_addr_str);
+
+    if (!esp_now_is_peer_exist(peer_address))
+    {
+        /// TODO: Add error handling here
+         esp_now_add_peer(peer_address, role, 1, NULL, 0);
+        LOG_ERROR("Registered new peer: [%s]", mac_addr_str);
+    }
+    else
+    {
+        LOG_ERROR("Peer has already been registered: [%s]", mac_addr_str);
+    }
+
+    return RESULT_OK;
+}
 
 ServerNodeManager::ServerNodeManager(EspNowNode *node)
 {
@@ -36,7 +60,7 @@ ProcessingResult ServerNodeManager::process(PeerMessage *message)
     this->peer_count++;
 
     LOG_DEBUG("Configuring peer");
-    esp_now_add_peer(message->sender, ESP_NOW_ROLE_COMBO, 1, NULL, 0);
+    ASSERT_OK(__register_peer(message->sender, ESP_NOW_ROLE_COMBO));
 
     LOG_DEBUG("Setting up message handler for peer");
     this->node->add_handler(new PeerMessageHandler(message->sender));
@@ -49,6 +73,8 @@ int ServerNodeManager::init()
 {
     this->advertise_timer->start();
     this->prune_timer->start();
+
+    ASSERT_OK(__register_peer((u8*)__broadcast_peer, ESP_NOW_ROLE_CONTROLLER));
     return RESULT_OK;
 }
 
@@ -57,6 +83,8 @@ int ServerNodeManager::update()
     if (this->advertise_timer->is_complete())
     {
         LOG_INFO("Advertising server to peers");
+        u8 payload[] = { 0x01 };
+        esp_now_send((u8 *)__broadcast_peer, payload, 1);
     }
 
     if (this->prune_timer->is_complete())
