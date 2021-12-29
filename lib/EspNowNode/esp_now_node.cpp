@@ -6,7 +6,6 @@
 #include <espnow.h>
 
 #include "log.h"
-#include "format_utils.h"
 
 #include "esp_now_node.h"
 #include "node_manager.h"
@@ -28,9 +27,7 @@ namespace thingnet
      */
     void __on_data_sent(u8 *mac_addr, u8 status)
     {
-        char buffer[18];
-        FORMAT_MAC(buffer, mac_addr);
-        LOG_INFO("Message delivery to [%s] [%s]", buffer, status == 0 ? "ok" : "err");
+        LOG_INFO("Message delivery to [%s] [%s]", LOG_FORMAT_MAC(mac_addr), status == 0 ? "ok" : "err");
     }
 
     /**
@@ -151,15 +148,10 @@ namespace thingnet
 
         this->is_initialized = true;
 
-        char mac_addr_str[18];
-
         LOG_INFO("Node initialized");
 
-        FORMAT_MAC(mac_addr_str, this->ap_mac_address);
-        LOG_DEBUG("AP MAC Address : [%s]", mac_addr_str);
-
-        FORMAT_MAC(mac_addr_str, this->sta_mac_address);
-        LOG_DEBUG("STA MAC Address: [%s]", mac_addr_str);
+        LOG_DEBUG("AP MAC Address : [%s]", LOG_FORMAT_MAC(this->ap_mac_address));
+        LOG_DEBUG("STA MAC Address: [%s]", LOG_FORMAT_MAC(this->sta_mac_address));
 
         return RESULT_OK;
     }

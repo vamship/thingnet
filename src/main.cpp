@@ -7,7 +7,6 @@
 #include <espnow.h>
 
 #include "log.h"
-#include "format_utils.h"
 #include "pulser.h"
 #include "timer.h"
 #include "error_codes.h"

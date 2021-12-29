@@ -2,7 +2,6 @@
 
 #include "message_handler.h"
 #include "log.h"
-#include "format_utils.h"
 
 namespace thingnet::message_handlers
 {

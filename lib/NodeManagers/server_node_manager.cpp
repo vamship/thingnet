@@ -1,7 +1,6 @@
 #include <Arduino.h>
 
 #include "log.h"
-#include "format_utils.h"
 #include "timer.h"
 
 #include "error_codes.h"
@@ -19,20 +18,19 @@ namespace thingnet::node_managers
 
     int __register_peer(u8 *peer_address, esp_now_role role)
     {
-        char mac_addr_str[18];
-
-        FORMAT_MAC(mac_addr_str, peer_address);
-        LOG_DEBUG("Checking if peer exists: [%s]", mac_addr_str);
+        LOG_DEBUG("Checking if peer exists: [%s]", LOG_FORMAT_MAC(peer_address));
 
         if (!esp_now_is_peer_exist(peer_address))
         {
             /// TODO: Add error handling here
             esp_now_add_peer(peer_address, role, 1, NULL, 0);
-            LOG_ERROR("Registered new peer: [%s]", mac_addr_str);
+            LOG_ERROR("Registered new peer: [%s]",
+                      LOG_FORMAT_MAC(peer_address));
         }
         else
         {
-            LOG_ERROR("Peer has already been registered: [%s]", mac_addr_str);
+            LOG_ERROR("Peer has already been registered: [%s]",
+                      LOG_FORMAT_MAC(peer_address));
         }
 
         return RESULT_OK;
