@@ -14,8 +14,8 @@
 
 namespace thingnet
 {
-    const int MAX_HANDLER_COUNT = 255;
-    MessageHandler *__message_handler_list[MAX_HANDLER_COUNT];
+    const int __MAX_HANDLER_COUNT = 255;
+    MessageHandler *__message_handler_list[__MAX_HANDLER_COUNT];
     MessageHandler *__default_handler = 0;
     int __message_handler_count = 0;
 
@@ -164,7 +164,7 @@ namespace thingnet
             return ERR_NODE_NOT_INITIALIZED;
         }
 
-        if (__message_handler_count >= MAX_HANDLER_COUNT)
+        if (__message_handler_count >= __MAX_HANDLER_COUNT)
         {
             LOG_ERROR("Cannot add handler - maximum handler limit has been reached");
             return ERR_HANDLER_LIMIT_EXCEEDED;

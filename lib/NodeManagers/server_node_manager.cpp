@@ -11,10 +11,10 @@
 
 namespace thingnet::node_managers
 {
-    const int SERVER_NODE_ADVERTISE_DURATION = 1000;
-    const int SERVER_NODE_PRUNE_DURATION = 1000;
+    const int __SERVER_NODE_ADVERTISE_DURATION = 1000;
+    const int __SERVER_NODE_PRUNE_DURATION = 1000;
 
-    const u8 __broadcast_peer[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+    const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
     int __register_peer(u8 *peer_address, esp_now_role role)
     {
@@ -40,9 +40,9 @@ namespace thingnet::node_managers
     {
         this->node = node;
         this->peer_count = 0;
-        this->advertise_timer = new Timer(SERVER_NODE_ADVERTISE_DURATION,
+        this->advertise_timer = new Timer(__SERVER_NODE_ADVERTISE_DURATION,
                                           true);
-        this->prune_timer = new Timer(SERVER_NODE_PRUNE_DURATION, true);
+        this->prune_timer = new Timer(__SERVER_NODE_PRUNE_DURATION, true);
     }
 
     ProcessingResult ServerNodeManager::process(PeerMessage *message)
@@ -76,7 +76,7 @@ namespace thingnet::node_managers
         this->advertise_timer->start();
         this->prune_timer->start();
 
-        ASSERT_OK(__register_peer((u8 *)__broadcast_peer, ESP_NOW_ROLE_CONTROLLER));
+        ASSERT_OK(__register_peer((u8 *)__BROADCAST_PEER, ESP_NOW_ROLE_CONTROLLER));
         return RESULT_OK;
     }
 
@@ -86,7 +86,7 @@ namespace thingnet::node_managers
         {
             LOG_INFO("Advertising server to peers");
             u8 payload[] = {0x01};
-            esp_now_send((u8 *)__broadcast_peer, payload, 1);
+            esp_now_send((u8 *)__BROADCAST_PEER, payload, 1);
         }
 
         if (this->prune_timer->is_complete())
