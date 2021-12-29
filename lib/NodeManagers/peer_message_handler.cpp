@@ -8,32 +8,28 @@
 
 using namespace thingnet::message_handlers;
 
-namespace thingnet
+namespace thingnet::node_managers
 {
-    namespace node_managers
+    PeerMessageHandler::PeerMessageHandler(u8 *peer_mac_address)
     {
+        // Store the peer mac address for future comparison
+        memcpy(this->peer_mac_address, peer_mac_address, 6);
+    }
 
-        PeerMessageHandler::PeerMessageHandler(u8 *peer_mac_address)
+    bool PeerMessageHandler::can_handle(PeerMessage *message)
+    {
+        if (memcmp(this->peer_mac_address, message->sender, 6) == 0)
         {
-            // Store the peer mac address for future comparison
-            memcpy(this->peer_mac_address, peer_mac_address, 6);
-        }
+            LOG_INFO("[PeerMessageHandler] will handle message");
+            return true;
+        };
+        LOG_INFO("[PeerMessageHandler] **CANNOT** handle message");
+        return false;
+    }
 
-        bool PeerMessageHandler::can_handle(PeerMessage *message)
-        {
-            if (memcmp(this->peer_mac_address, message->sender, 6) == 0)
-            {
-                LOG_INFO("[PeerMessageHandler] will handle message");
-                return true;
-            };
-            LOG_INFO("[PeerMessageHandler] **CANNOT** handle message");
-            return false;
-        }
-
-        ProcessingResult PeerMessageHandler::process(PeerMessage *message)
-        {
-            LOG_INFO("[PeerMessageHandler] Processing message");
-            return ProcessingResult::handled;
-        }
+    ProcessingResult PeerMessageHandler::process(PeerMessage *message)
+    {
+        LOG_INFO("[PeerMessageHandler] Processing message");
+        return ProcessingResult::handled;
     }
 }
