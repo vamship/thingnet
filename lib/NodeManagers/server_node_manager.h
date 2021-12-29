@@ -8,6 +8,7 @@
 #include "timer.h"
 
 using namespace thingnet::message_handlers;
+using namespace thingnet::utils;
 
 namespace thingnet::node_managers
 {
