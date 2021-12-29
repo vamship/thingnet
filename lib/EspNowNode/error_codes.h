@@ -12,7 +12,7 @@ namespace thingnet
 #define ASSERT_OK(expr)                                                                                 \
   {                                                                                                     \
     int result = expr;                                                                                  \
-    if (result != RESULT_OK)                                                                            \
+    if (result != thingnet::RESULT_OK)                                                                            \
     {                                                                                                   \
       LOG_ERROR("Fatal error. Non success error code: (%d) [%s, line %d]", result, __FILE__, __LINE__); \
       exit(result);                                                                                     \
