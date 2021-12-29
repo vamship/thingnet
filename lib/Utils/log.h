@@ -5,8 +5,9 @@
 #include <espnow.h>
 
 #define LOG_LEVEL_ERROR 1
-#define LOG_LEVEL_INFO 2
-#define LOG_LEVEL_DEBUG 3
+#define LOG_LEVEL_WARN 2
+#define LOG_LEVEL_INFO 3
+#define LOG_LEVEL_DEBUG 4
 
 #ifdef LOG_ENABLED
 #define LOG(level, message, ...)                           \
@@ -23,6 +24,12 @@
 #define LOG_ERROR(message, ...) LOG("[ERROR] ", message __VA_OPT__(, ) __VA_ARGS__)
 #else
 #define LOG_ERROR(...)
+#endif
+
+#if LOG_LEVEL >= LOG_LEVEL_WARN
+#define LOG_WARN(message, ...) LOG("[WARN ] ", message __VA_OPT__(, ) __VA_ARGS__)
+#else
+#define LOG_WARN(...)
 #endif
 
 #if LOG_LEVEL >= LOG_LEVEL_INFO
