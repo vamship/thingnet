@@ -5,12 +5,20 @@
 #include "message_handler.h"
 #include "generic_message_handler.h"
 
-GenericMessageHandler::GenericMessageHandler(message_processor_t processor)
+namespace thingnet
 {
-    this->processor = processor;
-}
+    namespace message_handlers
+    {
 
-ProcessingResult GenericMessageHandler::process(PeerMessage *message)
-{
-    return this->processor(message);
+        GenericMessageHandler::GenericMessageHandler(message_processor_t processor)
+        {
+            this->processor = processor;
+        }
+
+        ProcessingResult GenericMessageHandler::process(PeerMessage *message)
+        {
+            return this->processor(message);
+        }
+
+    }
 }

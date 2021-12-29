@@ -3,18 +3,25 @@
 #include "error_codes.h"
 #include "node_manager.h"
 
-NodeManager::NodeManager()
+namespace thingnet
 {
-    // Nothing to do here.
-}
+    namespace node_managers
+    {
 
-NodeManager::~NodeManager()
-{
-    // Nothing to do here.
-}
+        NodeManager::NodeManager()
+        {
+            // Nothing to do here.
+        }
 
-int NodeManager::init()
-{
-    // Default implementation does nothing.
-    return RESULT_OK;
+        NodeManager::~NodeManager()
+        {
+            // Nothing to do here.
+        }
+
+        int NodeManager::init()
+        {
+            // Default implementation does nothing.
+            return RESULT_OK;
+        }
+    }
 }

@@ -14,6 +14,10 @@
 #include "esp_now_node.h"
 #include "server_node_manager.h"
 
+using namespace thingnet;
+using namespace thingnet::node_managers;
+using namespace thingnet::message_handlers;
+
 // const u8 SERVER_MAC[] = {0x18, 0xfe, 0x34, 0xd4, 0x7e, 0x9a};
 const u8 SERVER_MAC[] = {0x1A, 0xFE, 0x34, 0xD4, 0x82, 0x2A};
 
