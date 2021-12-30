@@ -27,7 +27,7 @@ namespace thingnet
      */
     void __on_data_sent(u8 *mac_addr, u8 status)
     {
-        LOG_INFO("Message delivery to [%s] [%s]", LOG_FORMAT_MAC(mac_addr), status == 0 ? "ok" : "err");
+        LOG_INFO("Message delivery ack to [%s] [%s]", LOG_FORMAT_MAC(mac_addr), status == 0 ? "ok" : "err");
     }
 
     /**
@@ -47,35 +47,36 @@ namespace thingnet
         memcpy(message.payload, data, length);
 
         bool processing_complete = false;
-        LOG_DEBUG("Processing message");
+        LOG_DEBUG("Starting handler chain");
         for (int index = 0; index < __message_handler_count; index++)
         {
-            MessageHandler *processor = __message_handler_list[index];
-            if (!processor->can_handle(&message))
+            MessageHandler *handler = __message_handler_list[index];
+            if (!handler->can_handle(&message))
             {
+                LOG_DEBUG("Handler [%d] will not handle message", index);
                 continue;
             }
 
-            LOG_DEBUG("Processor [%d] can handle message", index);
-            ProcessingResult result = processor->process(&message);
+            LOG_DEBUG("Handler [%d] will handle message", index);
+            ProcessingResult result = handler->process(&message);
 
             if (result == ProcessingResult::handled)
             {
                 processing_complete = true;
-                LOG_DEBUG("Processing chain completed");
+                LOG_DEBUG("Handler chain completed");
                 break;
             }
             else if (result == ProcessingResult::error)
             {
                 processing_complete = true;
-                LOG_ERROR("Error processing message");
+                LOG_WARN("Error processing message by processor [%d]");
                 break;
             }
         }
 
         if (!processing_complete)
         {
-            LOG_DEBUG("Processing chain is still not complete");
+            LOG_DEBUG("Handler chain is still not complete");
             if (__default_handler != 0)
             {
                 LOG_DEBUG("Checking if default handler will process the message");
@@ -86,22 +87,27 @@ namespace thingnet
 
                     if (result == ProcessingResult::error)
                     {
-                        LOG_ERROR("Error executing default handler [%d]", result);
+                        LOG_WARN("Error processing message by default handler");
                     }
                 }
                 else
                 {
-                    LOG_ERROR("Default handler will not handle message");
+                    LOG_WARN("Default handler will not handle message");
                 }
             }
             else
             {
-                LOG_ERROR("Default handler has not been set. Skipping.");
+                LOG_WARN("Default handler has not been set. Skipping.");
             }
         }
+
+        LOG_INFO("Message from peer processed");
     }
 
-    EspNowNode::EspNowNode() {}
+    EspNowNode::EspNowNode()
+    {
+        this->manager = 0;
+    }
 
     EspNowNode::~EspNowNode()
     {
@@ -121,9 +127,10 @@ namespace thingnet
 
     int EspNowNode::init()
     {
+        LOG_INFO("Initializing node");
         if (this->is_initialized)
         {
-            LOG_INFO("Node has already been initialized");
+            LOG_WARN("Node has already been initialized");
             return RESULT_OK;
         }
 
@@ -148,16 +155,18 @@ namespace thingnet
 
         this->is_initialized = true;
 
-        LOG_INFO("Node initialized");
-
         LOG_DEBUG("AP MAC Address : [%s]", LOG_FORMAT_MAC(this->ap_mac_address));
         LOG_DEBUG("STA MAC Address: [%s]", LOG_FORMAT_MAC(this->sta_mac_address));
+
+        LOG_INFO("Node initialized");
 
         return RESULT_OK;
     }
 
     int EspNowNode::add_handler(MessageHandler *handler)
     {
+        LOG_INFO("Registering message handler");
+
         if (!this->is_initialized)
         {
             LOG_ERROR("Node has not been initialized");
@@ -170,8 +179,6 @@ namespace thingnet
             return ERR_HANDLER_LIMIT_EXCEEDED;
         }
 
-        LOG_INFO("Adding new handler to list");
-
         // Add handler to the end of the list.
         __message_handler_list[__message_handler_count] = handler;
         __message_handler_count++;
@@ -183,19 +190,26 @@ namespace thingnet
 
     int EspNowNode::set_node_manager(NodeManager *manager)
     {
+        LOG_INFO("Registering node manager");
+
         if (!this->is_initialized)
         {
             LOG_ERROR("Node has not been initialized");
             return ERR_NODE_NOT_INITIALIZED;
         }
 
-        LOG_INFO("Setting node manager");
+        if (this->manager != 0)
+        {
+            LOG_WARN("Node manager has already been registered");
+            return RESULT_OK;
+        }
+
         this->manager = manager;
 
         LOG_DEBUG("Configuring default handler");
         __default_handler = manager;
 
-        LOG_INFO("Default handler has been set");
+        LOG_INFO("Node manager registered");
 
         return RESULT_OK;
     }
@@ -214,12 +228,17 @@ namespace thingnet
 
     int EspNowNode::update()
     {
+        LOG_INFO("Executing node update");
+
         if (!this->manager)
         {
             LOG_ERROR("Node manager has not been set");
             return ERR_NODE_MANAGER_NOT_SET;
         }
+
         manager->update();
+
+        LOG_INFO("Node update completed");
 
         return RESULT_OK;
     }
