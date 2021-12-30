@@ -257,7 +257,7 @@ namespace thingnet
 
         /// TODO: Add enhanced error checking (ESP32 only)
         int status = esp_now_add_peer(peer_address, role, 1, NULL, 0);
-        if (!status)
+        if (status)
         {
             LOG_ERROR("Peer registration returned non zero value: [%d]", status);
             return ERR_PEER_REGISTRATION_FAILED;
