@@ -15,14 +15,14 @@ namespace thingnet
   const int ERR_PEER_REGISTRATION_FAILED = 0x13;
 }
 
-#define ASSERT_OK(expr)                                                                                 \
-  {                                                                                                     \
-    int result = expr;                                                                                  \
-    if (result > thingnet::RESULT_SUCCESS_BOUNDARY)                          \
-    {                                                                                                   \
-      LOG_ERROR("Fatal error. Non success error code: (%d) [%s, line %d]", result, __FILE__, __LINE__); \
-      exit(result);                                                                                     \
-    }                                                                                                   \
+#define ASSERT_OK(expr)                                                                                   \
+  {                                                                                                       \
+    int __result = expr;                                                                                  \
+    if (__result > thingnet::RESULT_SUCCESS_BOUNDARY)                                                     \
+    {                                                                                                     \
+      LOG_ERROR("Fatal error. Non success error code: (%d) [%s, line %d]", __result, __FILE__, __LINE__); \
+      exit(__result);                                                                                     \
+    }                                                                                                     \
   }
 
 #define ASSERT_TRUE(expr)                                                                                \
