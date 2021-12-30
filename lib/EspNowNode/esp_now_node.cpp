@@ -69,7 +69,7 @@ namespace thingnet
             else if (result == ProcessingResult::error)
             {
                 processing_complete = true;
-                LOG_WARN("Error processing message by processor [%d]");
+                LOG_WARN("Error processing message by processor [%d]", index);
                 break;
             }
         }
