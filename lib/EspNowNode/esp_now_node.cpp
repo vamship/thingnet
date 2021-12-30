@@ -14,10 +14,10 @@
 
 namespace thingnet
 {
-    const int __MAX_HANDLER_COUNT = 255;
+    const u8 __MAX_HANDLER_COUNT = 255;
     MessageHandler *__message_handler_list[__MAX_HANDLER_COUNT];
     MessageHandler *__default_handler = 0;
-    int __message_handler_count = 0;
+    u8 __message_handler_count = 0;
 
     /**
      * @brief Handles data send confirmation.
