@@ -19,16 +19,17 @@ namespace thingnet::node_managers
     {
         if (memcmp(this->peer_mac_address, message->sender, 6) == 0)
         {
-            LOG_INFO("[PeerMessageHandler] will handle message");
+            LOG_DEBUG("[PeerMessageHandler] will handle message");
             return true;
         };
-        LOG_INFO("[PeerMessageHandler] **CANNOT** handle message");
+
+        LOG_DEBUG("[PeerMessageHandler] will not handle message");
         return false;
     }
 
     ProcessingResult PeerMessageHandler::process(PeerMessage *message)
     {
-        LOG_INFO("[PeerMessageHandler] Processing message");
+        LOG_DEBUG("[PeerMessageHandler] Processing message");
         return ProcessingResult::handled;
     }
 }
