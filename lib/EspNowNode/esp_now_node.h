@@ -37,8 +37,8 @@ namespace thingnet
          * @brief Initializes the node and returns a non-zero value if the
          * initialization fails.
          *
-         * @return int A non zero value will be returned if the initialization
-         *         fails.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         int init();
 
@@ -47,8 +47,8 @@ namespace thingnet
          * handlers for the node. 
          * 
          * @param handler The handler to add
-         * @return int A non zero value will be returned if the add operation
-         *         resulted in an error.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         int add_handler(MessageHandler *handler);
 
@@ -60,8 +60,8 @@ namespace thingnet
          * 3. Allowing individual peer controllers to perform updates
          * 
          * @param manager The manager to add
-         * @return int A non zero value will be returned if the add operation
-         *         resulted in an error.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         int set_node_manager(NodeManager *manager);
 
@@ -73,14 +73,14 @@ namespace thingnet
          * @return false If the input mac address odes not match, or if the node
          *         has not been initialized.
          */
-            bool has_mac_address(u8 *input_mac);
+        bool has_mac_address(u8 *input_mac);
 
         /**
          * @brief Allows the node to update itself. This method will typically
          * be called from within a processing loop, and must be non blocking.
          * 
-         * @return int A non zero value will be returned if the update did not
-         *         work as expected.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         int update();
 
@@ -96,7 +96,8 @@ namespace thingnet
      * 
      * @param peer_address The mac address of the peer.
      * @param role The role to register the peer as.
-     * @return int A non zero error code will be returned if registration fails
+     * @return int A non success value will be returned if the add operation
+     *         resulted in an error. See error codes for more information.
      */
     int register_peer(u8 *peer_address, esp_now_role role);
 }

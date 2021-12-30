@@ -32,8 +32,8 @@ namespace thingnet::utils
         /**
          * @brief Initializes the pulser object
          * 
-         * @return int A non zero value will be returned if the initialization
-         *         fails.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         int init();
 
@@ -41,8 +41,8 @@ namespace thingnet::utils
          * @brief Set the duty cycle of the output pulses.
          * 
          * @param duty_cycle The duty cycle as a number from 1 to 100
-         * @return int A non zero value will be returned if the duty cycle could not
-         *         be set correctly.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         int set_duty_cycle(u8 duty_cycle);
 
@@ -50,8 +50,8 @@ namespace thingnet::utils
          * @brief Set the duration of the output pulses
          * 
          * @param duration The duration in milliseconds.
-         * @return int A non zero value will be returned if the duration could not
-         *         be set correctly.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         int set_duration(u64 duration);
 
@@ -60,7 +60,8 @@ namespace thingnet::utils
          * that will transition the state of the pulse (high -> low or low -> high)
          * based on the current time and the duty cycle of the pulser.
          * 
-         * @return int A non zero value will be returned if the update fails.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         int update();
     };

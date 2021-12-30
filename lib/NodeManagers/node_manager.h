@@ -38,8 +38,8 @@ namespace thingnet::node_managers
          * @brief Allows the node manager to initialize itself. This method
          * will be called once at the start of the program.
          * 
-         * @return int A non zero value will be returned if the update did
-         *         not work as expected.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         virtual int init();
 
@@ -48,8 +48,8 @@ namespace thingnet::node_managers
          * typically be called from within a processing loop, and must be
          * non blocking.
          * 
-         * @return int A non zero value will be returned if the update did
-         *         not work as expected.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         virtual int update() = 0;
     };

@@ -131,7 +131,7 @@ namespace thingnet
         if (this->is_initialized)
         {
             LOG_WARN("Node has already been initialized");
-            return RESULT_OK;
+            return RESULT_DUPLICATE;
         }
 
         LOG_DEBUG("Reading current mac address(es)");
@@ -201,7 +201,7 @@ namespace thingnet
         if (this->manager != 0)
         {
             LOG_WARN("Node manager has already been registered");
-            return RESULT_OK;
+            return RESULT_DUPLICATE;
         }
 
         this->manager = manager;
@@ -252,7 +252,7 @@ namespace thingnet
         {
             LOG_WARN("Peer has already been registered: [%s]",
                      LOG_FORMAT_MAC(peer_address));
-            return RESULT_OK;
+            return RESULT_DUPLICATE;
         }
 
         /// TODO: Add enhanced error checking (ESP32 only)

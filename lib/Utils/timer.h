@@ -50,16 +50,16 @@ namespace thingnet::utils
          * @brief Starts the timer. If the timer has been started, this method will
          * have no effect.
          * 
-         * @return int A non zero value will be returned if the timer cannot be
-         *         started.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         int start();
 
         /**
          * @brief Starts the timer.
          * 
-         * @return int A non zero value will be returned if the timer cannot be
-         *         started.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         int stop();
 
@@ -67,7 +67,8 @@ namespace thingnet::utils
          * @brief Restarts the timer - if the timer has been stopped, it will be
          * started, and if it has been stopped, it will be started again.
          * 
-         * @return int 
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         int restart();
     };
