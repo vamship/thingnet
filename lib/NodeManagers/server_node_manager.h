@@ -4,14 +4,18 @@
 #include <Arduino.h>
 #include "esp_now_node.h"
 #include "message_handler.h"
+#include "peer.h"
 #include "node_manager.h"
 #include "timer.h"
 
 using namespace thingnet::message_handlers;
 using namespace thingnet::utils;
+using namespace thingnet::peers;
 
 namespace thingnet::node_managers
 {
+    const int __MAX_PEER_COUNT = 50;
+
     /**
      * @brief A node manager implementation for server nodes. Provides basic server
      * functions such as dynamic peer registration, server advertisement,
@@ -21,7 +25,7 @@ namespace thingnet::node_managers
     {
     private:
         EspNowNode *node;
-        u8 peer_list[255][6];
+        Peer *peer_list[__MAX_PEER_COUNT];
         u8 peer_count;
         Timer *advertise_timer;
         Timer *prune_timer;

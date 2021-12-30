@@ -6,7 +6,7 @@
 #include "error_codes.h"
 #include "esp_now_node.h"
 #include "message_handler.h"
-#include "peer_message_handler.h"
+#include "basic_peer.h"
 #include "server_node_manager.h"
 
 namespace thingnet::node_managers
@@ -27,27 +27,22 @@ namespace thingnet::node_managers
 
     ProcessingResult ServerNodeManager::process(PeerMessage *message)
     {
-        LOG_DEBUG("Checking if peer has previously been registered");
-        for (int index = 0; index < this->peer_count; index++)
+        LOG_INFO("Registering a new peer");
+        int result = register_peer(message->sender, ESP_NOW_ROLE_COMBO);
+        ASSERT_OK(result);
+
+        if (result == RESULT_OK)
         {
-            if (memcmp(this->peer_list[index], message->sender, 6) == 0)
-            {
-                LOG_INFO("Peer already registered");
-                return ProcessingResult::handled;
-            }
+            LOG_DEBUG("Registering new peer");
+            BasicPeer *peer = new BasicPeer(message->sender, 30000);
+            this->peer_list[this->peer_count] = peer;
+            this->peer_count++;
+
+            LOG_DEBUG("Setting up message handler for peer");
+            this->node->add_handler(peer);
         }
 
-        LOG_DEBUG("Adding peer to list");
-        memcpy(this->peer_list[this->peer_count], message->sender, 6);
-        this->peer_count++;
-
-        LOG_DEBUG("Configuring peer");
-        ASSERT_OK(register_peer(message->sender, ESP_NOW_ROLE_COMBO));
-
-        LOG_DEBUG("Setting up message handler for peer");
-        this->node->add_handler(new PeerMessageHandler(message->sender));
-
-        LOG_INFO("New peer registered");
+        LOG_INFO("Peer registration process completed");
         return ProcessingResult::handled;
     }
 
@@ -74,28 +69,35 @@ namespace thingnet::node_managers
 
         if (this->prune_timer->is_complete())
         {
-            LOG_INFO("Pruning inactive peers");
-            //     // u8 payload[250];
-            //     // if (this->peer_count > 0)
-            //     // {
-            //     //     LOG_DEBUG("Preparing message");
-            //     //     payload[0] = 5; // Length of the message (Hello)
-            //     //     strcpy((char *)payload + 1, "Hello");
-            //     // }
-            //     // else
-            //     // {
-            //     //     LOG_DEBUG("No peers registered");
-            //     // }
+            LOG_INFO("Looking for inactive peers");
+            for (u8 peer_index = 0; peer_index < this->peer_count; peer_index++)
+            {
+                LOG_DEBUG("Checking if peer [%d] is active", peer_index);
+                if (!this->peer_list[peer_index]->is_active())
+                {
+                    LOG_INFO("Peer [%d] is inactive", peer_index);
+                    // Mark peer for pruning
+                    this->peer_list[peer_index] = 0;
+                }
+            }
 
-            //     // for (u8 peer_index = 0; peer_index < this->peer_count; peer_index++)
-            //     // {
-            //     //     u8 *peer_mac = this->peer_list[peer_index];
+            LOG_DEBUG("Pruning inactive peers");
+            u8 prune_count = 0;
+            for (u8 peer_index = 0; peer_index < this->peer_count; peer_index++)
+            {
+                if (this->peer_list[peer_index] == 0)
+                {
+                    prune_count++;
+                    LOG_DEBUG("Pruning inactive peer [%d]", peer_index);
+                }
+                else
+                {
+                    this->peer_list[peer_index - prune_count] = this->peer_list[peer_index];
+                }
+            }
 
-            //     //     LOG_DEBUG("Sending message to peer");
-            //     //     esp_now_send(peer_mac, (u8 *)&payload, sizeof(payload));
-
-            //     //     LOG_DEBUG("Message sent");
-            //     // }
+            this->peer_count -= prune_count;
+            LOG_INFO("Pruned [%d] inactive peers", prune_count);
         }
 
         return RESULT_OK;
