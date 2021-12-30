@@ -228,8 +228,6 @@ namespace thingnet
 
     int EspNowNode::update()
     {
-        LOG_INFO("Executing node update");
-
         if (!this->manager)
         {
             LOG_ERROR("Node manager has not been set");
@@ -237,9 +235,6 @@ namespace thingnet
         }
 
         manager->update();
-
-        LOG_INFO("Node update completed");
-
         return RESULT_OK;
     }
 

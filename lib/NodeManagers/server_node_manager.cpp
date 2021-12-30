@@ -65,8 +65,6 @@ namespace thingnet::node_managers
 
     int ServerNodeManager::update()
     {
-        LOG_INFO("Executing server node manager update");
-
         if (this->advertise_timer->is_complete())
         {
             LOG_INFO("Advertising server to peers");
@@ -99,8 +97,6 @@ namespace thingnet::node_managers
             //     //     LOG_DEBUG("Message sent");
             //     // }
         }
-
-        LOG_INFO("Server node manager update completed");
 
         return RESULT_OK;
     }
