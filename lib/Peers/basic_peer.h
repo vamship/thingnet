@@ -14,7 +14,6 @@ namespace thingnet::peers
     class BasicPeer : public Peer
     {
     private:
-        u8 peer_mac_address[6];
         u64 last_message_time;
         u32 timeout;
 
@@ -37,17 +36,6 @@ namespace thingnet::peers
          *        represented by this object
          */
         BasicPeer(u8 *peer_mac_address);
-
-        /**
-         * @brief Returns true only if the message is from a peer that this
-         * handler is configured for.
-         *
-         * @param message A pointer to the message that the handler will
-         *        receive.
-         * @return true If the handler wants to handle the message.
-         * @return false If the handler does not want to handle the message.
-         */
-        virtual bool can_handle(PeerMessage *message);
 
         /**
          * @brief Processes a message and returns a result that reflects the

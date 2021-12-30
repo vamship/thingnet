@@ -11,7 +11,7 @@
 
 namespace thingnet::node_managers
 {
-    const int __SERVER_NODE_ADVERTISE_DURATION = 1000;
+    const int __SERVER_NODE_ADVERTISE_DURATION = 30000;
     const int __SERVER_NODE_PRUNE_DURATION = 1000;
 
     const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -31,6 +31,9 @@ namespace thingnet::node_managers
         int result = register_peer(message->sender, ESP_NOW_ROLE_COMBO);
         ASSERT_OK(result);
 
+        // Result could be OK or DUPLICATE. Both cases are considered to be
+        // non-error. However, we do not want to add another peer reference
+        // if the peer already existx.
         if (result == RESULT_OK)
         {
             LOG_DEBUG("Registering new peer");
@@ -73,22 +76,36 @@ namespace thingnet::node_managers
             for (u8 peer_index = 0; peer_index < this->peer_count; peer_index++)
             {
                 LOG_DEBUG("Checking if peer [%d] is active", peer_index);
-                if (!this->peer_list[peer_index]->is_active())
+                Peer *current_peer = this->peer_list[peer_index];
+                if (!current_peer->is_active())
                 {
                     LOG_INFO("Peer [%d] is inactive", peer_index);
-                    // Mark peer for pruning
+
+                    // Removing peer handler
+                    this->node->remove_handler(current_peer);
+
+                    // Removing message handler
+                    u8 mac_addr[6];
+                    current_peer->read_mac_address(mac_addr);
+                    ASSERT_OK(unregister_peer(mac_addr));
+
+                    // Destroy the peer and mark the pointer as removed.
+                    LOG_DEBUG("Destroying peer [%d] [%s]",
+                              peer_index,
+                              LOG_FORMAT_MAC(mac_addr));
+
+                    delete current_peer;
                     this->peer_list[peer_index] = 0;
                 }
             }
 
-            LOG_DEBUG("Pruning inactive peers");
+            LOG_DEBUG("Compacting peer list");
             u8 prune_count = 0;
             for (u8 peer_index = 0; peer_index < this->peer_count; peer_index++)
             {
                 if (this->peer_list[peer_index] == 0)
                 {
                     prune_count++;
-                    LOG_DEBUG("Pruning inactive peer [%d]", peer_index);
                 }
                 else
                 {
@@ -97,7 +114,7 @@ namespace thingnet::node_managers
             }
 
             this->peer_count -= prune_count;
-            LOG_INFO("Pruned [%d] inactive peers", prune_count);
+            LOG_INFO("Pruned [%d] inactive peers. Peer count [%d]", prune_count, this->peer_count);
         }
 
         return RESULT_OK;
