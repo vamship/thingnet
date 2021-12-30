@@ -243,4 +243,27 @@ namespace thingnet
         return RESULT_OK;
     }
 
+    int register_peer(u8 *peer_address, esp_now_role role)
+    {
+        LOG_INFO("Registering new peer");
+
+        LOG_DEBUG("Checking if peer exists: [%s]", LOG_FORMAT_MAC(peer_address));
+        if (esp_now_is_peer_exist(peer_address))
+        {
+            LOG_WARN("Peer has already been registered: [%s]",
+                     LOG_FORMAT_MAC(peer_address));
+            return RESULT_OK;
+        }
+
+        /// TODO: Add enhanced error checking (ESP32 only)
+        int status = esp_now_add_peer(peer_address, role, 1, NULL, 0);
+        if (!status)
+        {
+            LOG_ERROR("Peer registration returned non zero value: [%d]", status);
+            return ERR_PEER_REGISTRATION_FAILED;
+        }
+        LOG_INFO("Registered new peer: [%s]", LOG_FORMAT_MAC(peer_address));
+
+        return RESULT_OK;
+    }
 }

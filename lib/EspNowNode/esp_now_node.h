@@ -89,6 +89,16 @@ namespace thingnet
         EspNowNode(EspNowNode const &) = delete;
         void operator=(EspNowNode const &) = delete;
     };
+
+    /**
+     * @brief Registers a new peer with the node. The peer will not be added if
+     * it has already been registered.
+     * 
+     * @param peer_address The mac address of the peer.
+     * @param role The role to register the peer as.
+     * @return int A non zero error code will be returned if registration fails
+     */
+    int register_peer(u8 *peer_address, esp_now_role role);
 }
 
 #endif

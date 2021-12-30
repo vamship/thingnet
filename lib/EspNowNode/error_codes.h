@@ -7,6 +7,7 @@ namespace thingnet
   const int ERR_NODE_NOT_INITIALIZED = 0x01;
   const int ERR_HANDLER_LIMIT_EXCEEDED = 0x02;
   const int ERR_NODE_MANAGER_NOT_SET = 0x03;
+  const int ERR_PEER_REGISTRATION_FAILED = 0x04;
 }
 
 #define ASSERT_OK(expr)                                                                                 \

@@ -16,26 +16,6 @@ namespace thingnet::node_managers
 
     const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-    int __register_peer(u8 *peer_address, esp_now_role role)
-    {
-        LOG_DEBUG("Checking if peer exists: [%s]", LOG_FORMAT_MAC(peer_address));
-
-        if (!esp_now_is_peer_exist(peer_address))
-        {
-            /// TODO: Add error handling here
-            esp_now_add_peer(peer_address, role, 1, NULL, 0);
-            LOG_ERROR("Registered new peer: [%s]",
-                      LOG_FORMAT_MAC(peer_address));
-        }
-        else
-        {
-            LOG_ERROR("Peer has already been registered: [%s]",
-                      LOG_FORMAT_MAC(peer_address));
-        }
-
-        return RESULT_OK;
-    }
-
     ServerNodeManager::ServerNodeManager(EspNowNode *node)
     {
         this->node = node;
@@ -62,7 +42,7 @@ namespace thingnet::node_managers
         this->peer_count++;
 
         LOG_DEBUG("Configuring peer");
-        ASSERT_OK(__register_peer(message->sender, ESP_NOW_ROLE_COMBO));
+        ASSERT_OK(register_peer(message->sender, ESP_NOW_ROLE_COMBO));
 
         LOG_DEBUG("Setting up message handler for peer");
         this->node->add_handler(new PeerMessageHandler(message->sender));
@@ -73,15 +53,20 @@ namespace thingnet::node_managers
 
     int ServerNodeManager::init()
     {
+        LOG_INFO("Initializing server node manager");
         this->advertise_timer->start();
         this->prune_timer->start();
 
-        ASSERT_OK(__register_peer((u8 *)__BROADCAST_PEER, ESP_NOW_ROLE_CONTROLLER));
+        ASSERT_OK(register_peer((u8 *)__BROADCAST_PEER, ESP_NOW_ROLE_CONTROLLER));
+
+        LOG_INFO("Server node manager initialized");
         return RESULT_OK;
     }
 
     int ServerNodeManager::update()
     {
+        LOG_INFO("Executing server node manager update");
+
         if (this->advertise_timer->is_complete())
         {
             LOG_INFO("Advertising server to peers");
@@ -114,6 +99,8 @@ namespace thingnet::node_managers
             //     //     LOG_DEBUG("Message sent");
             //     // }
         }
+
+        LOG_INFO("Server node manager update completed");
 
         return RESULT_OK;
     }
