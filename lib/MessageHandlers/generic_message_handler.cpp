@@ -13,6 +13,7 @@ namespace thingnet::message_handlers
 
     ProcessingResult GenericMessageHandler::process(PeerMessage *message)
     {
+        LOG_DEBUG("[GenericMessageHandler] Delegating message handling");
         return this->processor(message);
     }
 }

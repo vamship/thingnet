@@ -16,7 +16,7 @@ namespace thingnet::message_handlers
 
     bool MessageHandler::can_handle(PeerMessage *message)
     {
-        LOG_DEBUG("[MessageHandler] Checking if handler can process");
+        LOG_DEBUG("[MessageHandler] Checking if handler can process message");
         return true;
     }
 
