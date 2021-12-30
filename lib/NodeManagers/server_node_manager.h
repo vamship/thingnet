@@ -54,8 +54,8 @@ namespace thingnet::node_managers
         /**
          * @brief Initializes the node manager by starting the appropriate timers.
          * 
-         * @return int A non zero value will be returned if the initialization was
-         * not successful.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         int init();
 
@@ -64,8 +64,8 @@ namespace thingnet::node_managers
          * update actions. Additionally, performs basic housekeeping such as pruning
          * peer references that are no longer active, etc.
          * 
-         * @return int A non zero value will be returned if the update does not
-         * complete successfully
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
          */
         int update();
     };
