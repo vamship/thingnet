@@ -6,6 +6,7 @@ namespace thingnet
 
   const int RESULT_OK = 0x00;
   const int RESULT_DUPLICATE = 0x01;
+  const int RESULT_NO_EXIST = 0x02;
 
   const int RESULT_SUCCESS_BOUNDARY = 0x0F;
 
@@ -13,6 +14,7 @@ namespace thingnet
   const int ERR_HANDLER_LIMIT_EXCEEDED = 0x12;
   const int ERR_NODE_MANAGER_NOT_SET = 0x12;
   const int ERR_PEER_REGISTRATION_FAILED = 0x13;
+  const int ERR_PEER_UNREGISTRATION_FAILED = 0x14;
 }
 
 #define ASSERT_OK(expr)                                                                                   \

@@ -261,4 +261,28 @@ namespace thingnet
 
         return RESULT_OK;
     }
+
+    int unregister_peer(u8 *peer_address)
+    {
+        LOG_INFO("Unregistering existing peer");
+
+        LOG_DEBUG("Checking if peer exists: [%s]", LOG_FORMAT_MAC(peer_address));
+        if (!esp_now_is_peer_exist(peer_address))
+        {
+            LOG_WARN("Peer has not been registered: [%s]",
+                     LOG_FORMAT_MAC(peer_address));
+            return RESULT_NO_EXIST;
+        }
+
+        /// TODO: Add enhanced error checking (ESP32 only)
+        int status = esp_now_del_peer(peer_address);
+        if (status)
+        {
+            LOG_ERROR("Peer unregistration returned non zero value: [%d]", status);
+            return ERR_PEER_UNREGISTRATION_FAILED;
+        }
+        LOG_INFO("Unregistered existing peer: [%s]", LOG_FORMAT_MAC(peer_address));
+
+        return RESULT_OK;
+    }
 }

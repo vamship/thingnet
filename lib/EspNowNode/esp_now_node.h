@@ -100,6 +100,16 @@ namespace thingnet
      *         resulted in an error. See error codes for more information.
      */
     int register_peer(u8 *peer_address, esp_now_role role);
+
+    /**
+     * @brief Unregisters an existing peer from the node. This method will have
+     * no effect if the peer has not been previously registered.
+     * 
+     * @param peer_address The mac address of the peer.
+     * @return int A non success value will be returned if the add operation
+     *         resulted in an error. See error codes for more information.
+     */
+    int unregister_peer(u8* peer_address);
 }
 
 #endif
