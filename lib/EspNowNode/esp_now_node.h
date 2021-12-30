@@ -53,6 +53,16 @@ namespace thingnet
         int add_handler(MessageHandler *handler);
 
         /**
+         * @brief Removes the handler from the list of handlers and compacts the
+         * handler list.
+         * 
+         * @param handler The handler to remove
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
+         */
+        int remove_handler(MessageHandler *handler);
+
+        /**
          * @brief Sets the node manager for the current node. The node manager
          * is responsible for:
          * 1. Handling messages not handled by handlers in the chain

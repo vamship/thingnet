@@ -188,6 +188,44 @@ namespace thingnet
         return RESULT_OK;
     }
 
+    int EspNowNode::remove_handler(MessageHandler *handler)
+    {
+        LOG_INFO("Unregistering message handler");
+
+        if (!this->is_initialized)
+        {
+            LOG_ERROR("Node has not been initialized");
+            return ERR_NODE_NOT_INITIALIZED;
+        }
+
+        u8 find_count = 0;
+        for (u8 handler_index = 0; handler_index < __message_handler_count; handler_index++)
+        {
+            if (__message_handler_list[handler_index] == handler)
+            {
+                find_count++;
+            }
+            else
+            {
+                __message_handler_list[handler_index - find_count] =
+                    __message_handler_list[handler_index];
+            }
+        }
+
+        if (find_count == 0)
+        {
+            LOG_WARN("Could not find message handler");
+            return RESULT_NO_EXIST;
+        }
+        __message_handler_count -= find_count;
+
+        LOG_INFO("Handler(s) removed successfully [%d]. Total handlers: [%d]",
+                 find_count,
+                 __message_handler_count);
+
+        return RESULT_OK;
+    }
+
     int EspNowNode::set_node_manager(NodeManager *manager)
     {
         LOG_INFO("Registering node manager");
