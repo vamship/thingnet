@@ -4,9 +4,7 @@
 #include <Arduino.h>
 #include "message_handler.h"
 
-using namespace thingnet::message_handlers;
-
-namespace thingnet::node_managers
+namespace thingnet::message_handlers
 {
     /**
      * @brief Processes a message received from another node.

@@ -5,9 +5,7 @@
 #include "message_handler.h"
 #include "log.h"
 
-using namespace thingnet::message_handlers;
-
-namespace thingnet::node_managers
+namespace thingnet::message_handlers
 {
     PeerMessageHandler::PeerMessageHandler(u8 *peer_mac_address)
     {
