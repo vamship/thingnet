@@ -12,7 +12,7 @@
 namespace thingnet::node_managers
 {
     const int __SERVER_NODE_ADVERTISE_DURATION = 30000;
-    const int __SERVER_NODE_PRUNE_DURATION = 1000;
+    const int __SERVER_NODE_PRUNE_DURATION = 10000;
 
     const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
