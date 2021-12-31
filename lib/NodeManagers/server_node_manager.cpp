@@ -75,7 +75,7 @@ namespace thingnet::node_managers
             LOG_INFO("Looking for inactive peers");
             for (u8 peer_index = 0; peer_index < this->peer_count; peer_index++)
             {
-                LOG_DEBUG("Checking if peer [%d] is active", peer_index);
+                LOG_DEBUG("Checking peer [%d]", peer_index);
                 Peer *current_peer = this->peer_list[peer_index];
                 if (!current_peer->is_active())
                 {
@@ -96,6 +96,10 @@ namespace thingnet::node_managers
 
                     delete current_peer;
                     this->peer_list[peer_index] = 0;
+                }
+                else
+                {
+                    LOG_DEBUG("Peer [%d] is active", peer_index);
                 }
             }
 
