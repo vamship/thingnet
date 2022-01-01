@@ -3,18 +3,10 @@
 
 #include <Arduino.h>
 
+#include "messages.h"
+
 namespace thingnet::message_handlers
 {
-
-    /**
-     * @brief Data structure for message recevied from a remote peer.
-     */
-    typedef struct PeerMessage
-    {
-        u8 sender[6];
-        u8 payload[250];
-    } PeerMessage;
-
     /**
      * @brief An enumeration of possible statuses returned by a handler after
      * processing messages from a peer node.

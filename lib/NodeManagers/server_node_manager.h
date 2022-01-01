@@ -2,6 +2,8 @@
 #define __SERVER_NODE_MANAGER_H
 
 #include <Arduino.h>
+
+#include "messages.h"
 #include "esp_now_node.h"
 #include "message_handler.h"
 #include "peer.h"

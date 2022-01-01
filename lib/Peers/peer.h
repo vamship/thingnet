@@ -2,6 +2,8 @@
 #define __PEER_H
 
 #include <Arduino.h>
+
+#include "messages.h"
 #include "message_handler.h"
 
 using namespace thingnet::message_handlers;

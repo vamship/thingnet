@@ -4,6 +4,7 @@
 #include "timer.h"
 
 #include "error_codes.h"
+#include "messages.h"
 #include "esp_now_node.h"
 #include "message_handler.h"
 #include "basic_peer.h"

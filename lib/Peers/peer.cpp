@@ -1,6 +1,7 @@
 #include <Arduino.h>
 
 #include "log.h"
+#include "messages.h"
 #include "error_codes.h"
 #include "peer.h"
 

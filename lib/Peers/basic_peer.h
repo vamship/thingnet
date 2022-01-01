@@ -2,6 +2,8 @@
 #define __BASIC_PEER_H
 
 #include <Arduino.h>
+
+#include "messages.h"
 #include "peer.h"
 
 namespace thingnet::peers

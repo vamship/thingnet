@@ -7,6 +7,7 @@
 
 #include "log.h"
 
+#include "messages.h"
 #include "esp_now_node.h"
 #include "node_manager.h"
 #include "message_handler.h"
@@ -44,7 +45,7 @@ namespace thingnet
         LOG_DEBUG("Preparing message payload");
         PeerMessage message;
         memcpy(message.sender, mac_addr, 6);
-        memcpy(message.payload, data, length);
+        memcpy(&message.payload, data, length);
 
         bool processing_complete = false;
         LOG_DEBUG("Starting handler chain");

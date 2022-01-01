@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+#include "messages.h"
 #include "message_handler.h"
 #include "log.h"
 

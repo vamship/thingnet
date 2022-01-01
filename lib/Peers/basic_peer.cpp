@@ -1,6 +1,7 @@
 #include <Arduino.h>
 
 #include "log.h"
+#include "messages.h"
 #include "basic_peer.h"
 
 namespace thingnet::peers
