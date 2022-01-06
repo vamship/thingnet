@@ -17,8 +17,8 @@ using namespace thingnet::peers;
 namespace thingnet::node_managers
 {
     /**
-     * @brief A node manager implementation for server nodes. Provides basic server
-     * functions such as dynamic peer registration, server advertisement,
+     * @brief A node manager implementation for server nodes. Provides basic
+     * server functions such as dynamic peer registration, server advertisement,
      * disconnected peer pruning, etc.
      */
     class ServerNodeManager : public NodeManager
@@ -33,17 +33,18 @@ namespace thingnet::node_managers
         ServerNodeManager(EspNowNode *node);
 
         /**
-         * @brief Initializes the node manager by starting the appropriate timers.
+         * @brief Initializes the node manager by starting the appropriate
+         * timers.
          * 
-         * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * @return int A non success value will be returned if the init
+         * operation resulted in an error. See error codes for more information.
          */
         int init();
 
         /**
-         * @brief Loops through each registered peer and allows the peer to perform
-         * update actions. Additionally, performs basic housekeeping such as pruning
-         * peer references that are no longer active, etc.
+         * @brief Loops through each registered peer and allows the peer to
+         * perform update actions. Additionally, performs basic housekeeping
+         * such as pruning peer references that are no longer active, etc.
          * 
          * @return int A non success value will be returned if the add operation
          *         resulted in an error. See error codes for more information.
