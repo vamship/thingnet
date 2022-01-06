@@ -13,19 +13,28 @@ namespace thingnet
     const u8 MSG_TYPE_ADVERTISEMENT = 0x01;
 
     /**
+     * @brief A general acknowledgement that a message has been received by a
+     * peer. The interpretation of the acknowledgement is left to the individual
+     * peers that are exchanging messages.
+     */
+    const u8 MSG_TYPE_ACK = 0x01;
+
+    /**
+     * @brief A general rejection notification from a peer. The interpretation
+     * of the acknowledgement is left to the individual peers that are
+     * exchanging messages.
+     */
+    const u8 MSG_TYPE_NACK = 0x02;
+
+    /**
      * @brief Connect message sent by a peer to a server node.
      */
-    const u8 MSG_TYPE_CONNECT = 0x02;
+    const u8 MSG_TYPE_CONNECT = 0x10;
 
     /**
-     * @brief Connection acceptance message sent by a server to a peer node.
+     * @brief General data message from a peer to a server node.
      */
-    const u8 MSG_TYPE_CONNECT_ACK = 0x02;
-
-    /**
-     * @brief Connection declined message sent by a server to a peer node.
-     */
-    const u8 MSG_TYPE_CONNECT_NACK = 0x03;
+    const u8 MSG_TYPE_DATA = 0x11;
 
     /**
      * @brief The boundary (inclusive) for all reserved messages.
@@ -38,7 +47,8 @@ namespace thingnet
     typedef struct MessagePayload
     {
         u8 type;
-        u8 body[249];
+        u16 message_id;
+        u8 body[247];
     } MessagePayload;
 
     /**
