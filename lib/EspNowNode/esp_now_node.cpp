@@ -339,10 +339,4 @@ namespace thingnet
 
         return RESULT_OK;
     }
-
-    int EspNowNode::read_mac_address(u8 *buffer)
-    {
-        memcpy(buffer, this->sta_mac_address, 6);
-        return RESULT_OK;
-    }
 }
