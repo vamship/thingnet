@@ -3,6 +3,8 @@
 
 #include <Arduino.h>
 #include <espnow.h>
+
+#include "timer.h"
 #include "node_manager.h"
 #include "message_handler.h"
 
