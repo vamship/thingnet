@@ -273,7 +273,7 @@ namespace thingnet
             return ERR_NODE_MANAGER_NOT_SET;
         }
 
-        manager->update();
+        ASSERT_OK(manager->update());
         return RESULT_OK;
     }
 
