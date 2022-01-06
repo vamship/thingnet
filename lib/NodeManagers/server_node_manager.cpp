@@ -12,6 +12,7 @@
 
 namespace thingnet::node_managers
 {
+    u16 message_id = 0;
     const int __SERVER_NODE_ADVERTISE_DURATION = 30000;
     const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
@@ -41,8 +42,12 @@ namespace thingnet::node_managers
         if (this->advertise_timer->is_complete())
         {
             LOG_INFO("Advertising server to peers");
-            u8 payload[] = {0x01};
-            esp_now_send((u8 *)__BROADCAST_PEER, payload, 1);
+            MessagePayload payload;
+            payload.type = MSG_TYPE_ADVERTISEMENT;
+            payload.message_id = ++message_id;
+            this->node->read_mac_address(payload.body);
+
+            send_message((u8 *)__BROADCAST_PEER, &payload, 9);
         }
 
         return RESULT_OK;
