@@ -277,6 +277,12 @@ namespace thingnet
         return RESULT_OK;
     }
 
+    int EspNowNode::read_mac_address(u8 *buffer)
+    {
+        memcpy(buffer, this->sta_mac_address, 6);
+        return RESULT_OK;
+    }
+
     int register_peer(u8 *peer_address, esp_now_role role)
     {
         LOG_INFO("Registering new peer");
@@ -322,6 +328,21 @@ namespace thingnet
         }
         LOG_INFO("Unregistered existing peer: [%s]", LOG_FORMAT_MAC(peer_address));
 
+        return RESULT_OK;
+    }
+
+    int send_message(u8 *destination, MessagePayload *payload, u8 length)
+    {
+        LOG_DEBUG("Sending [%d] bytes to [%s]", length,
+                  LOG_FORMAT_MAC(destination));
+        esp_now_send(destination, (u8 *)&payload, length);
+
+        return RESULT_OK;
+    }
+
+    int EspNowNode::read_mac_address(u8 *buffer)
+    {
+        memcpy(buffer, this->sta_mac_address, 6);
         return RESULT_OK;
     }
 }

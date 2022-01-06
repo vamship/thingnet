@@ -96,6 +96,15 @@ namespace thingnet
          */
         int update();
 
+        /**
+         * @brief Copies the mac address of the node into the given * buffer.
+         * 
+         * @param buffer A buffer into which the mac address will be copied.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
+         */
+        int read_mac_address(u8 *buffer);
+
         // Singleton implementation.
         // See: https://stackoverflow.com/questions/1008019/c-singleton-design-pattern
         EspNowNode(EspNowNode const &) = delete;
@@ -122,6 +131,17 @@ namespace thingnet
      *         resulted in an error. See error codes for more information.
      */
     int unregister_peer(u8* peer_address);
+
+    /**
+     * @brief Sends a message to the specified peer.
+     * 
+     * @param destination The mac address of the peer
+     * @param payload A pointer to the message payload
+     * @param length The length of the payload
+     * @return int A non success value will be returned if the add operation
+     *         resulted in an error. See error codes for more information.
+     */
+    int send_message(u8* destination, MessagePayload *payload, u8 length);
 }
 
 #endif
