@@ -27,7 +27,7 @@ namespace thingnet
 
     Peer *NodeManager::create_peer(PeerMessage *message)
     {
-        return new BasicPeer(message->sender, 30000);
+        return new BasicPeer(message->sender);
     }
 
     int NodeManager::init()

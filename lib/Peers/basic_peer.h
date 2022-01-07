@@ -8,6 +8,8 @@
 
 namespace thingnet::peers
 {
+    const u32 BASIC_PEER_DEFAULT_TIMEOUT = 60000;
+
     /**
      * @brief A very basic implementation of a remote peer. Does nothing other
      * than track whether or not the remote peer is active based on time elapsed

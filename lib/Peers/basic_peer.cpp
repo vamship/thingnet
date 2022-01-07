@@ -14,7 +14,7 @@ namespace thingnet::peers
     }
 
     BasicPeer::BasicPeer(u8 *peer_mac_address)
-        : BasicPeer(peer_mac_address, 30000)
+        : BasicPeer(peer_mac_address, BASIC_PEER_DEFAULT_TIMEOUT)
     {
     }
 
