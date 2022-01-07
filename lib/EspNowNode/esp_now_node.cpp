@@ -45,7 +45,9 @@ namespace thingnet
         LOG_DEBUG("Preparing message payload");
         PeerMessage message;
         memcpy(message.sender, mac_addr, 6);
-        memcpy(&message.payload, data, length);
+        memcpy(&message.payload.type, data, 1);
+        memcpy(&message.payload.message_id, data + 1, 2);
+        memcpy(&message.payload.body, data + 3, length - 3);
 
         bool processing_complete = false;
         LOG_DEBUG("Starting handler chain");
@@ -333,9 +335,9 @@ namespace thingnet
 
     int send_message(u8 *destination, MessagePayload *payload, u8 data_size)
     {
-        
+
         LOG_DEBUG("Sending [%d] byte payload to [%s]", data_size,
-                    LOG_FORMAT_MAC(destination));
+                  LOG_FORMAT_MAC(destination));
 
         u8 payload_bytes[250];
         memcpy(payload_bytes, &payload->type, 1);
