@@ -57,6 +57,14 @@ namespace thingnet::peers
         virtual ProcessingResult process(PeerMessage *message);
 
         /**
+         * @brief Allows the peer to run periodic updates.
+         * 
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
+         */
+        virtual int update(EspNowNode *node);
+
+        /**
          * @brief Determines whether or not the peer is still active based on
          * the time elapsed since a message was last received from the peer.
          * 
