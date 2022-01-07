@@ -42,7 +42,7 @@ namespace thingnet
     {
         LOG_INFO("Message received from peer");
 
-        LOG_DEBUG("Received:[%02x|%02x:%02x]", data[0], data[1], data[2]);
+        LOG_DEBUG("Received [%02x|%02x:%02x]", data[0], data[1], data[2]);
 
         LOG_DEBUG("Preparing message payload");
         PeerMessage message;
@@ -357,7 +357,7 @@ namespace thingnet
         memcpy(payload_bytes + 1, &payload->message_id, 2);
         memcpy(payload_bytes + 3, &payload->body, data_size);
 
-        LOG_DEBUG("Sending:[%02x|%02x:%02x]",
+        LOG_DEBUG("Sending [%02x|%02x:%02x]",
                   payload_bytes[0],
                   payload_bytes[1],
                   payload_bytes[2]);
