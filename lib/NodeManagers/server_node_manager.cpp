@@ -12,8 +12,7 @@
 
 namespace thingnet::node_managers
 {
-    u16 message_id = 0;
-    const int __SERVER_NODE_ADVERTISE_DURATION = 30000;
+    const int __SERVER_NODE_ADVERTISE_DURATION = 5000;
     const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
     ServerNodeManager::ServerNodeManager(EspNowNode *node) : NodeManager(node)
