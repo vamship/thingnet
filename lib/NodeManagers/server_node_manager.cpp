@@ -10,7 +10,7 @@
 #include "basic_peer.h"
 #include "server_node_manager.h"
 
-namespace thingnet::node_managers
+namespace thingnet
 {
     const int __SERVER_NODE_ADVERTISE_DURATION = 5000;
     const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};

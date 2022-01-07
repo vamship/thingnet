@@ -9,7 +9,7 @@
 #include "basic_peer.h"
 #include "node_manager.h"
 
-namespace thingnet::node_managers
+namespace thingnet
 {
     const int __NODE_MANAGER_PRUNE_DURATION = 10000;
 

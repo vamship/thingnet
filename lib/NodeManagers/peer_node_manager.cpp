@@ -11,7 +11,7 @@
 
 using namespace thingnet::peers;
 
-namespace thingnet::node_managers
+namespace thingnet
 {
     const int __PEER_NODE_MESSAGE_DURATION = 30000;
 

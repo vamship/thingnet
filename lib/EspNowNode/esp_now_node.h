@@ -9,7 +9,7 @@
 
 // Forward declaration to prevent circular references.
 // See: https://stackoverflow.com/questions/625799/resolve-build-errors-due-to-circular-dependency-amongst-classes
-namespace thingnet::node_managers
+namespace thingnet
 {
     class NodeManager;
 }
@@ -19,7 +19,6 @@ namespace thingnet::message_handlers
     class MessageHandler;
 }
 
-using namespace thingnet::node_managers;
 using namespace thingnet::message_handlers;
 
 namespace thingnet
@@ -136,7 +135,7 @@ namespace thingnet
          *         resulted in an error. See error codes for more information.
          */
         int register_peer(u8 *peer_address, esp_now_role role);
-        
+
         /**
          * @brief Unregisters an existing peer from the node. This method will have
          * no effect if the peer has not been previously registered.
@@ -145,7 +144,7 @@ namespace thingnet
          * @return int A non success value will be returned if the add operation
          *         resulted in an error. See error codes for more information.
          */
-        int unregister_peer(u8* peer_address);
+        int unregister_peer(u8 *peer_address);
 
         /**
          * @brief Sends a message to the specified peer.
@@ -156,7 +155,7 @@ namespace thingnet
          * @return int A non success value will be returned if the add operation
          *         resulted in an error. See error codes for more information.
          */
-        int send_message(u8* destination, MessagePayload *payload, u8 data_size);
+        int send_message(u8 *destination, MessagePayload *payload, u8 data_size);
 
         // Singleton implementation.
         // See: https://stackoverflow.com/questions/1008019/c-singleton-design-pattern

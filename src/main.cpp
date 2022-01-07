@@ -11,11 +11,11 @@
 #include "timer.h"
 #include "error_codes.h"
 #include "esp_now_node.h"
+#include "node_manager.h"
 #include "server_node_manager.h"
 #include "peer_node_manager.h"
 
 using namespace thingnet;
-using namespace thingnet::node_managers;
 using namespace thingnet::message_handlers;
 using namespace thingnet::peers;
 using namespace thingnet::utils;

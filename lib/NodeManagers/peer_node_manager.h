@@ -19,7 +19,7 @@ using namespace thingnet::message_handlers;
 using namespace thingnet::utils;
 using namespace thingnet::peers;
 
-namespace thingnet::node_managers
+namespace thingnet
 {
     /**
      * @brief A node manager implementation for peer nodes. Automatically
