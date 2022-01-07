@@ -296,7 +296,7 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    int register_peer(u8 *peer_address, esp_now_role role)
+    int EspNowNode::register_peer(u8 *peer_address, esp_now_role role)
     {
         LOG_INFO("Registering new peer");
 
@@ -320,7 +320,7 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    int unregister_peer(u8 *peer_address)
+    int EspNowNode::unregister_peer(u8 *peer_address)
     {
         LOG_INFO("Unregistering existing peer");
 
@@ -344,7 +344,7 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    int send_message(u8 *destination, MessagePayload *payload, u8 data_size)
+    int EspNowNode::send_message(u8 *destination, MessagePayload *payload, u8 data_size)
     {
 
         LOG_DEBUG("Sending [%d] byte payload to [%s]", data_size,

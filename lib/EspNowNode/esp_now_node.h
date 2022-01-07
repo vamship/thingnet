@@ -115,43 +115,43 @@ namespace thingnet
          */
         int read_mac_address(u8 *buffer);
 
+        /**
+         * @brief Registers a new peer with the node. The peer will not be added if
+         * it has already been registered.
+         * 
+         * @param peer_address The mac address of the peer.
+         * @param role The role to register the peer as.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
+         */
+        int register_peer(u8 *peer_address, esp_now_role role);
+        
+        /**
+         * @brief Unregisters an existing peer from the node. This method will have
+         * no effect if the peer has not been previously registered.
+         * 
+         * @param peer_address The mac address of the peer.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
+         */
+        int unregister_peer(u8* peer_address);
+
+        /**
+         * @brief Sends a message to the specified peer.
+         * 
+         * @param destination The mac address of the peer
+         * @param payload A pointer to the message payload
+         * @param data_size The length of the payload, not including headers
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
+         */
+        int send_message(u8* destination, MessagePayload *payload, u8 data_size);
+
         // Singleton implementation.
         // See: https://stackoverflow.com/questions/1008019/c-singleton-design-pattern
         EspNowNode(EspNowNode const &) = delete;
         void operator=(EspNowNode const &) = delete;
     };
-
-    /**
-     * @brief Registers a new peer with the node. The peer will not be added if
-     * it has already been registered.
-     * 
-     * @param peer_address The mac address of the peer.
-     * @param role The role to register the peer as.
-     * @return int A non success value will be returned if the add operation
-     *         resulted in an error. See error codes for more information.
-     */
-    int register_peer(u8 *peer_address, esp_now_role role);
-
-    /**
-     * @brief Unregisters an existing peer from the node. This method will have
-     * no effect if the peer has not been previously registered.
-     * 
-     * @param peer_address The mac address of the peer.
-     * @return int A non success value will be returned if the add operation
-     *         resulted in an error. See error codes for more information.
-     */
-    int unregister_peer(u8* peer_address);
-
-    /**
-     * @brief Sends a message to the specified peer.
-     * 
-     * @param destination The mac address of the peer
-     * @param payload A pointer to the message payload
-     * @param data_size The length of the payload, not including headers
-     * @return int A non success value will be returned if the add operation
-     *         resulted in an error. See error codes for more information.
-     */
-    int send_message(u8* destination, MessagePayload *payload, u8 data_size);
 }
 
 #endif

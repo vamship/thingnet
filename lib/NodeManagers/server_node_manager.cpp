@@ -28,7 +28,8 @@ namespace thingnet::node_managers
         LOG_INFO("Starting advertise timer");
         this->advertise_timer->start();
 
-        ASSERT_OK(register_peer((u8 *)__BROADCAST_PEER, ESP_NOW_ROLE_CONTROLLER));
+        ASSERT_OK(this->node->register_peer((u8 *)__BROADCAST_PEER,
+                                            ESP_NOW_ROLE_CONTROLLER));
 
         LOG_INFO("Server node manager initialized");
         return RESULT_OK;
@@ -46,7 +47,7 @@ namespace thingnet::node_managers
             payload.message_id = this->node->get_next_message_id();
             this->node->read_mac_address(payload.body);
 
-            send_message((u8 *)__BROADCAST_PEER, &payload, 6);
+            this->node->send_message((u8 *)__BROADCAST_PEER, &payload, 6);
         }
 
         return RESULT_OK;

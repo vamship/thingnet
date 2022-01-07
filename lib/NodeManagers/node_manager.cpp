@@ -55,7 +55,8 @@ namespace thingnet::node_managers
         else
         {
             LOG_DEBUG("Registering new peer");
-            int result = register_peer(message->sender, ESP_NOW_ROLE_COMBO);
+            int result = this->node->register_peer(message->sender,
+                                                   ESP_NOW_ROLE_COMBO);
             ASSERT_OK(result);
 
             // Result could be OK or DUPLICATE. Both cases are considered to be
@@ -101,7 +102,7 @@ namespace thingnet::node_managers
                     // Removing message handler
                     u8 mac_addr[6];
                     current_peer->read_mac_address(mac_addr);
-                    ASSERT_OK(unregister_peer(mac_addr));
+                    ASSERT_OK(this->node->unregister_peer(mac_addr));
 
                     // Destroy the peer and mark the pointer as removed.
                     LOG_DEBUG("Destroying peer [%d] [%s]",
