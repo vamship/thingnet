@@ -54,7 +54,7 @@ namespace thingnet
         }
         else
         {
-            LOG_DEBUG("Registering new peer");
+            LOG_DEBUG("Adding peer to internal registry");
             int result = this->node->register_peer(message->sender,
                                                    ESP_NOW_ROLE_COMBO);
             ASSERT_OK(result);
