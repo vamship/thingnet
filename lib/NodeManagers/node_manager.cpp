@@ -40,36 +40,42 @@ namespace thingnet::node_managers
 
     ProcessingResult NodeManager::process(PeerMessage *message)
     {
-        LOG_INFO("Registering a new peer");
-        int result = register_peer(message->sender, ESP_NOW_ROLE_COMBO);
-        ASSERT_OK(result);
+        LOG_INFO("Executing node manager message handler");
 
-        // Result could be OK or DUPLICATE. Both cases are considered to be
-        // non-error. However, we do not want to add another peer reference
-        // if the peer already exists.
-        if (result == RESULT_OK)
+        // Allow the child class to determine if a new peer needs to be created.
+        // A child class can do this by overriding the create_peer() method.
+        LOG_DEBUG("Requesting new peer instance");
+        Peer *peer = this->create_peer(message);
+
+        if (peer == 0)
         {
-            LOG_DEBUG("Requesting new peer instance");
-            Peer *peer = this->create_peer(message);
-
-            if (peer == 0)
-            {
-                LOG_DEBUG("No peer was created");
-            }
-            else
-            {
-                LOG_DEBUG("Registering new peer");
-
-                this->peer_list[this->peer_count] = peer;
-                this->peer_count++;
-
-                LOG_DEBUG("Setting up message handler for peer");
-                this->node->add_handler(peer);
-            }
+            // Child class thinks no peer is required.
+            LOG_DEBUG("No peer was created");
         }
         else
         {
-            LOG_WARN("A peer has already been registered");
+            LOG_DEBUG("Registering new peer");
+            int result = register_peer(message->sender, ESP_NOW_ROLE_COMBO);
+            ASSERT_OK(result);
+
+            // Result could be OK or DUPLICATE. Both cases are considered to be
+            // non-error. However, we do not want to add another peer reference
+            // if the peer already exists.
+            if (result == RESULT_OK)
+            {
+                LOG_DEBUG("Configuring peer");
+                this->peer_list[this->peer_count] = peer;
+                this->peer_count++;
+
+                this->node->add_handler(peer);
+            }
+            else
+            {
+                // There is already a peer registered, so delete the one created
+                // by the child class
+                delete peer;
+                LOG_WARN("A peer has already been registered");
+            }
         }
 
         LOG_INFO("Peer registration process completed");
