@@ -41,7 +41,7 @@ namespace thingnet::node_managers
             for (u8 index = 0; index < this->peer_count; index++)
             {
                 LOG_DEBUG("Sending message to peer [%d]", index);
-                this->peer_list[index]->update();
+                this->peer_list[index]->update(this->node);
             }
         }
 

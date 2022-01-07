@@ -1,8 +1,10 @@
 #include <Arduino.h>
 
 #include "log.h"
-#include "messages.h"
 #include "error_codes.h"
+
+#include "esp_now_node.h"
+#include "messages.h"
 #include "peer.h"
 
 namespace thingnet::peers
@@ -36,7 +38,7 @@ namespace thingnet::peers
         // Nothing to do here
     }
 
-    int Peer::update()
+    int Peer::update(EspNowNode *node)
     {
         return RESULT_OK;
     }

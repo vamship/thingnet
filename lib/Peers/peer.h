@@ -5,6 +5,7 @@
 
 #include "messages.h"
 #include "message_handler.h"
+#include "esp_now_node.h"
 
 using namespace thingnet::message_handlers;
 
@@ -59,7 +60,7 @@ namespace thingnet::peers
          * @return int A non success value will be returned if the add operation
          *         resulted in an error. See error codes for more information.
          */
-        virtual int update();
+        virtual int update(EspNowNode *node);
 
         /**
          * @brief Determines whether or not the peer is still active.
