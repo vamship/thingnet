@@ -1,5 +1,5 @@
-#ifndef __CLIENT_NODE_MANAGER_H
-#define __CLIENT_NODE_MANAGER_H
+#ifndef __PEER_NODE_MANAGER_H
+#define __PEER_NODE_MANAGER_H
 
 #include <Arduino.h>
 
@@ -17,11 +17,11 @@ using namespace thingnet::peers;
 namespace thingnet::node_managers
 {
     /**
-     * @brief A node manager implementation for client nodes. Automatically
+     * @brief A node manager implementation for peer nodes. Automatically
      * registers itself with a server that is advertising itself, and
      * disconnects if the server becomes inactive.
      */
-    class ClientNodeManager : public NodeManager
+    class PeerNodeManager : public NodeManager
     {
     private:
         Timer *message_timer;
@@ -29,7 +29,7 @@ namespace thingnet::node_managers
     protected:
         /**
          * @brief Creates a new peer object, typically when establishing a
-         * connection to a server or client. Child classes can override this
+         * connection to a server or peer. Child classes can override this
          * implementation to create different peers based on specific
          * requirements.
          * 
@@ -41,9 +41,9 @@ namespace thingnet::node_managers
 
     public:
         /**
-         * @brief Construct a new Client Node Manager object
+         * @brief Construct a new Peer Node Manager object
          */
-        ClientNodeManager(EspNowNode *node);
+        PeerNodeManager(EspNowNode *node);
 
         /**
          * @brief Initializes the node manager by starting the appropriate

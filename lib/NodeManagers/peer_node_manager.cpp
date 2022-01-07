@@ -6,30 +6,29 @@
 #include "error_codes.h"
 #include "messages.h"
 #include "esp_now_node.h"
-#include "client_node_manager.h"
+#include "peer_node_manager.h"
 
 namespace thingnet::node_managers
 {
-    const int __CLIENT_NODE_MESSAGE_DURATION = 30000;
-    const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+    const int __PEER_NODE_MESSAGE_DURATION = 30000;
 
-    ClientNodeManager::ClientNodeManager(EspNowNode *node) : NodeManager(node)
+    PeerNodeManager::PeerNodeManager(EspNowNode *node) : NodeManager(node)
     {
-        this->message_timer = new Timer(__CLIENT_NODE_MESSAGE_DURATION, true);
+        this->message_timer = new Timer(__PEER_NODE_MESSAGE_DURATION, true);
     }
 
-    int ClientNodeManager::init()
+    int PeerNodeManager::init()
     {
         ASSERT_OK(NodeManager::init());
 
         LOG_INFO("Starting message timer");
         this->message_timer->start();
 
-        LOG_INFO("Client node manager initialized");
+        LOG_INFO("Peer node manager initialized");
         return RESULT_OK;
     }
 
-    int ClientNodeManager::update()
+    int PeerNodeManager::update()
     {
         ASSERT_OK(NodeManager::update());
 
@@ -46,7 +45,7 @@ namespace thingnet::node_managers
         return RESULT_OK;
     }
 
-    Peer *ClientNodeManager::create_peer(PeerMessage *message)
+    Peer *PeerNodeManager::create_peer(PeerMessage *message)
     {
         LOG_INFO("Inspecting message from peer");
         if (message->payload.message_id != MSG_TYPE_ADVERTISEMENT)
