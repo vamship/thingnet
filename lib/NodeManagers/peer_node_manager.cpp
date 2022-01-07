@@ -7,6 +7,9 @@
 #include "messages.h"
 #include "esp_now_node.h"
 #include "peer_node_manager.h"
+#include "basic_peer.h"
+
+using namespace thingnet::peers;
 
 namespace thingnet::node_managers
 {
@@ -47,17 +50,22 @@ namespace thingnet::node_managers
 
     Peer *PeerNodeManager::create_peer(PeerMessage *message)
     {
-        LOG_INFO("Inspecting message from peer");
-        if (message->payload.message_id != MSG_TYPE_ADVERTISEMENT)
+        LOG_INFO("Processing create peer request");
+
+        if (message->payload.type != MSG_TYPE_ADVERTISEMENT)
         {
-            LOG_INFO("Unexpected message [%d] from [%s]",
-                     message->payload.message_id,
+            LOG_DEBUG("Unexpected message [%02x] from [%s]. Ignoring.",
+                     message->payload.type,
                      LOG_FORMAT_MAC(message->sender));
 
             return 0;
         }
-        LOG_INFO("Advertisement message received from [%s]",
-                 LOG_FORMAT_MAC(message->sender));
-        return 0;
+        u8 mac_addr[6];
+        memcpy(mac_addr, message->payload.body, 6);
+        LOG_INFO("Advertisement message received for [%s] from [%s]",
+                 LOG_FORMAT_MAC(message->sender),
+                 LOG_FORMAT_MAC(mac_addr));
+
+        return new BasicPeer(mac_addr);
     }
 }
