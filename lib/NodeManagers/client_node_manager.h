@@ -3,12 +3,12 @@
 
 #include <Arduino.h>
 
-#include "timer.h"
 #include "messages.h"
 #include "esp_now_node.h"
 #include "message_handler.h"
 #include "peer.h"
 #include "node_manager.h"
+#include "timer.h"
 
 using namespace thingnet::message_handlers;
 using namespace thingnet::utils;
