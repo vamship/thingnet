@@ -16,7 +16,7 @@ namespace thingnet::peers
      */
     class Peer : public MessageHandler
     {
-    private:
+    protected:
         u8 peer_mac_address[6];
     public:
         /**

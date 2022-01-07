@@ -32,16 +32,12 @@ namespace thingnet::peers
 
     int BasicPeer::update(EspNowNode *node)
     {
-        LOG_INFO("Sending ping message to peer");
-        u8 mac_addr[6];
-        this->read_mac_address(mac_addr);
-
-        LOG_DEBUG("Ping destination [%s]", LOG_FORMAT_MAC(mac_addr));
+        LOG_INFO("Sending heartbeat message to peer");
         MessagePayload payload;
         payload.type = MSG_TYPE_HEARTBEAT;
         payload.message_id = node->get_next_message_id();
 
-        node->send_message((u8 *)mac_addr, &payload, 6);
+        node->send_message((u8 *)this->peer_mac_address, &payload, 6);
 
         return RESULT_OK;
     }
