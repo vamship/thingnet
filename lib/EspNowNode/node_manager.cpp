@@ -11,7 +11,7 @@
 
 namespace thingnet
 {
-    const int __NODE_MANAGER_PRUNE_DURATION = 10000;
+    const int __NODE_MANAGER_PRUNE_DURATION = 120000;
 
     NodeManager::NodeManager(EspNowNode *node)
     {
