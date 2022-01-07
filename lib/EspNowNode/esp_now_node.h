@@ -9,6 +9,7 @@
 #include "message_handler.h"
 
 using namespace thingnet::node_managers;
+using namespace thingnet::message_handlers;
 
 namespace thingnet
 {
