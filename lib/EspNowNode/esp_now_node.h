@@ -22,6 +22,7 @@ namespace thingnet
     private:
         u8 sta_mac_address[6];
         u8 ap_mac_address[6];
+        u16 message_id;
         bool is_initialized;
         NodeManager *manager;
 
@@ -44,6 +45,14 @@ namespace thingnet
          *         resulted in an error. See error codes for more information.
          */
         int init();
+
+        /**
+         * @brief Generates and returns a new message id value. This method will
+         * always return zero if the node has not been initialized.
+         * 
+         * @return u16 The generated message id.
+         */
+        u16 get_next_message_id();
 
         /**
          * @brief Adds a message handler to the end of the list of available

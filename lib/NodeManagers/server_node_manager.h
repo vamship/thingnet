@@ -24,7 +24,6 @@ namespace thingnet::node_managers
     class ServerNodeManager : public NodeManager
     {
     private:
-        u16 message_id;
         Timer *advertise_timer;
 
     public:

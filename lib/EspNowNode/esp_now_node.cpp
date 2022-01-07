@@ -166,6 +166,17 @@ namespace thingnet
         return RESULT_OK;
     }
 
+    u16 EspNowNode::get_next_message_id()
+    {
+        if (!this->is_initialized)
+        {
+            LOG_WARN("Node has not been initialized");
+            return 0;
+        }
+        this->message_id++;
+        return this->message_id;
+    }
+
     int EspNowNode::add_handler(MessageHandler *handler)
     {
         LOG_INFO("Registering message handler");
