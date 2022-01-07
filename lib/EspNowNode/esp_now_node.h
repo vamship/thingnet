@@ -138,11 +138,11 @@ namespace thingnet
      * 
      * @param destination The mac address of the peer
      * @param payload A pointer to the message payload
-     * @param length The length of the payload
+     * @param data_size The length of the payload, not including headers
      * @return int A non success value will be returned if the add operation
      *         resulted in an error. See error codes for more information.
      */
-    int send_message(u8* destination, MessagePayload *payload, u8 length);
+    int send_message(u8* destination, MessagePayload *payload, u8 data_size);
 }
 
 #endif

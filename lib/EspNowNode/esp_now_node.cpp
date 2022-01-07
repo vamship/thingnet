@@ -331,11 +331,17 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    int send_message(u8 *destination, MessagePayload *payload, u8 length)
+    int send_message(u8 *destination, MessagePayload *payload, u8 data_size)
     {
-        LOG_DEBUG("Sending [%d] bytes to [%s]", length,
-                  LOG_FORMAT_MAC(destination));
-        esp_now_send(destination, (u8 *)&payload, length);
+        
+        LOG_DEBUG("Sending [%d] byte payload to [%s]", data_size,
+                    LOG_FORMAT_MAC(destination));
+
+        u8 payload_bytes[250];
+        memcpy(payload_bytes, &payload->type, 1);
+        memcpy(payload_bytes + 1, &payload->message_id, 2);
+        memcpy(payload_bytes + 3, &payload->body, data_size);
+        esp_now_send(destination, (u8 *)&payload_bytes, data_size + 3);
 
         return RESULT_OK;
     }
