@@ -1,6 +1,11 @@
 #ifndef __PEER_NODE_MANAGER_H
 #define __PEER_NODE_MANAGER_H
 
+// WEIRD BEHAVIOR: For some reason naming this file "client_node_manager.h"
+// seems to cause compilation issues. I cannot explain it, but that's what the
+// preliminary evidence points to. Just to keep things moving, are just going to
+// adopt the name change for now.
+
 #include <Arduino.h>
 
 #include "messages.h"
