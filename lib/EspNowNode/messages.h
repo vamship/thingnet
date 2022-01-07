@@ -5,13 +5,6 @@
 
 namespace thingnet
 {
-
-    /**
-     * @brief Server advertisement message, typically follwed by the mac address
-     * of the server node.
-     */
-    const u8 MSG_TYPE_ADVERTISEMENT = 0x01;
-
     /**
      * @brief A general acknowledgement that a message has been received by a
      * peer. The interpretation of the acknowledgement is left to the individual
@@ -27,14 +20,25 @@ namespace thingnet
     const u8 MSG_TYPE_NACK = 0x02;
 
     /**
+     * @brief Server advertisement message, typically follwed by the mac address
+     * of the server node.
+     */
+    const u8 MSG_TYPE_ADVERTISEMENT = 0x10;
+
+    /**
      * @brief Connect message sent by a peer to a server node.
      */
-    const u8 MSG_TYPE_CONNECT = 0x10;
+    const u8 MSG_TYPE_CONNECT = 0x11;
+
+    /**
+     * @brief A heartbeat message sent by a peer.
+     */
+    const u8 MSG_TYPE_HEARTBEAT = 0x12;
 
     /**
      * @brief General data message from a peer to a server node.
      */
-    const u8 MSG_TYPE_DATA = 0x11;
+    const u8 MSG_TYPE_DATA = 0x13;
 
     /**
      * @brief The boundary (inclusive) for all reserved messages.
