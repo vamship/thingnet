@@ -3,20 +3,14 @@
 
 #include <Arduino.h>
 
+#include "timer.h"
+#include "esp_now_node.h"
 #include "message_handler.h"
 #include "peer.h"
-#include "timer.h"
 
 using namespace thingnet::message_handlers;
 using namespace thingnet::utils;
 using namespace thingnet::peers;
-
-// Forward declaration to prevent circular references.
-// See: https://stackoverflow.com/questions/625799/resolve-build-errors-due-to-circular-dependency-amongst-classes
-namespace thingnet
-{
-    class EspNowNode;
-}
 
 namespace thingnet::node_managers
 {

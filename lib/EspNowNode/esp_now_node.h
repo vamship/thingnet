@@ -5,8 +5,19 @@
 #include <espnow.h>
 
 #include "timer.h"
-#include "node_manager.h"
-#include "message_handler.h"
+#include "messages.h"
+
+// Forward declaration to prevent circular references.
+// See: https://stackoverflow.com/questions/625799/resolve-build-errors-due-to-circular-dependency-amongst-classes
+namespace thingnet::node_managers
+{
+    class NodeManager;
+}
+
+namespace thingnet::message_handlers
+{
+    class MessageHandler;
+}
 
 using namespace thingnet::node_managers;
 using namespace thingnet::message_handlers;
