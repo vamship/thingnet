@@ -22,6 +22,12 @@ namespace thingnet::peers
     {
         LOG_DEBUG("[BasicPeer] Processing message");
         this->last_message_time = millis();
+
+        if (message->payload.type == MSG_TYPE_HEARTBEAT)
+        {
+            LOG_DEBUG("Received heartbeat from [%s]",
+                     LOG_FORMAT_MAC(message->sender));
+        }
         return ProcessingResult::handled;
     }
 
