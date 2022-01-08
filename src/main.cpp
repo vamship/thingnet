@@ -12,7 +12,7 @@
 #include "error_codes.h"
 #include "esp_now_node.h"
 #include "node_profile.h"
-#include "server_node_manager.h"
+#include "server_node_profile.h"
 #include "peer_node_manager.h"
 
 using namespace thingnet;
@@ -38,7 +38,7 @@ void setup()
 
     if (node.has_mac_address((u8 *)SERVER_MAC))
     {
-        manager = new ServerNodeManager(&node);
+        manager = new ServerNodeProfile(&node);
         LOG_INFO("Running in SERVER mode");
     }
     else

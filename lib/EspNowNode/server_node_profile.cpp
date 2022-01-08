@@ -8,20 +8,21 @@
 #include "esp_now_node.h"
 #include "message_handler.h"
 #include "basic_peer.h"
-#include "server_node_manager.h"
+#include "server_node_profile.h"
 
 namespace thingnet
 {
-    const int __SERVER_NODE_ADVERTISE_DURATION = 30000;
+    const int __SERVER_NODE_PROFILE_ADVERTISE_PERIOD = 30000;
     const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-    ServerNodeManager::ServerNodeManager(EspNowNode *node) : NodeProfile(node)
+    ServerNodeProfile::ServerNodeProfile(EspNowNode *node) : NodeProfile(node)
     {
-        this->advertise_timer = new Timer(__SERVER_NODE_ADVERTISE_DURATION,
-                                          true);
+        this->advertise_timer = new Timer(
+            __SERVER_NODE_PROFILE_ADVERTISE_PERIOD,
+            true);
     }
 
-    int ServerNodeManager::init()
+    int ServerNodeProfile::init()
     {
         ASSERT_OK(NodeProfile::init());
 
@@ -31,11 +32,11 @@ namespace thingnet
         ASSERT_OK(this->node->register_peer((u8 *)__BROADCAST_PEER,
                                             ESP_NOW_ROLE_CONTROLLER));
 
-        LOG_INFO("Server node manager initialized");
+        LOG_INFO("Server node profile initialized");
         return RESULT_OK;
     }
 
-    int ServerNodeManager::update()
+    int ServerNodeProfile::update()
     {
         ASSERT_OK(NodeProfile::update());
 
