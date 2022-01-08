@@ -24,12 +24,31 @@ namespace thingnet::peers
         LOG_DEBUG("[BasicPeer] Processing message");
         this->last_message_time = millis();
 
+        int result = RESULT_OK;
         if (message->payload.type == MSG_TYPE_HEARTBEAT)
         {
-            LOG_DEBUG("Received heartbeat from [%s]",
+            LOG_DEBUG("Acknowledging heartbeat from [%s]",
+                      LOG_FORMAT_MAC(message->sender));
+
+            MessagePayload payload(MSG_TYPE_ACK);
+            memcpy(payload.body, &message->payload.message_id, 2);
+
+            result = this->node->send_message((u8 *)message->sender,
+                                              &payload, 2);
+        }
+        else if (message->payload.type == MSG_TYPE_ACK)
+        {
+            LOG_DEBUG("Ack received from [%s]",
                       LOG_FORMAT_MAC(message->sender));
         }
-        return ProcessingResult::handled;
+        else
+        {
+            LOG_WARN("Unexpected message [%02x] from [%s]",
+                     message->payload.type,
+                     LOG_FORMAT_MAC(message->sender));
+        }
+
+        return result == RESULT_OK ? ProcessingResult::handled : ProcessingResult::error;
     }
 
     bool BasicPeer::is_active()
