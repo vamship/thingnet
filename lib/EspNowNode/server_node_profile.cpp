@@ -56,8 +56,8 @@ namespace thingnet
         if (this->advertise_timer->is_complete())
         {
             LOG_INFO("Advertising server to peers");
-            MessagePayload payload;
-            payload.type = MSG_TYPE_ADVERTISEMENT;
+
+            MessagePayload payload(MSG_TYPE_ADVERTISEMENT);
             this->node->read_mac_address(payload.body);
 
             this->node->send_message((u8 *)__BROADCAST_PEER, &payload, 6);

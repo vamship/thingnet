@@ -40,8 +40,7 @@ namespace thingnet::peers
     int BasicPeer::update()
     {
         LOG_INFO("Sending heartbeat message to peer");
-        MessagePayload payload;
-        payload.type = MSG_TYPE_HEARTBEAT;
+        MessagePayload payload(MSG_TYPE_HEARTBEAT);
 
         this->node->send_message((u8 *)this->peer_mac_address, &payload, 6);
 

@@ -54,7 +54,11 @@ namespace thingnet
         u16 message_id;
         u8 body[247];
 
-        MessagePayload(): message_id(0) {}
+        MessagePayload() : message_id(0) {}
+        MessagePayload(u8 message_type) : MessagePayload()
+        {
+            type = message_type;
+        }
     } MessagePayload;
 
     /**
