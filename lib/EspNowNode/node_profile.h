@@ -1,5 +1,5 @@
-#ifndef __NODE_MANAGER_H
-#define __NODE_MANAGER_H
+#ifndef __NODE_PROFILE_H
+#define __NODE_PROFILE_H
 
 #include <Arduino.h>
 

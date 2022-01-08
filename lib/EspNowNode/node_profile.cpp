@@ -7,7 +7,7 @@
 #include "esp_now_node.h"
 #include "message_handler.h"
 #include "basic_peer.h"
-#include "node_manager.h"
+#include "node_profile.h"
 
 namespace thingnet
 {

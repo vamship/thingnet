@@ -11,7 +11,7 @@
 #include "timer.h"
 #include "error_codes.h"
 #include "esp_now_node.h"
-#include "node_manager.h"
+#include "node_profile.h"
 #include "server_node_manager.h"
 #include "peer_node_manager.h"
 
