@@ -1,10 +1,5 @@
-#ifndef __PEER_NODE_MANAGER_H
-#define __PEER_NODE_MANAGER_H
-
-// WEIRD BEHAVIOR: For some reason naming this file "client_node_manager.h"
-// seems to cause compilation issues. I cannot explain it, but that's what the
-// preliminary evidence points to. Just to keep things moving, are just going to
-// adopt the name change for now.
+#ifndef __CLIENT_NODE_PROFILE_H
+#define __CLIENT_NODE_PROFILE_H
 
 #include <Arduino.h>
 
@@ -22,11 +17,11 @@ using namespace thingnet::peers;
 namespace thingnet
 {
     /**
-     * @brief A node manager implementation for peer nodes. Automatically
+     * @brief A node profile implementation for client nodes. Automatically
      * registers itself with a server that is advertising itself, and
      * disconnects if the server becomes inactive.
      */
-    class PeerNodeManager : public NodeProfile
+    class ClientNodeProfile : public NodeProfile
     {
     private:
         Timer *message_timer;
@@ -34,7 +29,7 @@ namespace thingnet
     protected:
         /**
          * @brief Creates a new peer object, typically when establishing a
-         * connection to a server or peer. Child classes can override this
+         * connection to a server or client. Child classes can override this
          * implementation to create different peers based on specific
          * requirements.
          * 
@@ -46,12 +41,12 @@ namespace thingnet
 
     public:
         /**
-         * @brief Construct a new Peer Node Manager object
+         * @brief Construct a new Client Node Profile object
          */
-        PeerNodeManager(EspNowNode *node);
+        ClientNodeProfile(EspNowNode *node);
 
         /**
-         * @brief Initializes the node manager by starting the appropriate
+         * @brief Initializes the node profile by starting the appropriate
          * timers.
          * 
          * @return int A non success value will be returned if the init
@@ -61,7 +56,7 @@ namespace thingnet
 
         /**
          * @brief Loops through each registered peer and allows the peer to
-         * perform * update actions. Additionally, performs basic housekeeping
+         * perform update actions. Additionally, performs basic housekeeping
          * such as pruning peer references that are no longer active, etc.
          * 
          * @return int A non success value will be returned if the add operation

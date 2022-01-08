@@ -6,21 +6,23 @@
 #include "error_codes.h"
 #include "messages.h"
 #include "esp_now_node.h"
-#include "peer_node_manager.h"
+#include "client_node_profile.h"
 #include "basic_peer.h"
 
 using namespace thingnet::peers;
 
 namespace thingnet
 {
-    const int __PEER_NODE_MESSAGE_DURATION = 10000;
+    const int __CLIENT_NODE_PROFILE_DEFAULT_UPDATE_PERIOD = 10000;
 
-    PeerNodeManager::PeerNodeManager(EspNowNode *node) : NodeProfile(node)
+    ClientNodeProfile::ClientNodeProfile(EspNowNode *node) : NodeProfile(node)
     {
-        this->message_timer = new Timer(__PEER_NODE_MESSAGE_DURATION, true);
+        this->message_timer = new Timer(
+            __CLIENT_NODE_PROFILE_DEFAULT_UPDATE_PERIOD,
+            true);
     }
 
-    int PeerNodeManager::init()
+    int ClientNodeProfile::init()
     {
         ASSERT_OK(NodeProfile::init());
 
@@ -31,7 +33,7 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    int PeerNodeManager::update()
+    int ClientNodeProfile::update()
     {
         ASSERT_OK(NodeProfile::update());
 
@@ -48,7 +50,7 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    Peer *PeerNodeManager::create_peer(PeerMessage *message)
+    Peer *ClientNodeProfile::create_peer(PeerMessage *message)
     {
         LOG_INFO("Processing create peer request");
 

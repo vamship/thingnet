@@ -13,7 +13,7 @@
 #include "esp_now_node.h"
 #include "node_profile.h"
 #include "server_node_profile.h"
-#include "peer_node_manager.h"
+#include "client_node_profile.h"
 
 using namespace thingnet;
 using namespace thingnet::message_handlers;
@@ -43,7 +43,7 @@ void setup()
     }
     else
     {
-        manager = new PeerNodeManager(&node);
+        manager = new ClientNodeProfile(&node);
         LOG_INFO("Running in CLIENT mode");
     }
 
