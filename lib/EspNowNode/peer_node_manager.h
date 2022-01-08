@@ -26,7 +26,7 @@ namespace thingnet
      * registers itself with a server that is advertising itself, and
      * disconnects if the server becomes inactive.
      */
-    class PeerNodeManager : public NodeManager
+    class PeerNodeManager : public NodeProfile
     {
     private:
         Timer *message_timer;

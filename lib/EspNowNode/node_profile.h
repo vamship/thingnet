@@ -17,18 +17,18 @@ namespace thingnet
     const int __MAX_PEER_COUNT = 50;
 
     /**
-     * @brief Base class for node manager entities. Node managers are
-     * designed to manage the basic operation of the node - adding peers,
-     * updating them at regular intervals, etc.
+     * @brief Base class for node profile entities. Node profiles are designed
+     * to serve as a profile for the node, governing its behavior as a server
+     * or a peer.
      * 
-     * Node managers should be designed to function as the default message
+     * Node profiles should be designed to function as the default message
      * handlers for a node, dealing with messages that are not handled by
      * upstream handlers.
      * 
      * This class can be extended and customized for specific node profiles,
      * such as servers, clients, etc.
      */
-    class NodeManager : public MessageHandler
+    class NodeProfile : public MessageHandler
     {
     private:
         Timer *prune_timer;
@@ -52,12 +52,12 @@ namespace thingnet
 
     public:
         /**
-         * @brief Construct a new Node Manager object
+         * @brief Construct a new Node Profile object
          * 
          * @param node Reference to the node object that will be used for low
          *        level peer communication and management.
          */
-        NodeManager(EspNowNode *node);
+        NodeProfile(EspNowNode *node);
 
         /**
          * @brief Processes a message and returns a result that reflects the
@@ -79,13 +79,13 @@ namespace thingnet
         virtual ProcessingResult process(PeerMessage *message);
 
         /**
-         * @brief Destroy the Node Manager object. This is a virtual method
+         * @brief Destroy the Node Profile object. This is a virtual method
          * that should be implemented by child classes as appropriate.
          */
-        virtual ~NodeManager();
+        virtual ~NodeProfile();
 
         /**
-         * @brief Allows the node manager to initialize itself. This method
+         * @brief Allows the node profile to initialize itself. This method
          * will be called once at the start of the program.
          * 
          * @return int A non success value will be returned if the add operation
@@ -94,7 +94,7 @@ namespace thingnet
         virtual int init();
 
         /**
-         * @brief Allows the node manager to update itself. This method will
+         * @brief Allows the node profile to update itself. This method will
          * typically be called from within a processing loop, and must be
          * non blocking.
          * 

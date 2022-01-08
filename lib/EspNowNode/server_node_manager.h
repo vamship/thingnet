@@ -21,7 +21,7 @@ namespace thingnet
      * server functions such as dynamic peer registration, server advertisement,
      * disconnected peer pruning, etc.
      */
-    class ServerNodeManager : public NodeManager
+    class ServerNodeManager : public NodeProfile
     {
     private:
         Timer *advertise_timer;

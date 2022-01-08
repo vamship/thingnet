@@ -15,14 +15,14 @@ namespace thingnet
 {
     const int __PEER_NODE_MESSAGE_DURATION = 10000;
 
-    PeerNodeManager::PeerNodeManager(EspNowNode *node) : NodeManager(node)
+    PeerNodeManager::PeerNodeManager(EspNowNode *node) : NodeProfile(node)
     {
         this->message_timer = new Timer(__PEER_NODE_MESSAGE_DURATION, true);
     }
 
     int PeerNodeManager::init()
     {
-        ASSERT_OK(NodeManager::init());
+        ASSERT_OK(NodeProfile::init());
 
         LOG_INFO("Starting message timer");
         this->message_timer->start();
@@ -33,7 +33,7 @@ namespace thingnet
 
     int PeerNodeManager::update()
     {
-        ASSERT_OK(NodeManager::update());
+        ASSERT_OK(NodeProfile::update());
 
         if (this->message_timer->is_complete())
         {

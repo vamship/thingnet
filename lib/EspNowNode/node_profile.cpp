@@ -11,26 +11,26 @@
 
 namespace thingnet
 {
-    const int __NODE_MANAGER_PRUNE_DURATION = 120000;
+    const int __NODE_PROFILE_DEFAULT_PRUNE_PERIOD = 120000;
 
-    NodeManager::NodeManager(EspNowNode *node)
+    NodeProfile::NodeProfile(EspNowNode *node)
     {
         this->node = node;
         this->peer_count = 0;
-        this->prune_timer = new Timer(__NODE_MANAGER_PRUNE_DURATION, true);
+        this->prune_timer = new Timer(__NODE_PROFILE_DEFAULT_PRUNE_PERIOD, true);
     }
 
-    NodeManager::~NodeManager()
+    NodeProfile::~NodeProfile()
     {
         // Nothing to do here.
     }
 
-    Peer *NodeManager::create_peer(PeerMessage *message)
+    Peer *NodeProfile::create_peer(PeerMessage *message)
     {
         return new BasicPeer(this->node, message->sender);
     }
 
-    int NodeManager::init()
+    int NodeProfile::init()
     {
         LOG_INFO("Starting prune timer");
         this->prune_timer->start();
@@ -38,7 +38,7 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    ProcessingResult NodeManager::process(PeerMessage *message)
+    ProcessingResult NodeProfile::process(PeerMessage *message)
     {
         LOG_INFO("Executing node manager message handler");
 
@@ -83,7 +83,7 @@ namespace thingnet
         return ProcessingResult::handled;
     }
 
-    int NodeManager::update()
+    int NodeProfile::update()
     {
         if (this->prune_timer->is_complete())
         {

@@ -11,7 +11,7 @@
 // See: https://stackoverflow.com/questions/625799/resolve-build-errors-due-to-circular-dependency-amongst-classes
 namespace thingnet
 {
-    class NodeManager;
+    class NodeProfile;
 }
 
 namespace thingnet::message_handlers
@@ -34,7 +34,7 @@ namespace thingnet
         u8 ap_mac_address[6];
         u16 message_id;
         bool is_initialized;
-        NodeManager *manager;
+        NodeProfile *manager;
 
         EspNowNode();
         ~EspNowNode();
@@ -95,7 +95,7 @@ namespace thingnet
          * @return int A non success value will be returned if the add operation
          *         resulted in an error. See error codes for more information.
          */
-        int set_node_manager(NodeManager *manager);
+        int set_node_manager(NodeProfile *manager);
 
         /**
          * @brief Matches the input buffer against the mac address of the node. 

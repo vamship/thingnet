@@ -242,7 +242,7 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    int EspNowNode::set_node_manager(NodeManager *manager)
+    int EspNowNode::set_node_manager(NodeProfile *manager)
     {
         LOG_INFO("Registering node manager");
 

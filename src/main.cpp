@@ -34,7 +34,7 @@ void setup()
 
     LOG_DEBUG("Determining run mode");
 
-    NodeManager *manager;
+    NodeProfile *manager;
 
     if (node.has_mac_address((u8 *)SERVER_MAC))
     {
