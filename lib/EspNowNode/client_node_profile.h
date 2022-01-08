@@ -24,7 +24,8 @@ namespace thingnet
     class ClientNodeProfile : public NodeProfile
     {
     private:
-        Timer *message_timer;
+        Timer *update_timer;
+        u32 update_period;
 
     protected:
         /**
@@ -44,6 +45,17 @@ namespace thingnet
          * @brief Construct a new Client Node Profile object
          */
         ClientNodeProfile(EspNowNode *node);
+
+        /**
+         * @brief Sets the peer update duration for the node.
+         * 
+         * @param timeout The period at which peers will be updated, allowing
+         *        them to execute the functionality defined within their
+         *        update() method.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
+         */
+        int set_update_period(u32 timeout);
 
         /**
          * @brief Initializes the node profile by starting the appropriate

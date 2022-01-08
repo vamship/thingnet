@@ -17,17 +17,30 @@ namespace thingnet
 
     ClientNodeProfile::ClientNodeProfile(EspNowNode *node) : NodeProfile(node)
     {
-        this->message_timer = new Timer(
-            __CLIENT_NODE_PROFILE_DEFAULT_UPDATE_PERIOD,
-            true);
+        this->update_period = __CLIENT_NODE_PROFILE_DEFAULT_UPDATE_PERIOD;
+        this->update_timer = 0;
+    }
+
+    int ClientNodeProfile::set_update_period(u32 timeout)
+    {
+        if (!this->is_initialized)
+        {
+            LOG_WARN("Node profile has not been initialized");
+            return ERR_NODE_PROFILE_NOT_INITIALIZED;
+        }
+
+        this->update_period = timeout;
+
+        return RESULT_OK;
     }
 
     int ClientNodeProfile::init()
     {
         ASSERT_OK(NodeProfile::init());
 
-        LOG_INFO("Starting message timer");
-        this->message_timer->start();
+        LOG_INFO("Starting update timer");
+        this->update_timer = new Timer(this->update_period, true);
+        this->update_timer->start();
 
         LOG_INFO("Peer node manager initialized");
         return RESULT_OK;
@@ -37,12 +50,12 @@ namespace thingnet
     {
         ASSERT_OK(NodeProfile::update());
 
-        if (this->message_timer->is_complete())
+        if (this->update_timer->is_complete())
         {
-            LOG_INFO("Sending message to server");
+            LOG_INFO("Invoking update() on peers");
             for (u8 index = 0; index < this->peer_count; index++)
             {
-                LOG_DEBUG("Sending message to peer [%d]", index);
+                LOG_DEBUG("Updating peer [%d]", index);
                 this->peer_list[index]->update();
             }
         }
@@ -52,7 +65,11 @@ namespace thingnet
 
     Peer *ClientNodeProfile::create_peer(PeerMessage *message)
     {
-        LOG_INFO("Processing create peer request");
+        if (!this->is_initialized)
+        {
+            LOG_WARN("Node profile has not been initialized");
+            return 0;
+        }
 
         if (message->payload.type != MSG_TYPE_ADVERTISEMENT)
         {
