@@ -12,13 +12,13 @@
 
 namespace thingnet
 {
-    const int __SERVER_NODE_PROFILE_ADVERTISE_PERIOD = 30000;
+    const int __SERVER_NODE_PROFILE_DEFAULT_ADVERTISE_PERIOD = 30000;
     const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
     ServerNodeProfile::ServerNodeProfile(EspNowNode *node) : NodeProfile(node)
     {
         this->advertise_timer = new Timer(
-            __SERVER_NODE_PROFILE_ADVERTISE_PERIOD,
+            __SERVER_NODE_PROFILE_DEFAULT_ADVERTISE_PERIOD,
             true);
     }
 
