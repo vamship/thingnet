@@ -111,7 +111,7 @@ namespace thingnet
 
     EspNowNode::EspNowNode()
     {
-        this->manager = 0;
+        this->profile = 0;
     }
 
     EspNowNode::~EspNowNode()
@@ -242,9 +242,9 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    int EspNowNode::set_node_manager(NodeProfile *manager)
+    int EspNowNode::set_node_profile(NodeProfile *profile)
     {
-        LOG_INFO("Registering node manager");
+        LOG_INFO("Registering node profile");
 
         if (!this->is_initialized)
         {
@@ -252,18 +252,18 @@ namespace thingnet
             return ERR_NODE_NOT_INITIALIZED;
         }
 
-        if (this->manager != 0)
+        if (this->profile != 0)
         {
-            LOG_WARN("Node manager has already been registered");
+            LOG_WARN("Node profile has already been registered");
             return RESULT_DUPLICATE;
         }
 
-        this->manager = manager;
+        this->profile = profile;
 
         LOG_DEBUG("Configuring default handler");
-        __default_handler = manager;
+        __default_handler = profile;
 
-        LOG_INFO("Node manager registered");
+        LOG_INFO("Node profile registered");
 
         return RESULT_OK;
     }
@@ -282,13 +282,13 @@ namespace thingnet
 
     int EspNowNode::update()
     {
-        if (!this->manager)
+        if (!this->profile)
         {
-            LOG_ERROR("Node manager has not been set");
-            return ERR_NODE_MANAGER_NOT_SET;
+            LOG_ERROR("Node profile has not been set");
+            return ERR_NODE_PROFILE_NOT_SET;
         }
 
-        ASSERT_OK(manager->update());
+        ASSERT_OK(profile->update());
         return RESULT_OK;
     }
 

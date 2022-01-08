@@ -34,7 +34,7 @@ namespace thingnet
         u8 ap_mac_address[6];
         u16 message_id;
         bool is_initialized;
-        NodeProfile *manager;
+        NodeProfile *profile;
 
         EspNowNode();
         ~EspNowNode();
@@ -85,17 +85,17 @@ namespace thingnet
         int remove_handler(MessageHandler *handler);
 
         /**
-         * @brief Sets the node manager for the current node. The node manager
+         * @brief Sets the node profile for the current node. The node profile
          * is responsible for:
          * 1. Handling messages not handled by handlers in the chain
          * 2. Managing connections to other nodes
          * 3. Allowing individual peer controllers to perform updates
          * 
-         * @param manager The manager to add
+         * @param profile The profile to set
          * @return int A non success value will be returned if the add operation
          *         resulted in an error. See error codes for more information.
          */
-        int set_node_manager(NodeProfile *manager);
+        int set_node_profile(NodeProfile *profile);
 
         /**
          * @brief Matches the input buffer against the mac address of the node. 

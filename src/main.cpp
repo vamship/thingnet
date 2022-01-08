@@ -48,7 +48,7 @@ void setup()
     }
 
     ASSERT_OK(manager->init());
-    ASSERT_OK(node.set_node_manager(manager));
+    ASSERT_OK(node.set_node_profile(manager));
 
     LOG_INFO("Initialization complete");
 }
