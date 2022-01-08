@@ -25,12 +25,23 @@ namespace thingnet
     {
     private:
         Timer *advertise_timer;
+        u32 advertise_period;
 
     public:
         /**
          * @brief Construct a new Server Node Profile object
          */
         ServerNodeProfile(EspNowNode *node);
+
+        /**
+         * @brief Sets the advertisement period for the node.
+         * 
+         * @param timeout The period at which the profile advertises itself to
+         *        peers.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
+         */
+        int set_advertise_period(u32 timeout);
 
         /**
          * @brief Initializes the node profile by starting the appropriate

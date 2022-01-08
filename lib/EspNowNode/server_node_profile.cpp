@@ -12,14 +12,26 @@
 
 namespace thingnet
 {
-    const int __SERVER_NODE_PROFILE_DEFAULT_ADVERTISE_PERIOD = 30000;
+    const int __SERVER_NODE_PROFILE_DEFAULT_ADVERTISE_PERIOD = 60000;
     const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
     ServerNodeProfile::ServerNodeProfile(EspNowNode *node) : NodeProfile(node)
     {
-        this->advertise_timer = new Timer(
-            __SERVER_NODE_PROFILE_DEFAULT_ADVERTISE_PERIOD,
-            true);
+        this->advertise_period = __SERVER_NODE_PROFILE_DEFAULT_ADVERTISE_PERIOD;
+        this->advertise_timer = 0;
+    }
+
+    int ServerNodeProfile::set_advertise_period(u32 timeout)
+    {
+        if (!this->is_initialized)
+        {
+            LOG_WARN("Node profile has not been initialized");
+            return ERR_NODE_PROFILE_NOT_INITIALIZED;
+        }
+
+        this->advertise_period = timeout;
+
+        return RESULT_OK;
     }
 
     int ServerNodeProfile::init()
@@ -27,6 +39,7 @@ namespace thingnet
         ASSERT_OK(NodeProfile::init());
 
         LOG_INFO("Starting advertise timer");
+        this->advertise_timer = new Timer(this->advertise_period, true);
         this->advertise_timer->start();
 
         ASSERT_OK(this->node->register_peer((u8 *)__BROADCAST_PEER,
