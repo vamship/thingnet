@@ -41,7 +41,7 @@ namespace thingnet
             for (u8 index = 0; index < this->peer_count; index++)
             {
                 LOG_DEBUG("Sending message to peer [%d]", index);
-                this->peer_list[index]->update(this->node);
+                this->peer_list[index]->update();
             }
         }
 
@@ -55,8 +55,8 @@ namespace thingnet
         if (message->payload.type != MSG_TYPE_ADVERTISEMENT)
         {
             LOG_DEBUG("Unexpected message [%02x] from [%s]. Ignoring.",
-                     message->payload.type,
-                     LOG_FORMAT_MAC(message->sender));
+                      message->payload.type,
+                      LOG_FORMAT_MAC(message->sender));
 
             return 0;
         }
@@ -66,6 +66,6 @@ namespace thingnet
                  LOG_FORMAT_MAC(message->sender),
                  LOG_FORMAT_MAC(mac_addr));
 
-        return new BasicPeer(mac_addr);
+        return new BasicPeer(this->node, mac_addr);
     }
 }

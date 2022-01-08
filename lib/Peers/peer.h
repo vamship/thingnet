@@ -17,16 +17,20 @@ namespace thingnet::peers
     class Peer : public MessageHandler
     {
     protected:
+        EspNowNode *node;
         u8 peer_mac_address[6];
+
     public:
         /**
          * @brief Construct a new basic peer object. Sets the timeout to a
          *        default value of 300s.
          * 
+         * @param node Reference to the node object that will be used for low
+         *        level peer communication and management.
          * @param peer_mac_address The mac address of the peer that is
          *        represented by this object
          */
-        Peer(u8 *peer_mac_address);
+        Peer(EspNowNode *node, u8 *peer_mac_address);
 
         /**
          * @brief Destroy the Peer object
@@ -60,7 +64,7 @@ namespace thingnet::peers
          * @return int A non success value will be returned if the add operation
          *         resulted in an error. See error codes for more information.
          */
-        virtual int update(EspNowNode *node);
+        virtual int update();
 
         /**
          * @brief Determines whether or not the peer is still active.

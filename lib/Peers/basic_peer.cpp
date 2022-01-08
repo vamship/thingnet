@@ -7,14 +7,15 @@
 
 namespace thingnet::peers
 {
-    BasicPeer::BasicPeer(u8 *peer_mac_address, u32 timeout): Peer(peer_mac_address)
+    BasicPeer::BasicPeer(EspNowNode *node, u8 *peer_mac_address, u32 timeout)
+        : Peer(node, peer_mac_address)
     {
         this->timeout = timeout;
         this->last_message_time = millis();
     }
 
-    BasicPeer::BasicPeer(u8 *peer_mac_address)
-        : BasicPeer(peer_mac_address, BASIC_PEER_DEFAULT_TIMEOUT)
+    BasicPeer::BasicPeer(EspNowNode *node, u8 *peer_mac_address)
+        : BasicPeer(node, peer_mac_address, BASIC_PEER_DEFAULT_TIMEOUT)
     {
     }
 
@@ -26,7 +27,7 @@ namespace thingnet::peers
         if (message->payload.type == MSG_TYPE_HEARTBEAT)
         {
             LOG_DEBUG("Received heartbeat from [%s]",
-                     LOG_FORMAT_MAC(message->sender));
+                      LOG_FORMAT_MAC(message->sender));
         }
         return ProcessingResult::handled;
     }
@@ -36,14 +37,14 @@ namespace thingnet::peers
         return (millis() - this->last_message_time) < this->timeout;
     }
 
-    int BasicPeer::update(EspNowNode *node)
+    int BasicPeer::update()
     {
         LOG_INFO("Sending heartbeat message to peer");
         MessagePayload payload;
         payload.type = MSG_TYPE_HEARTBEAT;
-        payload.message_id = node->get_next_message_id();
+        payload.message_id = this->node->get_next_message_id();
 
-        node->send_message((u8 *)this->peer_mac_address, &payload, 6);
+        this->node->send_message((u8 *)this->peer_mac_address, &payload, 6);
 
         return RESULT_OK;
     }

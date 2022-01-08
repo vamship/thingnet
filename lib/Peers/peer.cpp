@@ -9,9 +9,9 @@
 
 namespace thingnet::peers
 {
-    Peer::Peer(u8 *peer_mac_address)
+    Peer::Peer(EspNowNode *node, u8 *peer_mac_address)
     {
-        // Store the peer mac address for future comparison
+        this->node = node;
         memcpy(this->peer_mac_address, peer_mac_address, 6);
     }
 
@@ -38,7 +38,7 @@ namespace thingnet::peers
         // Nothing to do here
     }
 
-    int Peer::update(EspNowNode *node)
+    int Peer::update()
     {
         return RESULT_OK;
     }
