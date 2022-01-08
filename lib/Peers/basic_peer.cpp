@@ -42,7 +42,6 @@ namespace thingnet::peers
         LOG_INFO("Sending heartbeat message to peer");
         MessagePayload payload;
         payload.type = MSG_TYPE_HEARTBEAT;
-        payload.message_id = this->node->get_next_message_id();
 
         this->node->send_message((u8 *)this->peer_mac_address, &payload, 6);
 

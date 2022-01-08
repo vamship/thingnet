@@ -353,8 +353,11 @@ namespace thingnet
                   LOG_FORMAT_MAC(destination));
 
         u8 payload_bytes[250];
+        u16 message_id = payload->message_id == 0 ? this->get_next_message_id()
+                                                  : payload->message_id;
+
         memcpy(payload_bytes, &payload->type, 1);
-        memcpy(payload_bytes + 1, &payload->message_id, 2);
+        memcpy(payload_bytes + 1, &message_id, 2);
         memcpy(payload_bytes + 3, &payload->body, data_size);
 
         LOG_DEBUG("Sending [%02x|%02x:%02x]",
