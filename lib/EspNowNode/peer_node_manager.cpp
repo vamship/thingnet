@@ -13,7 +13,7 @@ using namespace thingnet::peers;
 
 namespace thingnet
 {
-    const int __PEER_NODE_MESSAGE_DURATION = 30000;
+    const int __PEER_NODE_MESSAGE_DURATION = 10000;
 
     PeerNodeManager::PeerNodeManager(EspNowNode *node) : NodeManager(node)
     {
