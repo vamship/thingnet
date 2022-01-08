@@ -32,6 +32,8 @@ namespace thingnet
     {
     private:
         Timer *prune_timer;
+        u32 prune_period;
+        bool is_initialized;
 
     protected:
         EspNowNode *node;
@@ -58,6 +60,16 @@ namespace thingnet
          *        level peer communication and management.
          */
         NodeProfile(EspNowNode *node);
+
+        /**
+         * @brief Sets the inactive peer prune duration for the node.
+         * 
+         * @param timeout The period at which the profile checks for inactive
+         *        peers.
+         * @return int A non success value will be returned if the add operation
+         *         resulted in an error. See error codes for more information.
+         */
+        int set_prune_period(u32 timeout);
 
         /**
          * @brief Processes a message and returns a result that reflects the

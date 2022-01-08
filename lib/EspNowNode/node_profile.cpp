@@ -11,13 +11,15 @@
 
 namespace thingnet
 {
-    const int __NODE_PROFILE_DEFAULT_PRUNE_PERIOD = 120000;
+    const int __NODE_PROFILE_DEFAULT_PRUNE_PERIOD = 300000;
 
     NodeProfile::NodeProfile(EspNowNode *node)
     {
         this->node = node;
+        this->prune_period = __NODE_PROFILE_DEFAULT_PRUNE_PERIOD;
         this->peer_count = 0;
-        this->prune_timer = new Timer(__NODE_PROFILE_DEFAULT_PRUNE_PERIOD, true);
+        this->prune_timer = 0;
+        this->is_initialized = false;
     }
 
     NodeProfile::~NodeProfile()
@@ -25,14 +27,41 @@ namespace thingnet
         // Nothing to do here.
     }
 
+    int NodeProfile::set_prune_period(u32 timeout)
+    {
+        if (!this->is_initialized)
+        {
+            LOG_WARN("Node profile has not been initialized");
+            return ERR_NODE_PROFILE_NOT_INITIALIZED;
+        }
+
+        this->prune_period = timeout;
+
+        return RESULT_OK;
+    }
+
     Peer *NodeProfile::create_peer(PeerMessage *message)
     {
+        if (!this->is_initialized)
+        {
+            LOG_WARN("Node profile has not been initialized");
+            return 0;
+        }
+
         return new BasicPeer(this->node, message->sender);
     }
 
     int NodeProfile::init()
     {
+        LOG_INFO("Initializing node profile");
+        if (this->is_initialized)
+        {
+            LOG_WARN("Node profile has already been initialized");
+            return RESULT_DUPLICATE;
+        }
+
         LOG_INFO("Starting prune timer");
+        this->prune_timer = new Timer(this->prune_period, true);
         this->prune_timer->start();
 
         return RESULT_OK;
@@ -40,6 +69,12 @@ namespace thingnet
 
     ProcessingResult NodeProfile::process(PeerMessage *message)
     {
+        if (!this->is_initialized)
+        {
+            LOG_ERROR("Node profile has not been initialized");
+            return ProcessingResult::error;
+        }
+
         LOG_INFO("Executing node manager message handler");
 
         // Allow the child class to determine if a new peer needs to be created.
@@ -85,6 +120,12 @@ namespace thingnet
 
     int NodeProfile::update()
     {
+        if (!this->is_initialized)
+        {
+            LOG_ERROR("Node profile has not been initialized");
+            return ERR_NODE_PROFILE_NOT_INITIALIZED;
+        }
+
         if (this->prune_timer->is_complete())
         {
             LOG_INFO("Looking for inactive peers");

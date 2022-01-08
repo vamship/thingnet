@@ -15,6 +15,7 @@ namespace thingnet
   const int ERR_NODE_PROFILE_NOT_SET = 0x12;
   const int ERR_PEER_REGISTRATION_FAILED = 0x13;
   const int ERR_PEER_UNREGISTRATION_FAILED = 0x14;
+  const int ERR_NODE_PROFILE_NOT_INITIALIZED = 0x15;
 }
 
 #define ASSERT_OK(expr)                                                                                   \
