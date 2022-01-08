@@ -33,6 +33,8 @@ namespace thingnet
     private:
         Timer *prune_timer;
         u32 prune_period;
+
+    protected:
         bool is_initialized;
 
     protected:
