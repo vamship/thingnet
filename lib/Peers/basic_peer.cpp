@@ -39,8 +39,10 @@ namespace thingnet::peers
         }
         else if (message->payload.type == MSG_TYPE_ACK)
         {
-            LOG_DEBUG("Ack received from [%s]",
-                      LOG_FORMAT_MAC(message->sender));
+            LOG_DEBUG("Ack received from [%s] for message id [%02x:%02x]",
+                      LOG_FORMAT_MAC(message->sender),
+                      message->payload.body[0],
+                      message->payload.body[1]);
         }
         else
         {
