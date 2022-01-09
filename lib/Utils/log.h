@@ -42,25 +42,25 @@ namespace thingnet::utils
 #endif
 
 #if LOG_LEVEL >= LOG_LEVEL_ERROR
-#define LOG_ERROR(message, ...) LOG("[ERROR] ", message __VA_OPT__(, ) __VA_ARGS__)
+#define LOG_ERROR(message, ...) LOG("[ERR] ", message __VA_OPT__(, ) __VA_ARGS__)
 #else
 #define LOG_ERROR(...)
 #endif
 
 #if LOG_LEVEL >= LOG_LEVEL_WARN
-#define LOG_WARN(message, ...) LOG("[WARN ] ", message __VA_OPT__(, ) __VA_ARGS__)
+#define LOG_WARN(message, ...) LOG("[WRN] ", message __VA_OPT__(, ) __VA_ARGS__)
 #else
 #define LOG_WARN(...)
 #endif
 
 #if LOG_LEVEL >= LOG_LEVEL_INFO
-#define LOG_INFO(message, ...) LOG("[INFO ] ", message __VA_OPT__(, ) __VA_ARGS__)
+#define LOG_INFO(message, ...) LOG("[INF] ", message __VA_OPT__(, ) __VA_ARGS__)
 #else
 #define LOG_INFO(...)
 #endif
 
 #if LOG_LEVEL >= LOG_LEVEL_DEBUG
-#define LOG_DEBUG(message, ...) LOG("[DEBUG] ", message __VA_OPT__(, ) __VA_ARGS__)
+#define LOG_DEBUG(message, ...) LOG("[DBG] ", message __VA_OPT__(, ) __VA_ARGS__)
 #else
 #define LOG_DEBUG(...)
 #endif
