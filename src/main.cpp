@@ -25,30 +25,40 @@ const u8 SERVER_MAC[] = {0x1A, 0xFE, 0x34, 0xD4, 0x82, 0x2A};
 
 EspNowNode &node = EspNowNode::get_instance();
 
+bool is_server()
+{
+    u8 ap_mac_addr[7];
+    u8 sta_mac_addr[6];
+
+    WiFi.macAddress(sta_mac_addr);
+    WiFi.softAPmacAddress(ap_mac_addr);
+
+    return memcmp(sta_mac_addr, SERVER_MAC, 6) == 0 ||
+           memcmp(ap_mac_addr, SERVER_MAC, 6) == 0;
+}
+
 void setup()
 {
     Serial.begin(115200);
 
-    LOG_DEBUG("Initializing node")
-    ASSERT_OK(node.init());
+    LOG_DEBUG("Determining node profile");
+    NodeProfile *profile;
 
-    LOG_DEBUG("Determining run mode");
-
-    NodeProfile *manager;
-
-    if (node.has_mac_address((u8 *)SERVER_MAC))
+    if (is_server())
     {
-        manager = new ServerNodeProfile(&node);
-        LOG_INFO("Running in SERVER mode");
+        profile = new ServerNodeProfile(&node);
+        LOG_INFO("Node profile is [SERVER]");
     }
     else
     {
-        manager = new ClientNodeProfile(&node);
-        LOG_INFO("Running in CLIENT mode");
+        profile = new ClientNodeProfile(&node);
+        LOG_INFO("Node profile is [CLIENT]");
     }
 
-    ASSERT_OK(manager->init());
-    ASSERT_OK(node.set_node_profile(manager));
+    node.set_node_profile(profile);
+
+    LOG_DEBUG("Initializing node")
+    ASSERT_OK(node.init());
 
     LOG_INFO("Initialization complete");
 }

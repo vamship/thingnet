@@ -150,13 +150,21 @@ namespace thingnet
         if (esp_now_init() != 0)
         {
             LOG_ERROR("Error initializing ESP-NOW");
-            return 1;
+            return ERR_ESP_NOW_INIT_FAILED;
         }
         esp_now_set_self_role(ESP_NOW_ROLE_COMBO);
 
         LOG_DEBUG("Registering send/receive callbacks");
         esp_now_register_send_cb(__on_data_sent);
         esp_now_register_recv_cb(__on_data_received);
+
+        LOG_DEBUG("Initializing node profile");
+        if(this->profile == 0)
+        {
+            LOG_ERROR("Node profile not set");
+            return ERR_NODE_PROFILE_NOT_SET;
+        }
+        ASSERT_OK(this->profile->init());
 
         this->is_initialized = true;
 
@@ -246,10 +254,10 @@ namespace thingnet
     {
         LOG_INFO("Registering node profile");
 
-        if (!this->is_initialized)
+        if (this->is_initialized)
         {
-            LOG_ERROR("Node has not been initialized");
-            return ERR_NODE_NOT_INITIALIZED;
+            LOG_ERROR("Node has already been initialized");
+            return RESULT_DUPLICATE;
         }
 
         if (this->profile != 0)
