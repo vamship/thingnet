@@ -64,6 +64,8 @@ namespace thingnet
         this->prune_timer = new Timer(this->prune_period, true);
         this->prune_timer->start();
 
+        this->is_initialized = true;
+
         return RESULT_OK;
     }
 
