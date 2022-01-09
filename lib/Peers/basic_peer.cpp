@@ -27,7 +27,7 @@ namespace thingnet::peers
         int result = RESULT_OK;
         if (message->payload.type == MSG_TYPE_HEARTBEAT)
         {
-            LOG_DEBUG("Acknowledging heartbeat [%d] from [%s]",
+            LOG_DEBUG("[HEARTBEAT] Message id [%d] from [%s]",
                       message->payload.message_id,
                       LOG_FORMAT_MAC(message->sender));
 
@@ -39,7 +39,7 @@ namespace thingnet::peers
         }
         else if (message->payload.type == MSG_TYPE_ACK)
         {
-            LOG_DEBUG("Ack received from [%s] for message id [%02x:%02x]",
+            LOG_DEBUG("[ACK] from [%s] for message id [%02x:%02x]",
                       LOG_FORMAT_MAC(message->sender),
                       message->payload.body[0],
                       message->payload.body[1]);
@@ -48,13 +48,13 @@ namespace thingnet::peers
         {
             u8 mac_addr[6];
             memcpy(mac_addr, message->payload.body, 6);
-            LOG_DEBUG("Ignoring advertisement from [%s] for [%s]",
+            LOG_DEBUG("[ADVERTISEMENT] from [%s] for [%s]",
                      LOG_FORMAT_MAC(message->sender),
                      LOG_FORMAT_MAC(mac_addr));
         }
         else
         {
-            LOG_WARN("Unexpected message [%02x] from [%s]",
+            LOG_WARN("[UNKNOWN] Message type [%02x] from [%s]",
                      message->payload.type,
                      LOG_FORMAT_MAC(message->sender));
         }
