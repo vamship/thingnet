@@ -44,6 +44,14 @@ namespace thingnet::peers
                       message->payload.body[0],
                       message->payload.body[1]);
         }
+        else if (message->payload.type == MSG_TYPE_ADVERTISEMENT)
+        {
+            u8 mac_addr[6];
+            memcpy(mac_addr, message->payload.body, 6);
+            LOG_DEBUG("Ignoring advertisement from [%s] for [%s]",
+                     LOG_FORMAT_MAC(message->sender),
+                     LOG_FORMAT_MAC(mac_addr));
+        }
         else
         {
             LOG_WARN("Unexpected message [%02x] from [%s]",
