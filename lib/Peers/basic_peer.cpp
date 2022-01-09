@@ -27,7 +27,8 @@ namespace thingnet::peers
         int result = RESULT_OK;
         if (message->payload.type == MSG_TYPE_HEARTBEAT)
         {
-            LOG_DEBUG("Acknowledging heartbeat from [%s]",
+            LOG_DEBUG("Acknowledging heartbeat [%d] from [%s]",
+                      message->payload.message_id,
                       LOG_FORMAT_MAC(message->sender));
 
             MessagePayload payload(MSG_TYPE_ACK);
