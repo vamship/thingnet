@@ -52,7 +52,7 @@ namespace thingnet
 
         if (this->update_timer->is_complete())
         {
-            LOG_INFO("Invoking update() on peers");
+            LOG_INFO("Updating [%d] peers", this->peer_count);
             for (u8 index = 0; index < this->peer_count; index++)
             {
                 LOG_DEBUG("Updating peer [%d]", index);
