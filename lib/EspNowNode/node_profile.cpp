@@ -91,8 +91,14 @@ namespace thingnet
         }
         else
         {
-            LOG_DEBUG("Adding peer to internal registry");
-            int result = this->node->register_peer(message->sender,
+            LOG_DEBUG("New peer createed");
+            u8 mac_addr[6];
+            peer->read_mac_address(mac_addr);
+
+            LOG_DEBUG("Adding peer [%s] to internal registry",
+                        LOG_FORMAT_MAC(mac_addr));
+
+            int result = this->node->register_peer(mac_addr,
                                                    ESP_NOW_ROLE_COMBO);
             ASSERT_OK(result);
 
