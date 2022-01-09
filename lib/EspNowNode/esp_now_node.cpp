@@ -40,11 +40,13 @@ namespace thingnet
      */
     void __on_data_received(u8 *mac_addr, u8 *data, u8 length)
     {
-        LOG_INFO("Message received from peer");
+        LOG_DEBUG("Received [%02x|%02x:%02x] + [%d] bytes from [%s]",
+                  data[0],
+                  data[1],
+                  data[2],
+                  length - 3,
+                  LOG_FORMAT_MAC(mac_addr));
 
-        LOG_DEBUG("Received [%02x|%02x:%02x]", data[0], data[1], data[2]);
-
-        LOG_DEBUG("Preparing message payload");
         PeerMessage message;
         memcpy(message.sender, mac_addr, 6);
         memcpy(&message.payload.type, data, 1);
@@ -159,7 +161,7 @@ namespace thingnet
         esp_now_register_recv_cb(__on_data_received);
 
         LOG_DEBUG("Initializing node profile");
-        if(this->profile == 0)
+        if (this->profile == 0)
         {
             LOG_ERROR("Node profile not set");
             return ERR_NODE_PROFILE_NOT_SET;
@@ -356,10 +358,6 @@ namespace thingnet
 
     int EspNowNode::send_message(u8 *destination, MessagePayload *payload, u8 data_size)
     {
-
-        LOG_DEBUG("Sending [%d] byte payload to [%s]", data_size,
-                  LOG_FORMAT_MAC(destination));
-
         u8 payload_bytes[250];
         u16 message_id = payload->message_id == 0 ? this->get_next_message_id()
                                                   : payload->message_id;
@@ -368,10 +366,12 @@ namespace thingnet
         memcpy(payload_bytes + 1, &message_id, 2);
         memcpy(payload_bytes + 3, &payload->body, data_size);
 
-        LOG_DEBUG("Sending [%02x|%02x:%02x]",
+        LOG_DEBUG("Sending [%02x|%02x:%02x] + [%d] bytes to [%s]",
                   payload_bytes[0],
                   payload_bytes[1],
-                  payload_bytes[2]);
+                  payload_bytes[2],
+                  data_size,
+                  LOG_FORMAT_MAC(destination));
 
         esp_now_send(destination, (u8 *)&payload_bytes, data_size + 3);
 
