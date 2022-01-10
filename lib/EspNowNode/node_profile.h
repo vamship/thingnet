@@ -74,6 +74,13 @@ namespace thingnet
         int set_prune_period(u32 timeout);
 
         /**
+         * @brief Gets the number of active peers associated with the profile.
+         * 
+         * @return int The number of active peers
+         */
+        int get_peer_count();
+
+        /**
          * @brief Processes a message and returns a result that reflects the
          * result of the processing. If the incoming message represents a new
          * connection, a peer will be registered and added to the internal list of

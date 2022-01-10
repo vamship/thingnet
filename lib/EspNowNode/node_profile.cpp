@@ -44,6 +44,11 @@ namespace thingnet
         return RESULT_OK;
     }
 
+    int NodeProfile::get_peer_count()
+    {
+        return this->peer_count;
+    }
+
     Peer *NodeProfile::create_peer(PeerMessage *message)
     {
         if (!this->is_initialized)
@@ -100,7 +105,7 @@ namespace thingnet
             peer->read_mac_address(mac_addr);
 
             LOG_DEBUG(logger, "Adding peer [%s] to internal registry",
-                        LOG_FORMAT_MAC(mac_addr));
+                      LOG_FORMAT_MAC(mac_addr));
 
             int result = this->node->register_peer(mac_addr,
                                                    ESP_NOW_ROLE_COMBO);
