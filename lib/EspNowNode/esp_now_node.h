@@ -65,6 +65,15 @@ namespace thingnet
         u16 get_next_message_id();
 
         /**
+         * @brief Gets the node profile currently associated with the node.
+         * 
+         * @return NodeProfile* A pointer to the current node profile. A null
+         *         value will be returned if the node profile has not been
+         *         configured.
+         */
+        NodeProfile *get_profile();
+
+        /**
          * @brief Adds a message handler to the end of the list of available
          * handlers for the node. 
          * 

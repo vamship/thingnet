@@ -192,6 +192,16 @@ namespace thingnet
         return this->message_id;
     }
 
+    NodeProfile *EspNowNode::get_profile()
+    {
+        if (!this->is_initialized)
+        {
+            LOG_WARN(logger, "Node has not been initialized");
+            return 0;
+        }
+        return this->profile;
+    }
+
     int EspNowNode::add_handler(MessageHandler *handler)
     {
         LOG_TRACE(logger, "Registering message handler");
