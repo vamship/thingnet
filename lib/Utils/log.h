@@ -62,7 +62,9 @@ namespace thingnet::utils
 #define LOG_FORMAT_MAC(mac_addr) thingnet::utils::__log_format_mac(mac_addr)
 #define LOG(level, message, ...)                           \
     {                                                      \
-        Serial.print(level);                               \
+        char leader[32];                                   \
+        sprintf(leader, LOG_LEADER_FORMAT, level, "-");    \
+        Serial.print(leader);                              \
         Serial.printf(message __VA_OPT__(, ) __VA_ARGS__); \
         Serial.println();                                  \
     }
@@ -70,33 +72,35 @@ namespace thingnet::utils
 #else
 
 #define LOG_FORMAT_MAC(mac_addr)
-#define LOG(level, message)
+#define LOG(level, message, ...)
 
 #endif
 
+#if LOG_LEVEL >= LOG_LEVEL_FATAL
+#define LOG_FATAL(message, ...) LOG("FAT", message __VA_OPT__(, ) __VA_ARGS__)
+#else
+#define LOG_FATAL(...)
+#endif
+
 #if LOG_LEVEL >= LOG_LEVEL_ERROR
-#define LOG_ERROR(message, ...) LOG("[ERR] ", message __VA_OPT__(, ) __VA_ARGS__)
 #define LOG_ERROR_1(logger, message, ...) logger->log("ERR", message __VA_OPT__(, ) __VA_ARGS__)
 #else
 #define LOG_ERROR(...)
 #endif
 
 #if LOG_LEVEL >= LOG_LEVEL_WARN
-#define LOG_WARN(message, ...) LOG("[WRN] ", message __VA_OPT__(, ) __VA_ARGS__)
 #define LOG_WARN_1(logger, message, ...) logger->log("WRN", message __VA_OPT__(, ) __VA_ARGS__)
 #else
 #define LOG_WARN(...)
 #endif
 
 #if LOG_LEVEL >= LOG_LEVEL_INFO
-#define LOG_INFO(message, ...) LOG("[INF] ", message __VA_OPT__(, ) __VA_ARGS__)
 #define LOG_INFO_1(logger, message, ...) logger->log("INF", message __VA_OPT__(, ) __VA_ARGS__)
 #else
 #define LOG_INFO(...)
 #endif
 
 #if LOG_LEVEL >= LOG_LEVEL_DEBUG
-#define LOG_DEBUG(message, ...) LOG("[DBG] ", message __VA_OPT__(, ) __VA_ARGS__)
 #define LOG_DEBUG_1(logger, message, ...) logger->log("DBG", message __VA_OPT__(, ) __VA_ARGS__)
 #else
 #define LOG_DEBUG(...)

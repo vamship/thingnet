@@ -24,7 +24,7 @@ namespace thingnet
     int __result = expr;                                                                                  \
     if (__result > thingnet::RESULT_SUCCESS_BOUNDARY)                                                     \
     {                                                                                                     \
-      LOG_ERROR("Fatal error. Non success error code: (%d) [%s, line %d]", __result, __FILE__, __LINE__); \
+      LOG_FATAL("Fatal error. Non success error code: (%d) [%s, line %d]", __result, __FILE__, __LINE__); \
       exit(__result);                                                                                     \
     }                                                                                                     \
   }
@@ -33,7 +33,7 @@ namespace thingnet
   {                                                                                                      \
     if (!(expr))                                                                                         \
     {                                                                                                    \
-      LOG_ERROR("Fatal error. Did not evaluate to true: (%s) [%s, line %d]", #expr, __FILE__, __LINE__); \
+      LOG_FATAL("Fatal error. Did not evaluate to true: (%s) [%s, line %d]", #expr, __FILE__, __LINE__); \
       exit(1);                                                                                           \
     }                                                                                                    \
   }
