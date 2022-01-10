@@ -4,10 +4,11 @@
 #include <Arduino.h>
 #include <espnow.h>
 
-#define LOG_LEVEL_ERROR 1
-#define LOG_LEVEL_WARN 2
-#define LOG_LEVEL_INFO 3
-#define LOG_LEVEL_DEBUG 4
+#define LOG_LEVEL_FATAL 1
+#define LOG_LEVEL_ERROR 2
+#define LOG_LEVEL_WARN 3
+#define LOG_LEVEL_INFO 4
+#define LOG_LEVEL_DEBUG 5
 
 #define LOG_LEADER_FORMAT "[%3s|%12s] "
 #define LOG_MESSAGE_MAX_LEN 255
@@ -83,25 +84,25 @@ namespace thingnet::utils
 #endif
 
 #if LOG_LEVEL >= LOG_LEVEL_ERROR
-#define LOG_ERROR_1(logger, message, ...) logger->log("ERR", message __VA_OPT__(, ) __VA_ARGS__)
+#define LOG_ERROR(logger, message, ...) logger->log("ERR", message __VA_OPT__(, ) __VA_ARGS__)
 #else
 #define LOG_ERROR(...)
 #endif
 
 #if LOG_LEVEL >= LOG_LEVEL_WARN
-#define LOG_WARN_1(logger, message, ...) logger->log("WRN", message __VA_OPT__(, ) __VA_ARGS__)
+#define LOG_WARN(logger, message, ...) logger->log("WRN", message __VA_OPT__(, ) __VA_ARGS__)
 #else
 #define LOG_WARN(...)
 #endif
 
 #if LOG_LEVEL >= LOG_LEVEL_INFO
-#define LOG_INFO_1(logger, message, ...) logger->log("INF", message __VA_OPT__(, ) __VA_ARGS__)
+#define LOG_INFO(logger, message, ...) logger->log("INF", message __VA_OPT__(, ) __VA_ARGS__)
 #else
 #define LOG_INFO(...)
 #endif
 
 #if LOG_LEVEL >= LOG_LEVEL_DEBUG
-#define LOG_DEBUG_1(logger, message, ...) logger->log("DBG", message __VA_OPT__(, ) __VA_ARGS__)
+#define LOG_DEBUG(logger, message, ...) logger->log("DBG", message __VA_OPT__(, ) __VA_ARGS__)
 #else
 #define LOG_DEBUG(...)
 #endif

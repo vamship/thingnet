@@ -42,26 +42,26 @@ void setup()
 {
     Serial.begin(115200);
 
-    LOG_DEBUG_1(logger, "Determining node profile");
+    LOG_DEBUG(logger, "Determining node profile");
     NodeProfile *profile;
 
     if (is_server())
     {
         profile = new ServerNodeProfile(&node);
-        LOG_INFO_1(logger, "Node profile is [SERVER]");
+        LOG_INFO(logger, "Node profile is [SERVER]");
     }
     else
     {
         profile = new ClientNodeProfile(&node);
-        LOG_INFO_1(logger, "Node profile is [CLIENT]");
+        LOG_INFO(logger, "Node profile is [CLIENT]");
     }
 
     node.set_node_profile(profile);
 
-    LOG_DEBUG_1(logger, "Initializing node");
+    LOG_DEBUG(logger, "Initializing node");
     ASSERT_OK(node.init());
 
-    LOG_INFO_1(logger, "Initialization complete");
+    LOG_INFO(logger, "Initialization complete");
 }
 
 void loop()
