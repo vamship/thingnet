@@ -10,6 +10,10 @@
 #include "basic_peer.h"
 #include "server_node_profile.h"
 
+using namespace thingnet::utils;
+
+static Logger *logger = new Logger("server-prof");
+
 namespace thingnet
 {
     const int __SERVER_NODE_PROFILE_DEFAULT_ADVERTISE_PERIOD = 60000;
@@ -25,7 +29,7 @@ namespace thingnet
     {
         if (!this->is_initialized)
         {
-            LOG_WARN("Node profile has not been initialized");
+            LOG_WARN_1(logger, "Node profile has not been initialized");
             return ERR_NODE_PROFILE_NOT_INITIALIZED;
         }
 
@@ -38,14 +42,14 @@ namespace thingnet
     {
         ASSERT_OK(NodeProfile::init());
 
-        LOG_INFO("Starting advertise timer");
+        LOG_INFO_1(logger, "Starting advertise timer");
         this->advertise_timer = new Timer(this->advertise_period, true);
         this->advertise_timer->start();
 
         ASSERT_OK(this->node->register_peer((u8 *)__BROADCAST_PEER,
                                             ESP_NOW_ROLE_CONTROLLER));
 
-        LOG_INFO("Server node profile initialized");
+        LOG_INFO_1(logger, "Server node profile initialized");
         return RESULT_OK;
     }
 
@@ -55,7 +59,7 @@ namespace thingnet
 
         if (this->advertise_timer->is_complete())
         {
-            LOG_INFO("Advertising server to peers");
+            LOG_INFO_1(logger, "Advertising server to peers");
 
             MessagePayload payload(MSG_TYPE_ADVERTISEMENT);
             this->node->read_mac_address(payload.body);

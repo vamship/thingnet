@@ -10,6 +10,9 @@
 #include "basic_peer.h"
 
 using namespace thingnet::peers;
+using namespace thingnet::utils;
+
+static Logger *logger = new Logger("client-prof");
 
 namespace thingnet
 {
@@ -25,7 +28,7 @@ namespace thingnet
     {
         if (!this->is_initialized)
         {
-            LOG_WARN("Node profile has not been initialized");
+            LOG_WARN_1(logger, "Node profile has not been initialized");
             return ERR_NODE_PROFILE_NOT_INITIALIZED;
         }
 
@@ -38,11 +41,11 @@ namespace thingnet
     {
         ASSERT_OK(NodeProfile::init());
 
-        LOG_INFO("Starting update timer");
+        LOG_INFO_1(logger, "Starting update timer");
         this->update_timer = new Timer(this->update_period, true);
         this->update_timer->start();
 
-        LOG_INFO("Peer node manager initialized");
+        LOG_INFO_1(logger, "Peer node manager initialized");
         return RESULT_OK;
     }
 
@@ -52,10 +55,10 @@ namespace thingnet
 
         if (this->update_timer->is_complete())
         {
-            LOG_INFO("Updating [%d] peers", this->peer_count);
+            LOG_INFO_1(logger, "Updating [%d] peers", this->peer_count);
             for (u8 index = 0; index < this->peer_count; index++)
             {
-                LOG_DEBUG("Updating peer [%d]", index);
+                LOG_DEBUG_1(logger, "Updating peer [%d]", index);
                 this->peer_list[index]->update();
             }
         }
@@ -67,13 +70,13 @@ namespace thingnet
     {
         if (!this->is_initialized)
         {
-            LOG_WARN("Node profile has not been initialized");
+            LOG_WARN_1(logger, "Node profile has not been initialized");
             return 0;
         }
 
         if (message->payload.type != MSG_TYPE_ADVERTISEMENT)
         {
-            LOG_DEBUG("Unexpected message [%02x] from [%s]. Ignoring.",
+            LOG_DEBUG_1(logger, "Unexpected message [%02x] from [%s]. Ignoring.",
                       message->payload.type,
                       LOG_FORMAT_MAC(message->sender));
 
@@ -81,7 +84,7 @@ namespace thingnet
         }
         u8 mac_addr[6];
         memcpy(mac_addr, message->payload.body, 6);
-        LOG_INFO("Advertisement message received from [%s] for [%s]",
+        LOG_INFO_1(logger, "Advertisement message received from [%s] for [%s]",
                  LOG_FORMAT_MAC(message->sender),
                  LOG_FORMAT_MAC(mac_addr));
 

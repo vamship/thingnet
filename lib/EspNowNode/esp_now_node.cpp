@@ -13,6 +13,8 @@
 #include "message_handler.h"
 #include "error_codes.h"
 
+static Logger *logger = new Logger("node");
+
 namespace thingnet
 {
     const u8 __MAX_HANDLER_COUNT = 255;
@@ -28,7 +30,7 @@ namespace thingnet
      */
     void __on_data_sent(u8 *mac_addr, u8 status)
     {
-        LOG_INFO("Message delivery ack to [%s] [%s]", LOG_FORMAT_MAC(mac_addr), status == 0 ? "ok" : "err");
+        LOG_INFO_1(logger, "Message delivery ack to [%s] [%s]", LOG_FORMAT_MAC(mac_addr), status == 0 ? "ok" : "err");
     }
 
     /**
@@ -40,7 +42,7 @@ namespace thingnet
      */
     void __on_data_received(u8 *mac_addr, u8 *data, u8 length)
     {
-        LOG_DEBUG("Received [%02x|%02x:%02x] + [%d] bytes from [%s]",
+        LOG_DEBUG_1(logger, "Received [%02x|%02x:%02x] + [%d] bytes from [%s]",
                   data[0],
                   data[1],
                   data[2],
@@ -54,61 +56,61 @@ namespace thingnet
         memcpy(&message.payload.body, data + 3, length - 3);
 
         bool processing_complete = false;
-        LOG_DEBUG("Starting handler chain");
+        LOG_DEBUG_1(logger, "Starting handler chain");
         for (int index = 0; index < __message_handler_count; index++)
         {
             MessageHandler *handler = __message_handler_list[index];
             if (!handler->can_handle(&message))
             {
-                LOG_DEBUG("Handler [%d] will not handle message", index);
+                LOG_DEBUG_1(logger, "Handler [%d] will not handle message", index);
                 continue;
             }
 
-            LOG_DEBUG("Handler [%d] will handle message", index);
+            LOG_DEBUG_1(logger, "Handler [%d] will handle message", index);
             ProcessingResult result = handler->process(&message);
 
             if (result == ProcessingResult::handled)
             {
                 processing_complete = true;
-                LOG_DEBUG("Handler chain completed");
+                LOG_DEBUG_1(logger, "Handler chain completed");
                 break;
             }
             else if (result == ProcessingResult::error)
             {
                 processing_complete = true;
-                LOG_WARN("Error processing message by processor [%d]", index);
+                LOG_WARN_1(logger, "Error processing message by processor [%d]", index);
                 break;
             }
         }
 
         if (!processing_complete)
         {
-            LOG_DEBUG("Handler chain is still not complete");
+            LOG_DEBUG_1(logger, "Handler chain is still not complete");
             if (__default_handler != 0)
             {
-                LOG_DEBUG("Checking if default handler will process the message");
+                LOG_DEBUG_1(logger, "Checking if default handler will process the message");
                 if (__default_handler->can_handle(&message))
                 {
-                    LOG_DEBUG("Invoking default handler");
+                    LOG_DEBUG_1(logger, "Invoking default handler");
                     ProcessingResult result = __default_handler->process(&message);
 
                     if (result == ProcessingResult::error)
                     {
-                        LOG_WARN("Error processing message by default handler");
+                        LOG_WARN_1(logger, "Error processing message by default handler");
                     }
                 }
                 else
                 {
-                    LOG_WARN("Default handler will not handle message");
+                    LOG_WARN_1(logger, "Default handler will not handle message");
                 }
             }
             else
             {
-                LOG_WARN("Default handler has not been set. Skipping.");
+                LOG_WARN_1(logger, "Default handler has not been set. Skipping.");
             }
         }
 
-        LOG_INFO("Message from peer processed");
+        LOG_INFO_1(logger, "Message from peer processed");
     }
 
     EspNowNode::EspNowNode()
@@ -134,46 +136,46 @@ namespace thingnet
 
     int EspNowNode::init()
     {
-        LOG_INFO("Initializing node");
+        LOG_INFO_1(logger, "Initializing node");
         if (this->is_initialized)
         {
-            LOG_WARN("Node has already been initialized");
+            LOG_WARN_1(logger, "Node has already been initialized");
             return RESULT_DUPLICATE;
         }
 
-        LOG_DEBUG("Reading current mac address(es)");
+        LOG_DEBUG_1(logger, "Reading current mac address(es)");
         WiFi.macAddress(this->sta_mac_address);
         WiFi.softAPmacAddress(this->ap_mac_address);
 
-        LOG_DEBUG("Setting wifi to station mode");
+        LOG_DEBUG_1(logger, "Setting wifi to station mode");
         WiFi.mode(WIFI_AP_STA);
 
-        LOG_DEBUG("Initializing ESP-NOW")
+        LOG_DEBUG_1(logger, "Initializing ESP-NOW");
         if (esp_now_init() != 0)
         {
-            LOG_ERROR("Error initializing ESP-NOW");
+            LOG_ERROR_1(logger, "Error initializing ESP-NOW");
             return ERR_ESP_NOW_INIT_FAILED;
         }
         esp_now_set_self_role(ESP_NOW_ROLE_COMBO);
 
-        LOG_DEBUG("Registering send/receive callbacks");
+        LOG_DEBUG_1(logger, "Registering send/receive callbacks");
         esp_now_register_send_cb(__on_data_sent);
         esp_now_register_recv_cb(__on_data_received);
 
-        LOG_DEBUG("Initializing node profile");
+        LOG_DEBUG_1(logger, "Initializing node profile");
         if (this->profile == 0)
         {
-            LOG_ERROR("Node profile not set");
+            LOG_ERROR_1(logger, "Node profile not set");
             return ERR_NODE_PROFILE_NOT_SET;
         }
         ASSERT_OK(this->profile->init());
 
         this->is_initialized = true;
 
-        LOG_DEBUG("AP MAC Address : [%s]", LOG_FORMAT_MAC(this->ap_mac_address));
-        LOG_DEBUG("STA MAC Address: [%s]", LOG_FORMAT_MAC(this->sta_mac_address));
+        LOG_DEBUG_1(logger, "AP MAC Address : [%s]", LOG_FORMAT_MAC(this->ap_mac_address));
+        LOG_DEBUG_1(logger, "STA MAC Address: [%s]", LOG_FORMAT_MAC(this->sta_mac_address));
 
-        LOG_INFO("Node initialized");
+        LOG_INFO_1(logger, "Node initialized");
 
         return RESULT_OK;
     }
@@ -182,7 +184,7 @@ namespace thingnet
     {
         if (!this->is_initialized)
         {
-            LOG_WARN("Node has not been initialized");
+            LOG_WARN_1(logger, "Node has not been initialized");
             return 0;
         }
         this->message_id++;
@@ -191,17 +193,17 @@ namespace thingnet
 
     int EspNowNode::add_handler(MessageHandler *handler)
     {
-        LOG_INFO("Registering message handler");
+        LOG_INFO_1(logger, "Registering message handler");
 
         if (!this->is_initialized)
         {
-            LOG_ERROR("Node has not been initialized");
+            LOG_ERROR_1(logger, "Node has not been initialized");
             return ERR_NODE_NOT_INITIALIZED;
         }
 
         if (__message_handler_count >= __MAX_HANDLER_COUNT)
         {
-            LOG_ERROR("Cannot add handler - maximum handler limit has been reached");
+            LOG_ERROR_1(logger, "Cannot add handler - maximum handler limit has been reached");
             return ERR_HANDLER_LIMIT_EXCEEDED;
         }
 
@@ -209,18 +211,18 @@ namespace thingnet
         __message_handler_list[__message_handler_count] = handler;
         __message_handler_count++;
 
-        LOG_INFO("Handler added successfully. Total handlers: [%d]", __message_handler_count);
+        LOG_INFO_1(logger, "Handler added successfully. Total handlers: [%d]", __message_handler_count);
 
         return RESULT_OK;
     }
 
     int EspNowNode::remove_handler(MessageHandler *handler)
     {
-        LOG_INFO("Unregistering message handler");
+        LOG_INFO_1(logger, "Unregistering message handler");
 
         if (!this->is_initialized)
         {
-            LOG_ERROR("Node has not been initialized");
+            LOG_ERROR_1(logger, "Node has not been initialized");
             return ERR_NODE_NOT_INITIALIZED;
         }
 
@@ -240,12 +242,12 @@ namespace thingnet
 
         if (find_count == 0)
         {
-            LOG_WARN("Could not find message handler");
+            LOG_WARN_1(logger, "Could not find message handler");
             return RESULT_NO_EXIST;
         }
         __message_handler_count -= find_count;
 
-        LOG_INFO("Handler(s) removed successfully [%d]. Total handlers: [%d]",
+        LOG_INFO_1(logger, "Handler(s) removed successfully [%d]. Total handlers: [%d]",
                  find_count,
                  __message_handler_count);
 
@@ -254,26 +256,26 @@ namespace thingnet
 
     int EspNowNode::set_node_profile(NodeProfile *profile)
     {
-        LOG_INFO("Registering node profile");
+        LOG_INFO_1(logger, "Registering node profile");
 
         if (this->is_initialized)
         {
-            LOG_ERROR("Node has already been initialized");
+            LOG_ERROR_1(logger, "Node has already been initialized");
             return RESULT_DUPLICATE;
         }
 
         if (this->profile != 0)
         {
-            LOG_WARN("Node profile has already been registered");
+            LOG_WARN_1(logger, "Node profile has already been registered");
             return RESULT_DUPLICATE;
         }
 
         this->profile = profile;
 
-        LOG_DEBUG("Configuring default handler");
+        LOG_DEBUG_1(logger, "Configuring default handler");
         __default_handler = profile;
 
-        LOG_INFO("Node profile registered");
+        LOG_INFO_1(logger, "Node profile registered");
 
         return RESULT_OK;
     }
@@ -282,7 +284,7 @@ namespace thingnet
     {
         if (!this->is_initialized)
         {
-            LOG_ERROR("Node has not been initialized");
+            LOG_ERROR_1(logger, "Node has not been initialized");
             return false;
         }
 
@@ -294,7 +296,7 @@ namespace thingnet
     {
         if (!this->profile)
         {
-            LOG_ERROR("Node profile has not been set");
+            LOG_ERROR_1(logger, "Node profile has not been set");
             return ERR_NODE_PROFILE_NOT_SET;
         }
 
@@ -310,12 +312,12 @@ namespace thingnet
 
     int EspNowNode::register_peer(u8 *peer_address, esp_now_role role)
     {
-        LOG_INFO("Registering new peer");
+        LOG_INFO_1(logger, "Registering new peer");
 
-        LOG_DEBUG("Checking if peer exists: [%s]", LOG_FORMAT_MAC(peer_address));
+        LOG_DEBUG_1(logger, "Checking if peer exists: [%s]", LOG_FORMAT_MAC(peer_address));
         if (esp_now_is_peer_exist(peer_address))
         {
-            LOG_WARN("Peer has already been registered: [%s]",
+            LOG_WARN_1(logger, "Peer has already been registered: [%s]",
                      LOG_FORMAT_MAC(peer_address));
             return RESULT_DUPLICATE;
         }
@@ -324,22 +326,22 @@ namespace thingnet
         int status = esp_now_add_peer(peer_address, role, 1, NULL, 0);
         if (status)
         {
-            LOG_ERROR("Peer registration returned non zero value: [%d]", status);
+            LOG_ERROR_1(logger, "Peer registration returned non zero value: [%d]", status);
             return ERR_PEER_REGISTRATION_FAILED;
         }
-        LOG_INFO("Registered new peer: [%s]", LOG_FORMAT_MAC(peer_address));
+        LOG_INFO_1(logger, "Registered new peer: [%s]", LOG_FORMAT_MAC(peer_address));
 
         return RESULT_OK;
     }
 
     int EspNowNode::unregister_peer(u8 *peer_address)
     {
-        LOG_INFO("Unregistering existing peer");
+        LOG_INFO_1(logger, "Unregistering existing peer");
 
-        LOG_DEBUG("Checking if peer exists: [%s]", LOG_FORMAT_MAC(peer_address));
+        LOG_DEBUG_1(logger, "Checking if peer exists: [%s]", LOG_FORMAT_MAC(peer_address));
         if (!esp_now_is_peer_exist(peer_address))
         {
-            LOG_WARN("Peer has not been registered: [%s]",
+            LOG_WARN_1(logger, "Peer has not been registered: [%s]",
                      LOG_FORMAT_MAC(peer_address));
             return RESULT_NO_EXIST;
         }
@@ -348,10 +350,10 @@ namespace thingnet
         int status = esp_now_del_peer(peer_address);
         if (status)
         {
-            LOG_ERROR("Peer unregistration returned non zero value: [%d]", status);
+            LOG_ERROR_1(logger, "Peer unregistration returned non zero value: [%d]", status);
             return ERR_PEER_UNREGISTRATION_FAILED;
         }
-        LOG_INFO("Unregistered existing peer: [%s]", LOG_FORMAT_MAC(peer_address));
+        LOG_INFO_1(logger, "Unregistered existing peer: [%s]", LOG_FORMAT_MAC(peer_address));
 
         return RESULT_OK;
     }
@@ -366,7 +368,7 @@ namespace thingnet
         memcpy(payload_bytes + 1, &message_id, 2);
         memcpy(payload_bytes + 3, &payload->body, data_size);
 
-        LOG_DEBUG("Sending [%02x|%02x:%02x] + [%d] bytes to [%s]",
+        LOG_DEBUG_1(logger, "Sending [%02x|%02x:%02x] + [%d] bytes to [%s]",
                   payload_bytes[0],
                   payload_bytes[1],
                   payload_bytes[2],

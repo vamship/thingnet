@@ -24,7 +24,7 @@ using namespace thingnet::utils;
 const u8 SERVER_MAC[] = {0x1A, 0xFE, 0x34, 0xD4, 0x82, 0x2A};
 
 EspNowNode &node = EspNowNode::get_instance();
-Logger *logger = new Logger("main");
+static Logger *logger = new Logger("main");
 
 bool is_server()
 {

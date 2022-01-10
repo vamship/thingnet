@@ -5,6 +5,10 @@
 #include "messages.h"
 #include "basic_peer.h"
 
+using namespace thingnet::utils;
+
+static Logger *logger = new Logger("basic-peer");
+
 namespace thingnet::peers
 {
     BasicPeer::BasicPeer(EspNowNode *node, u8 *peer_mac_address, u32 timeout)
@@ -21,13 +25,13 @@ namespace thingnet::peers
 
     ProcessingResult BasicPeer::process(PeerMessage *message)
     {
-        LOG_DEBUG("[BasicPeer] Processing message");
+        LOG_DEBUG_1(logger, "[BasicPeer] Processing message");
         this->last_message_time = millis();
 
         int result = RESULT_OK;
         if (message->payload.type == MSG_TYPE_HEARTBEAT)
         {
-            LOG_DEBUG("[HEARTBEAT] Message id [%d] from [%s]",
+            LOG_DEBUG_1(logger, "[HEARTBEAT] Message id [%d] from [%s]",
                       message->payload.message_id,
                       LOG_FORMAT_MAC(message->sender));
 
@@ -39,7 +43,7 @@ namespace thingnet::peers
         }
         else if (message->payload.type == MSG_TYPE_ACK)
         {
-            LOG_DEBUG("[ACK] from [%s] for message id [%02x:%02x]",
+            LOG_DEBUG_1(logger, "[ACK] from [%s] for message id [%02x:%02x]",
                       LOG_FORMAT_MAC(message->sender),
                       message->payload.body[0],
                       message->payload.body[1]);
@@ -48,13 +52,13 @@ namespace thingnet::peers
         {
             u8 mac_addr[6];
             memcpy(mac_addr, message->payload.body, 6);
-            LOG_DEBUG("[ADVERTISEMENT] from [%s] for [%s]",
+            LOG_DEBUG_1(logger, "[ADVERTISEMENT] from [%s] for [%s]",
                      LOG_FORMAT_MAC(message->sender),
                      LOG_FORMAT_MAC(mac_addr));
         }
         else
         {
-            LOG_WARN("[UNKNOWN] Message type [%02x] from [%s]",
+            LOG_WARN_1(logger, "[UNKNOWN] Message type [%02x] from [%s]",
                      message->payload.type,
                      LOG_FORMAT_MAC(message->sender));
         }
@@ -69,7 +73,7 @@ namespace thingnet::peers
 
     int BasicPeer::update()
     {
-        LOG_INFO("Sending heartbeat message to peer");
+        LOG_INFO_1(logger, "Sending heartbeat message to peer");
         MessagePayload payload(MSG_TYPE_HEARTBEAT);
 
         this->node->send_message((u8 *)this->peer_mac_address, &payload, 6);

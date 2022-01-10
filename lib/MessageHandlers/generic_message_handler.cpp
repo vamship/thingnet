@@ -5,6 +5,10 @@
 #include "message_handler.h"
 #include "generic_message_handler.h"
 
+using namespace thingnet::utils;
+
+static Logger *logger = new Logger("gen-msgh");
+
 namespace thingnet::message_handlers
 {
     GenericMessageHandler::GenericMessageHandler(message_processor_t processor)
@@ -14,7 +18,7 @@ namespace thingnet::message_handlers
 
     ProcessingResult GenericMessageHandler::process(PeerMessage *message)
     {
-        LOG_DEBUG("[GenericMessageHandler] Delegating message handling");
+        LOG_DEBUG_1(logger, "[GenericMessageHandler] Delegating message handling");
         return this->processor(message);
     }
 }
