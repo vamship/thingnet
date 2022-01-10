@@ -84,7 +84,7 @@ namespace thingnet
         }
         u8 mac_addr[6];
         memcpy(mac_addr, message->payload.body, 6);
-        LOG_INFO(logger, "Advertisement message received from [%s] for [%s]",
+        LOG_DEBUG(logger, "Advertisement message received from [%s] for [%s]",
                  LOG_FORMAT_MAC(message->sender),
                  LOG_FORMAT_MAC(mac_addr));
 
