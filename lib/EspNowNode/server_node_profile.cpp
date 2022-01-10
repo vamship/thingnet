@@ -16,12 +16,12 @@ static Logger *logger = new Logger("server-prof");
 
 namespace thingnet
 {
-    const int __SERVER_NODE_PROFILE_DEFAULT_ADVERTISE_PERIOD = 60000;
-    const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+    static const int __DEFAULT_ADVERTISE_PERIOD = 60000;
+    static const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
     ServerNodeProfile::ServerNodeProfile(EspNowNode *node) : NodeProfile(node)
     {
-        this->advertise_period = __SERVER_NODE_PROFILE_DEFAULT_ADVERTISE_PERIOD;
+        this->advertise_period = __DEFAULT_ADVERTISE_PERIOD;
         this->advertise_timer = 0;
     }
 

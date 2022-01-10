@@ -17,10 +17,10 @@ static Logger *logger = new Logger("node");
 
 namespace thingnet
 {
-    const u8 __MAX_HANDLER_COUNT = 255;
-    MessageHandler *__message_handler_list[__MAX_HANDLER_COUNT];
-    MessageHandler *__default_handler = 0;
-    u8 __message_handler_count = 0;
+    static const u8 __MAX_HANDLER_COUNT = 255;
+    static MessageHandler *__message_handler_list[__MAX_HANDLER_COUNT];
+    static MessageHandler *__default_handler = 0;
+    static u8 __message_handler_count = 0;
 
     /**
      * @brief Handles data send confirmation.

@@ -3,7 +3,7 @@
 
 namespace thingnet::utils
 {
-    char __mac_str[18];
+    static char __mac_str[18];
 
     char *__log_format_mac(u8 *mac_addr)
     {

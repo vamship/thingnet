@@ -15,12 +15,12 @@ static Logger *logger = new Logger("prof");
 
 namespace thingnet
 {
-    const int __NODE_PROFILE_DEFAULT_PRUNE_PERIOD = 300000;
+    static const int __DEFAULT_PRUNE_PERIOD = 300000;
 
     NodeProfile::NodeProfile(EspNowNode *node)
     {
         this->node = node;
-        this->prune_period = __NODE_PROFILE_DEFAULT_PRUNE_PERIOD;
+        this->prune_period = __DEFAULT_PRUNE_PERIOD;
         this->peer_count = 0;
         this->prune_timer = 0;
         this->is_initialized = false;

@@ -16,11 +16,11 @@ static Logger *logger = new Logger("client-prof");
 
 namespace thingnet
 {
-    const int __CLIENT_NODE_PROFILE_DEFAULT_UPDATE_PERIOD = 10000;
+    static const int __DEFAULT_UPDATE_PERIOD = 10000;
 
     ClientNodeProfile::ClientNodeProfile(EspNowNode *node) : NodeProfile(node)
     {
-        this->update_period = __CLIENT_NODE_PROFILE_DEFAULT_UPDATE_PERIOD;
+        this->update_period = __DEFAULT_UPDATE_PERIOD;
         this->update_timer = 0;
     }
 
