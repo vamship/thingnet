@@ -18,4 +18,22 @@ namespace thingnet::utils
         return __mac_str;
     }
 
+    Logger::Logger(const char *module_name)
+    {
+        this->module_name = module_name;
+    }
+
+    void Logger::log(const char *level, const char *message, ...)
+    {
+        va_list v_args;
+        va_start(v_args, message);
+        vsprintf(this->buffer, message, v_args);
+        va_end(v_args);
+
+        char leader[32];
+        sprintf(leader, LOG_LEADER_FORMAT, level, this->module_name);
+
+        Serial.print(leader);
+        Serial.println(this->buffer);
+    }
 }

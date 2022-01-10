@@ -24,6 +24,7 @@ using namespace thingnet::utils;
 const u8 SERVER_MAC[] = {0x1A, 0xFE, 0x34, 0xD4, 0x82, 0x2A};
 
 EspNowNode &node = EspNowNode::get_instance();
+Logger *logger = new Logger("main");
 
 bool is_server()
 {
@@ -41,26 +42,26 @@ void setup()
 {
     Serial.begin(115200);
 
-    LOG_DEBUG("Determining node profile");
+    LOG_DEBUG_1(logger, "Determining node profile");
     NodeProfile *profile;
 
     if (is_server())
     {
         profile = new ServerNodeProfile(&node);
-        LOG_INFO("Node profile is [SERVER]");
+        LOG_INFO_1(logger, "Node profile is [SERVER]");
     }
     else
     {
         profile = new ClientNodeProfile(&node);
-        LOG_INFO("Node profile is [CLIENT]");
+        LOG_INFO_1(logger, "Node profile is [CLIENT]");
     }
 
     node.set_node_profile(profile);
 
-    LOG_DEBUG("Initializing node")
+    LOG_DEBUG_1(logger, "Initializing node");
     ASSERT_OK(node.init());
 
-    LOG_INFO("Initialization complete");
+    LOG_INFO_1(logger, "Initialization complete");
 }
 
 void loop()
