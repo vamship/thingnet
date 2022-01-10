@@ -9,6 +9,7 @@
 #define LOG_LEVEL_WARN 3
 #define LOG_LEVEL_INFO 4
 #define LOG_LEVEL_DEBUG 5
+#define LOG_LEVEL_TRACE 6
 
 #define LOG_LEADER_FORMAT "[%3s|%12s] "
 #define LOG_MESSAGE_MAX_LEN 255
@@ -105,6 +106,12 @@ namespace thingnet::utils
 #define LOG_DEBUG(logger, message, ...) logger->log("DBG", message __VA_OPT__(, ) __VA_ARGS__)
 #else
 #define LOG_DEBUG(...)
+#endif
+
+#if LOG_LEVEL >= LOG_LEVEL_TRACE
+#define LOG_TRACE(logger, message, ...) logger->log("TRC", message __VA_OPT__(, ) __VA_ARGS__)
+#else
+#define LOG_TRACE(...)
 #endif
 
 #endif
