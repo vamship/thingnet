@@ -21,13 +21,13 @@ namespace thingnet::message_handlers
 
     bool MessageHandler::can_handle(PeerMessage *message)
     {
-        LOG_DEBUG(logger, "[MessageHandler] Checking if handler can process message");
+        LOG_TRACE(logger, "Checking if handler can process message");
         return true;
     }
 
     ProcessingResult MessageHandler::process(PeerMessage *message)
     {
-        LOG_DEBUG(logger, "[MessageHandler] Processing message");
+        LOG_TRACE(logger, "Processing message (NOOP)");
         return ProcessingResult::handled;
     }
 }

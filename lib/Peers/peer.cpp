@@ -29,11 +29,8 @@ namespace thingnet::peers
     {
         if (memcmp(this->peer_mac_address, message->sender, 6) == 0)
         {
-            LOG_DEBUG(logger, "[Peer] will handle message");
             return true;
         };
-
-        LOG_DEBUG(logger, "[Peer] will not handle message");
         return false;
     }
 

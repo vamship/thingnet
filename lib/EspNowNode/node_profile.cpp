@@ -57,14 +57,14 @@ namespace thingnet
 
     int NodeProfile::init()
     {
-        LOG_INFO(logger, "Initializing node profile");
+        LOG_TRACE(logger, "Initializing node profile");
         if (this->is_initialized)
         {
             LOG_WARN(logger, "Node profile has already been initialized");
             return RESULT_DUPLICATE;
         }
 
-        LOG_INFO(logger, "Starting prune timer");
+        LOG_TRACE(logger, "Starting prune timer");
         this->prune_timer = new Timer(this->prune_period, true);
         this->prune_timer->start();
 
@@ -81,11 +81,11 @@ namespace thingnet
             return ProcessingResult::error;
         }
 
-        LOG_INFO(logger, "Executing node manager message handler");
+        LOG_TRACE(logger, "Executing node manager message handler");
 
         // Allow the child class to determine if a new peer needs to be created.
         // A child class can do this by overriding the create_peer() method.
-        LOG_DEBUG(logger, "Requesting new peer instance");
+        LOG_TRACE(logger, "Requesting new peer instance");
         Peer *peer = this->create_peer(message);
 
         if (peer == 0)
@@ -95,7 +95,7 @@ namespace thingnet
         }
         else
         {
-            LOG_DEBUG(logger, "New peer createed");
+            LOG_TRACE(logger, "New peer created");
             u8 mac_addr[6];
             peer->read_mac_address(mac_addr);
 
@@ -111,7 +111,7 @@ namespace thingnet
             // if the peer already exists.
             if (result == RESULT_OK)
             {
-                LOG_DEBUG(logger, "Configuring peer");
+                LOG_TRACE(logger, "Configuring peer");
                 this->peer_list[this->peer_count] = peer;
                 this->peer_count++;
 
@@ -126,7 +126,7 @@ namespace thingnet
             }
         }
 
-        LOG_INFO(logger, "Peer registration process completed");
+        LOG_TRACE(logger, "Peer registration process completed");
         return ProcessingResult::handled;
     }
 
@@ -140,14 +140,14 @@ namespace thingnet
 
         if (this->prune_timer->is_complete())
         {
-            LOG_INFO(logger, "Looking for inactive peers");
+            LOG_DEBUG(logger, "Pruning peer list");
             for (u8 peer_index = 0; peer_index < this->peer_count; peer_index++)
             {
-                LOG_DEBUG(logger, "Checking peer [%d]", peer_index);
+                LOG_TRACE(logger, "Checking peer [%d]", peer_index);
                 Peer *current_peer = this->peer_list[peer_index];
                 if (!current_peer->is_active())
                 {
-                    LOG_INFO(logger, "Peer [%d] is inactive", peer_index);
+                    LOG_TRACE(logger, "Peer [%d] is inactive", peer_index);
 
                     // Removing peer handler
                     this->node->remove_handler(current_peer);
@@ -167,11 +167,11 @@ namespace thingnet
                 }
                 else
                 {
-                    LOG_DEBUG(logger, "Peer [%d] is active", peer_index);
+                    LOG_TRACE(logger, "Peer [%d] is active", peer_index);
                 }
             }
 
-            LOG_DEBUG(logger, "Compacting peer list");
+            LOG_TRACE(logger, "Compacting peer list");
             u8 prune_count = 0;
             for (u8 peer_index = 0; peer_index < this->peer_count; peer_index++)
             {
@@ -186,7 +186,7 @@ namespace thingnet
             }
 
             this->peer_count -= prune_count;
-            LOG_INFO(logger, "Pruned [%d] inactive peers. Peer count [%d]", prune_count, this->peer_count);
+            LOG_DEBUG(logger, "Pruned [%d] inactive peers. Peer count [%d]", prune_count, this->peer_count);
         }
 
         return RESULT_OK;

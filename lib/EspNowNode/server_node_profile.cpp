@@ -42,14 +42,14 @@ namespace thingnet
     {
         ASSERT_OK(NodeProfile::init());
 
-        LOG_INFO(logger, "Starting advertise timer");
+        LOG_TRACE(logger, "Starting advertise timer");
         this->advertise_timer = new Timer(this->advertise_period, true);
         this->advertise_timer->start();
 
         ASSERT_OK(this->node->register_peer((u8 *)__BROADCAST_PEER,
                                             ESP_NOW_ROLE_CONTROLLER));
 
-        LOG_INFO(logger, "Server node profile initialized");
+        LOG_TRACE(logger, "Server node profile initialized");
         return RESULT_OK;
     }
 
@@ -59,7 +59,7 @@ namespace thingnet
 
         if (this->advertise_timer->is_complete())
         {
-            LOG_INFO(logger, "Advertising server to peers");
+            LOG_DEBUG(logger, "Advertising server to peers");
 
             MessagePayload payload(MSG_TYPE_ADVERTISEMENT);
             this->node->read_mac_address(payload.body);

@@ -41,11 +41,11 @@ namespace thingnet
     {
         ASSERT_OK(NodeProfile::init());
 
-        LOG_INFO(logger, "Starting update timer");
+        LOG_TRACE(logger, "Starting update timer");
         this->update_timer = new Timer(this->update_period, true);
         this->update_timer->start();
 
-        LOG_INFO(logger, "Peer node manager initialized");
+        LOG_TRACE(logger, "Peer node manager initialized");
         return RESULT_OK;
     }
 
@@ -55,10 +55,10 @@ namespace thingnet
 
         if (this->update_timer->is_complete())
         {
-            LOG_INFO(logger, "Updating [%d] peers", this->peer_count);
+            LOG_DEBUG(logger, "Updating [%d] peers", this->peer_count);
             for (u8 index = 0; index < this->peer_count; index++)
             {
-                LOG_DEBUG(logger, "Updating peer [%d]", index);
+                LOG_TRACE(logger, "Updating peer [%d]", index);
                 this->peer_list[index]->update();
             }
         }

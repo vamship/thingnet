@@ -25,7 +25,7 @@ namespace thingnet::peers
 
     ProcessingResult BasicPeer::process(PeerMessage *message)
     {
-        LOG_DEBUG(logger, "[BasicPeer] Processing message");
+        LOG_TRACE(logger, "Processing message");
         this->last_message_time = millis();
 
         int result = RESULT_OK;
@@ -73,7 +73,7 @@ namespace thingnet::peers
 
     int BasicPeer::update()
     {
-        LOG_INFO(logger, "Sending heartbeat message to peer");
+        LOG_DEBUG(logger, "Sending heartbeat message to peer");
         MessagePayload payload(MSG_TYPE_HEARTBEAT);
 
         this->node->send_message((u8 *)this->peer_mac_address, &payload, 6);
