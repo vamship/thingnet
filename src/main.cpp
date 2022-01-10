@@ -25,6 +25,9 @@ static const u8 SERVER_MAC[] = {0x1A, 0xFE, 0x34, 0xD4, 0x82, 0x2A};
 static EspNowNode &node = EspNowNode::get_instance();
 static Logger *logger = new Logger("main");
 
+static Timer *status_timer = new Timer(10000, true);
+static bool is_server_profile = false;
+
 bool is_server()
 {
     u8 ap_mac_addr[7];
@@ -44,7 +47,8 @@ void setup()
     LOG_DEBUG(logger, "Determining node profile");
     NodeProfile *profile;
 
-    if (is_server())
+    is_server_profile = is_server();
+    if (is_server_profile)
     {
         profile = new ServerNodeProfile(&node);
         LOG_INFO(logger, "Node profile is [SERVER]");
@@ -60,10 +64,21 @@ void setup()
     LOG_DEBUG(logger, "Initializing node");
     ASSERT_OK(node.init());
 
+    LOG_DEBUG(logger, "Starting status timer");
+    status_timer->start();
+
     LOG_INFO(logger, "Initialization complete");
 }
 
 void loop()
 {
     node.update();
+
+    if (status_timer->is_complete())
+    {
+        LOG_INFO(logger, "-==-");
+        LOG_INFO(logger, "Profile    : [%s]", is_server_profile ? "SERVER" : "CLIENT");
+        LOG_INFO(logger, "Peer count : [%d]", node.get_profile()->get_peer_count());
+        LOG_INFO(logger, "-==-");
+    }
 }
