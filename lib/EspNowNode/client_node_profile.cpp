@@ -88,6 +88,10 @@ namespace thingnet
                  LOG_FORMAT_MAC(message->sender),
                  LOG_FORMAT_MAC(mac_addr));
 
+        LOG_DEBUG(logger, "Sending connect message");
+        MessagePayload payload(MSG_TYPE_CONNECT);
+        this->node->send_message(mac_addr, &payload, 0);
+
         return new BasicPeer(this->node, mac_addr);
     }
 }
