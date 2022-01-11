@@ -27,6 +27,17 @@ namespace thingnet
         Timer *advertise_timer;
         u32 advertise_period;
 
+    protected:
+        /**
+         * @brief Creates a new peer object if a connect message is received
+         * from the peer.
+         * 
+         * @param message A pointer to the message that was received from the
+         *        peer.
+         * @return Peer* Pointer to a newly created peer object.
+         */
+        virtual Peer *create_peer(PeerMessage *message);
+
     public:
         /**
          * @brief Construct a new Server Node Profile object

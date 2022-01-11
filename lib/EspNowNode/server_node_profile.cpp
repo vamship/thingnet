@@ -69,4 +69,27 @@ namespace thingnet
 
         return RESULT_OK;
     }
+
+    Peer *ServerNodeProfile::create_peer(PeerMessage *message)
+    {
+        if (!this->is_initialized)
+        {
+            LOG_WARN(logger, "Node profile has not been initialized");
+            return 0;
+        }
+
+        if (message->payload.type != MSG_TYPE_CONNECT)
+        {
+            LOG_DEBUG(logger, "Unexpected message [%02x] from [%s]. Ignoring.",
+                      message->payload.type,
+                      LOG_FORMAT_MAC(message->sender));
+
+            return 0;
+        }
+
+        LOG_DEBUG(logger, "[CONNECT] received from [%s]",
+                  LOG_FORMAT_MAC(message->sender));
+
+        return new BasicPeer(this->node, message->sender);
+    }
 }
