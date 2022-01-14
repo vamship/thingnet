@@ -1,5 +1,5 @@
-#ifndef __ESP_NOW_NODE_H
-#define __ESP_NOW_NODE_H
+#ifndef __NODE_H
+#define __NODE_H
 
 #include <Arduino.h>
 #include <espnow.h>
