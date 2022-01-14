@@ -5,7 +5,7 @@
 
 #include "messages.h"
 #include "message_handler.h"
-#include "esp_now_node.h"
+#include "node.h"
 
 using namespace thingnet::message_handlers;
 

@@ -3,7 +3,7 @@
 #include "log.h"
 #include "error_codes.h"
 
-#include "esp_now_node.h"
+#include "node.h"
 #include "messages.h"
 #include "peer.h"
 

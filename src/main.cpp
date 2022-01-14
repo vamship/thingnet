@@ -10,7 +10,7 @@
 #include "pulser.h"
 #include "timer.h"
 #include "error_codes.h"
-#include "esp_now_node.h"
+#include "node.h"
 #include "node_profile.h"
 #include "server_node_profile.h"
 #include "client_node_profile.h"

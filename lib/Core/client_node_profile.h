@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 #include "messages.h"
-#include "esp_now_node.h"
+#include "node.h"
 #include "message_handler.h"
 #include "peer.h"
 #include "node_profile.h"

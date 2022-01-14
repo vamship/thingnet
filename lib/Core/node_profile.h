@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 #include "timer.h"
-#include "esp_now_node.h"
+#include "node.h"
 #include "message_handler.h"
 #include "peer.h"
 

@@ -5,7 +5,7 @@
 
 #include "error_codes.h"
 #include "messages.h"
-#include "esp_now_node.h"
+#include "node.h"
 #include "message_handler.h"
 #include "basic_peer.h"
 #include "server_node_profile.h"
