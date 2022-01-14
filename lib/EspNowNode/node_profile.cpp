@@ -49,17 +49,6 @@ namespace thingnet
         return this->peer_count;
     }
 
-    Peer *NodeProfile::create_peer(PeerMessage *message)
-    {
-        if (!this->is_initialized)
-        {
-            LOG_WARN(logger, "Node profile has not been initialized");
-            return 0;
-        }
-
-        return new BasicPeer(this->node, message->sender);
-    }
-
     int NodeProfile::init()
     {
         LOG_TRACE(logger, "Initializing node profile");

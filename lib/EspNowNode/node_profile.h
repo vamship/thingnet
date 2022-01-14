@@ -52,7 +52,7 @@ namespace thingnet
          *        peer.
          * @return Peer* Pointer to a newly created peer object.
          */
-        virtual Peer *create_peer(PeerMessage *message);
+        virtual Peer *create_peer(PeerMessage *message) = 0;
 
     public:
         /**
