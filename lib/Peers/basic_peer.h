@@ -32,7 +32,7 @@ namespace thingnet::peers
          * @param timeout The number of milliseconds since the last message was
          *         received after which the peer will be deemed to be inactive.
          */
-        BasicPeer(EspNowNode *node, u8 *peer_mac_address, u32 timeout);
+        BasicPeer(Node *node, u8 *peer_mac_address, u32 timeout);
 
         /**
          * @brief Construct a new basic peer object. Sets the timeout to a
@@ -43,7 +43,7 @@ namespace thingnet::peers
          * @param peer_mac_address The mac address of the peer that is
          *        represented by this object
          */
-        BasicPeer(EspNowNode *node, u8 *peer_mac_address);
+        BasicPeer(Node *node, u8 *peer_mac_address);
 
         /**
          * @brief Processes a message and returns a result that reflects the

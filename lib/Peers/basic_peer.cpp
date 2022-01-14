@@ -11,14 +11,14 @@ static Logger *logger = new Logger("basic-peer");
 
 namespace thingnet::peers
 {
-    BasicPeer::BasicPeer(EspNowNode *node, u8 *peer_mac_address, u32 timeout)
+    BasicPeer::BasicPeer(Node *node, u8 *peer_mac_address, u32 timeout)
         : Peer(node, peer_mac_address)
     {
         this->timeout = timeout;
         this->last_message_time = millis();
     }
 
-    BasicPeer::BasicPeer(EspNowNode *node, u8 *peer_mac_address)
+    BasicPeer::BasicPeer(Node *node, u8 *peer_mac_address)
         : BasicPeer(node, peer_mac_address, BASIC_PEER_DEFAULT_TIMEOUT)
     {
     }

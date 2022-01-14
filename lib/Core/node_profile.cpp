@@ -17,7 +17,7 @@ namespace thingnet
 {
     static const int __DEFAULT_PRUNE_PERIOD = 300000;
 
-    NodeProfile::NodeProfile(EspNowNode *node)
+    NodeProfile::NodeProfile(Node *node)
     {
         this->node = node;
         this->prune_period = __DEFAULT_PRUNE_PERIOD;

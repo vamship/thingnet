@@ -38,7 +38,7 @@ namespace thingnet
         bool is_initialized;
 
     protected:
-        EspNowNode *node;
+        Node *node;
         Peer *peer_list[__MAX_PEER_COUNT];
         u8 peer_count;
 
@@ -61,7 +61,7 @@ namespace thingnet
          * @param node Reference to the node object that will be used for low
          *        level peer communication and management.
          */
-        NodeProfile(EspNowNode *node);
+        NodeProfile(Node *node);
 
         /**
          * @brief Sets the inactive peer prune duration for the node.

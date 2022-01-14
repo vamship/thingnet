@@ -19,7 +19,7 @@ namespace thingnet
     static const int __DEFAULT_ADVERTISE_PERIOD = 60000;
     static const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-    ServerNodeProfile::ServerNodeProfile(EspNowNode *node) : NodeProfile(node)
+    ServerNodeProfile::ServerNodeProfile(Node *node) : NodeProfile(node)
     {
         this->advertise_period = __DEFAULT_ADVERTISE_PERIOD;
         this->advertise_timer = 0;

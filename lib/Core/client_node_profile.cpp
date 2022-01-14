@@ -18,7 +18,7 @@ namespace thingnet
 {
     static const int __DEFAULT_UPDATE_PERIOD = 10000;
 
-    ClientNodeProfile::ClientNodeProfile(EspNowNode *node) : NodeProfile(node)
+    ClientNodeProfile::ClientNodeProfile(Node *node) : NodeProfile(node)
     {
         this->update_period = __DEFAULT_UPDATE_PERIOD;
         this->update_timer = 0;

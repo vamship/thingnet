@@ -44,7 +44,7 @@ namespace thingnet
         /**
          * @brief Construct a new Client Node Profile object
          */
-        ClientNodeProfile(EspNowNode *node);
+        ClientNodeProfile(Node *node);
 
         /**
          * @brief Sets the peer update duration for the node.

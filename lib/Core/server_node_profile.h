@@ -42,7 +42,7 @@ namespace thingnet
         /**
          * @brief Construct a new Server Node Profile object
          */
-        ServerNodeProfile(EspNowNode *node);
+        ServerNodeProfile(Node *node);
 
         /**
          * @brief Sets the advertisement period for the node.

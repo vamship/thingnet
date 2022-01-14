@@ -27,7 +27,7 @@ namespace thingnet
     /**
      * @brief Represents a node that can communicate using ESP-NOW
      */
-    class EspNowNode
+    class Node
     {
     private:
         u8 sta_mac_address[6];
@@ -36,8 +36,8 @@ namespace thingnet
         bool is_initialized;
         NodeProfile *profile;
 
-        EspNowNode();
-        ~EspNowNode();
+        Node();
+        ~Node();
 
     public:
         /**
@@ -45,7 +45,7 @@ namespace thingnet
          *
          * @return EspNowNode&
          */
-        static EspNowNode &get_instance();
+        static Node &get_instance();
 
         /**
          * @brief Initializes the node and returns a non-zero value if the
@@ -168,8 +168,8 @@ namespace thingnet
 
         // Singleton implementation.
         // See: https://stackoverflow.com/questions/1008019/c-singleton-design-pattern
-        EspNowNode(EspNowNode const &) = delete;
-        void operator=(EspNowNode const &) = delete;
+        Node(Node const &) = delete;
+        void operator=(Node const &) = delete;
     };
 }
 

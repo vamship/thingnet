@@ -13,7 +13,7 @@ static Logger *logger = new Logger("server-prof");
 
 namespace thingnet::peers
 {
-    Peer::Peer(EspNowNode *node, u8 *peer_mac_address)
+    Peer::Peer(Node *node, u8 *peer_mac_address)
     {
         this->node = node;
         memcpy(this->peer_mac_address, peer_mac_address, 6);

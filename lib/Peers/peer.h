@@ -17,7 +17,7 @@ namespace thingnet::peers
     class Peer : public MessageHandler
     {
     protected:
-        EspNowNode *node;
+        Node *node;
         u8 peer_mac_address[6];
 
     public:
@@ -30,7 +30,7 @@ namespace thingnet::peers
          * @param peer_mac_address The mac address of the peer that is
          *        represented by this object
          */
-        Peer(EspNowNode *node, u8 *peer_mac_address);
+        Peer(Node *node, u8 *peer_mac_address);
 
         /**
          * @brief Destroy the Peer object

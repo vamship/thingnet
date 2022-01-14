@@ -114,12 +114,12 @@ namespace thingnet
         LOG_TRACE(logger, "Message from peer processed");
     }
 
-    EspNowNode::EspNowNode()
+    Node::Node()
     {
         this->profile = 0;
     }
 
-    EspNowNode::~EspNowNode()
+    Node::~Node()
     {
         // Loop through all handlers and delete them.
         for (int index = 0; index < __message_handler_count; index++)
@@ -129,13 +129,13 @@ namespace thingnet
         __message_handler_count = 0;
     }
 
-    EspNowNode &EspNowNode::get_instance()
+    Node &Node::get_instance()
     {
-        static EspNowNode instance;
+        static Node instance;
         return instance;
     }
 
-    int EspNowNode::init()
+    int Node::init()
     {
         LOG_TRACE(logger, "Initializing node");
         if (this->is_initialized)
@@ -181,7 +181,7 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    u16 EspNowNode::get_next_message_id()
+    u16 Node::get_next_message_id()
     {
         if (!this->is_initialized)
         {
@@ -192,7 +192,7 @@ namespace thingnet
         return this->message_id;
     }
 
-    NodeProfile *EspNowNode::get_profile()
+    NodeProfile *Node::get_profile()
     {
         if (!this->is_initialized)
         {
@@ -202,7 +202,7 @@ namespace thingnet
         return this->profile;
     }
 
-    int EspNowNode::add_handler(MessageHandler *handler)
+    int Node::add_handler(MessageHandler *handler)
     {
         LOG_TRACE(logger, "Registering message handler");
 
@@ -227,7 +227,7 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    int EspNowNode::remove_handler(MessageHandler *handler)
+    int Node::remove_handler(MessageHandler *handler)
     {
         LOG_TRACE(logger, "Unregistering message handler");
 
@@ -265,7 +265,7 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    int EspNowNode::set_node_profile(NodeProfile *profile)
+    int Node::set_node_profile(NodeProfile *profile)
     {
         LOG_TRACE(logger, "Registering node profile");
 
@@ -291,7 +291,7 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    bool EspNowNode::has_mac_address(u8 *input_mac)
+    bool Node::has_mac_address(u8 *input_mac)
     {
         if (!this->is_initialized)
         {
@@ -303,7 +303,7 @@ namespace thingnet
                memcmp(this->ap_mac_address, input_mac, 6) == 0;
     }
 
-    int EspNowNode::update()
+    int Node::update()
     {
         if (!this->profile)
         {
@@ -315,13 +315,13 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    int EspNowNode::read_mac_address(u8 *buffer)
+    int Node::read_mac_address(u8 *buffer)
     {
         memcpy(buffer, this->ap_mac_address, 6);
         return RESULT_OK;
     }
 
-    int EspNowNode::register_peer(u8 *peer_address, esp_now_role role)
+    int Node::register_peer(u8 *peer_address, esp_now_role role)
     {
         LOG_TRACE(logger, "Registering new peer");
 
@@ -345,7 +345,7 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    int EspNowNode::unregister_peer(u8 *peer_address)
+    int Node::unregister_peer(u8 *peer_address)
     {
         LOG_TRACE(logger, "Unregistering existing peer");
 
@@ -369,7 +369,7 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    int EspNowNode::send_message(u8 *destination, MessagePayload *payload, u8 data_size)
+    int Node::send_message(u8 *destination, MessagePayload *payload, u8 data_size)
     {
         u8 payload_bytes[250];
         u16 message_id = payload->message_id == 0 ? this->get_next_message_id()
