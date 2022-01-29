@@ -16,36 +16,17 @@ static Logger *logger = new Logger("server-prof");
 
 namespace thingnet
 {
-    static const int __DEFAULT_ADVERTISE_PERIOD = 60000;
     static const u8 __BROADCAST_PEER[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
     ServerNodeProfile::ServerNodeProfile(Node *node) : NodeProfile(node)
     {
-        this->advertise_period = __DEFAULT_ADVERTISE_PERIOD;
-        this->advertise_timer = 0;
-    }
-
-    int ServerNodeProfile::set_advertise_period(u32 timeout)
-    {
-        if (!this->is_initialized)
-        {
-            LOG_WARN(logger, "Node profile has not been initialized");
-            return ERR_NODE_PROFILE_NOT_INITIALIZED;
-        }
-
-        this->advertise_period = timeout;
-
-        return RESULT_OK;
     }
 
     int ServerNodeProfile::init()
     {
         ASSERT_OK(NodeProfile::init());
 
-        LOG_TRACE(logger, "Starting advertise timer");
-        this->advertise_timer = new Timer(this->advertise_period, true);
-        this->advertise_timer->start();
-
+        LOG_TRACE(logger, "Registering broadcast peer");
         ASSERT_OK(this->node->register_peer((u8 *)__BROADCAST_PEER,
                                             ESP_NOW_ROLE_CONTROLLER));
 
@@ -53,20 +34,19 @@ namespace thingnet
         return RESULT_OK;
     }
 
-    int ServerNodeProfile::update()
+    int ServerNodeProfile::advertise()
     {
-        ASSERT_OK(NodeProfile::update());
-
-        if (this->advertise_timer->is_complete())
+        if (!this->is_initialized)
         {
-            LOG_DEBUG(logger, "Advertising server to peers");
-
-            MessagePayload payload(MSG_TYPE_ADVERTISEMENT);
-            this->node->read_mac_address(payload.body);
-
-            this->node->send_message((u8 *)__BROADCAST_PEER, &payload, 6);
+            LOG_WARN(logger, "Node profile has not been initialized");
+            return ERR_NODE_PROFILE_NOT_INITIALIZED;
         }
 
+        LOG_TRACE(logger, "Advertising server to peers");
+        MessagePayload payload(MSG_TYPE_ADVERTISEMENT);
+        this->node->read_mac_address(payload.body);
+
+        this->node->send_message((u8 *)__BROADCAST_PEER, &payload, 6);
         return RESULT_OK;
     }
 

@@ -24,9 +24,6 @@ namespace thingnet
     class ServerNodeProfile : public NodeProfile
     {
     private:
-        Timer *advertise_timer;
-        u32 advertise_period;
-
     protected:
         /**
          * @brief Creates a new peer object if a connect message is received
@@ -45,14 +42,12 @@ namespace thingnet
         ServerNodeProfile(Node *node);
 
         /**
-         * @brief Sets the advertisement period for the node.
+         * @brief Broadcasts an advertisement message to all peers.
          * 
-         * @param timeout The period at which the profile advertises itself to
-         *        peers.
          * @return int A non success value will be returned if the add operation
          *         resulted in an error. See error codes for more information.
          */
-        int set_advertise_period(u32 timeout);
+        int advertise();
 
         /**
          * @brief Initializes the node profile by starting the appropriate
@@ -62,16 +57,6 @@ namespace thingnet
          * operation resulted in an error. See error codes for more information.
          */
         int init();
-
-        /**
-         * @brief Loops through each registered peer and allows the peer to
-         * perform update actions. Additionally, performs basic housekeeping
-         * such as pruning peer references that are no longer active, etc.
-         * 
-         * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
-         */
-        int update();
     };
 }
 

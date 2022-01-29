@@ -26,6 +26,7 @@ static Node &node = Node::get_instance();
 static Logger *logger = new Logger("main");
 
 static Timer *status_timer = new Timer(10000, true);
+static Timer *advertise_timer = 0;
 static bool is_server_profile = false;
 
 bool is_server()
@@ -51,6 +52,7 @@ void setup()
     if (is_server_profile)
     {
         profile = new ServerNodeProfile(&node);
+        advertise_timer = new Timer(10000, true);
         LOG_INFO(logger, "Node profile is [SERVER]");
     }
     else
@@ -73,6 +75,13 @@ void setup()
 void loop()
 {
     node.update();
+
+    if (advertise_timer != 0 && advertise_timer->is_complete())
+    {
+        LOG_INFO(logger, "Advertising server");
+        ServerNodeProfile *profile = (ServerNodeProfile *)node.get_profile();
+        ASSERT_OK(profile->advertise());
+    }
 
     if (status_timer->is_complete())
     {
