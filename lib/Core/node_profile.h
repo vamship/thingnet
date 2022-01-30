@@ -7,6 +7,7 @@
 #include "node.h"
 #include "message_handler.h"
 #include "peer.h"
+#include "event_emitter.h"
 
 using namespace thingnet::message_handlers;
 using namespace thingnet::utils;
@@ -15,6 +16,25 @@ using namespace thingnet::peers;
 namespace thingnet
 {
     const int __MAX_PEER_COUNT = 50;
+
+    /**
+     * @brief Information about a peer, passed to listeners when a peer is
+     * added or removed from the profile.
+     */
+    typedef struct PeerListEventData
+    {
+        u8 peer_mac_address[6];
+
+        PeerListEventData()
+        {
+            memset(peer_mac_address, 0, 6);
+        }
+
+        PeerListEventData(Peer *peer)
+        {
+            peer->read_mac_address(peer_mac_address);
+        }
+    } PeerListEventData;
 
     /**
      * @brief Base class for node profile entities. Node profiles are designed
@@ -33,6 +53,8 @@ namespace thingnet
     private:
         Timer *prune_timer;
         u32 prune_period;
+        EventEmitter<PeerListEventData> *peer_added;
+        EventEmitter<PeerListEventData> *peer_removed;
 
     protected:
         bool is_initialized;
@@ -123,6 +145,22 @@ namespace thingnet
          *         resulted in an error. See error codes for more information.
          */
         virtual int update();
+
+        /**
+         * @brief Returns a reference to the peer added event, to which
+         * additional listeners may be attached.
+         * 
+         * @return Reference to the peer added event.
+         */
+        const Event<PeerListEventData> *get_peer_added_event();
+
+        /**
+         * @brief Returns a reference to the peer removed event, to which
+         * additional listeners may be attached.
+         * 
+         * @return Reference to the peer removed event.
+         */
+        const Event<PeerListEventData> *get_peer_removed_event();
     };
 }
 
