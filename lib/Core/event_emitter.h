@@ -187,7 +187,7 @@ namespace thingnet
         for (u16 index = 0; index < this->listener_count; index++)
         {
             LOG_TRACE(_event_emitter_logger, "Notifying listener [%d]");
-            this->listeners[index](event_data);
+            this->listeners[index](this->event_type, event_data);
         }
 
         LOG_TRACE(_event_emitter_logger, "Notified [%d] listeners", this->listener_count);
