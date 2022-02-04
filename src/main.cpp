@@ -15,31 +15,19 @@
 #include "server_node_profile.h"
 #include "client_node_profile.h"
 
+#include "hadrware_manager.h"
+
 using namespace thingnet;
 using namespace thingnet::message_handlers;
 using namespace thingnet::peers;
 using namespace thingnet::utils;
 
-// const u8 SERVER_MAC[] = {0x18, 0xfe, 0x34, 0xd4, 0x7e, 0x9a};
-static const u8 SERVER_MAC[] = {0x1A, 0xFE, 0x34, 0xD4, 0x82, 0x2A};
-static Node &node = Node::get_instance();
 static Logger *logger = new Logger("main");
+static Node &node = Node::get_instance();
 
 static Timer *status_timer = new Timer(10000, true);
-static Timer *advertise_timer = 0;
-static bool is_server_profile = false;
-
-bool is_server()
-{
-    u8 ap_mac_addr[7];
-    u8 sta_mac_addr[6];
-
-    WiFi.macAddress(sta_mac_addr);
-    WiFi.softAPmacAddress(ap_mac_addr);
-
-    return memcmp(sta_mac_addr, SERVER_MAC, 6) == 0 ||
-           memcmp(ap_mac_addr, SERVER_MAC, 6) == 0;
-}
+static Timer *advertise_timer = new Timer(3000);
+static HardwareManager *hw_manager = new HardwareManager();
 
 void setup()
 {
@@ -48,11 +36,15 @@ void setup()
     LOG_DEBUG(logger, "Determining node profile");
     NodeProfile *profile;
 
-    is_server_profile = is_server();
-    if (is_server_profile)
+    LOG_DEBUG(logger, "Initializing hardware manager");
+    hw_manager->initialize();
+
+    LOG_DEBUG(logger, "Performing preliminary update on hardware manager");
+    ASSERT_OK(hw_manager->update());
+
+    if (hw_manager->is_server_mode())
     {
         profile = new ServerNodeProfile(&node);
-        advertise_timer = new Timer(10000, true);
         LOG_INFO(logger, "Node profile is [SERVER]");
     }
     else
@@ -74,9 +66,18 @@ void setup()
 
 void loop()
 {
-    node.update();
+    ASSERT_OK(node.update());
+    ASSERT_OK(hw_manager->update());
 
-    if (advertise_timer != 0 && advertise_timer->is_complete())
+    if (hw_manager->send_advertisement())
+    {
+        if (advertise_timer->start() == 0)
+        {
+            LOG_INFO(logger, "Scheduled advertise message");
+        }
+    }
+
+    if (advertise_timer->is_complete())
     {
         LOG_INFO(logger, "Advertising server");
         ServerNodeProfile *profile = (ServerNodeProfile *)node.get_profile();
@@ -86,7 +87,8 @@ void loop()
     if (status_timer->is_complete())
     {
         LOG_INFO(logger, "-==-");
-        LOG_INFO(logger, "Profile    : [%s]", is_server_profile ? "SERVER" : "CLIENT");
+        LOG_INFO(logger, "Profile    : [%s]",
+                 hw_manager->is_server_mode() ? "SERVER" : "CLIENT");
         LOG_INFO(logger, "Peer count : [%d]", node.get_profile()->get_peer_count());
         LOG_INFO(logger, "-==-");
     }
