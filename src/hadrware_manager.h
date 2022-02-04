@@ -5,6 +5,10 @@
 
 const int HW_MGR_ERR_NOT_INITIALIZED = 0x70;
 
+/**
+ * @brief Provides an abstracted wrapper around the hardware that the code is
+ * currently running.
+ */
 class HardwareManager
 {
 private:
