@@ -183,7 +183,7 @@ namespace thingnet
     void EventEmitter<T>::emit(T event_data)
     {
         LOG_DEBUG(_event_emitter_logger, "Emitting event [%d]. Listener count [%d]",
-                  event_data, this->listener_count);
+                  this->event_type, this->listener_count);
         for (u16 index = 0; index < this->listener_count; index++)
         {
             LOG_TRACE(_event_emitter_logger, "Notifying listener [%d]");
