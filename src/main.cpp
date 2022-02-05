@@ -26,7 +26,6 @@ static Logger *logger = new Logger("main");
 static Node &node = Node::get_instance();
 
 static Timer *status_timer = new Timer(10000, true);
-static Timer *advertise_timer = new Timer(3000);
 static HardwareManager *hw_manager = new HardwareManager();
 
 void setup()
@@ -70,14 +69,6 @@ void loop()
     ASSERT_OK(hw_manager->update());
 
     if (hw_manager->send_advertisement())
-    {
-        if (advertise_timer->start() == 0)
-        {
-            LOG_INFO(logger, "Scheduled advertise message");
-        }
-    }
-
-    if (advertise_timer->is_complete())
     {
         LOG_INFO(logger, "Advertising server");
         ServerNodeProfile *profile = (ServerNodeProfile *)node.get_profile();

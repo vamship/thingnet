@@ -2,6 +2,7 @@
 
 #include "log.h"
 #include "error_codes.h"
+#include "debounced_input.h"
 
 #include "hadrware_manager.h"
 
@@ -13,9 +14,7 @@ static Logger *logger = new Logger("hw-mgr");
 HardwareManager::HardwareManager()
 {
     this->is_initialized = false;
-    this->server_mode_pin_value = LOW;
-    this->gpio_in_server_mode = 14;
-    this->gpio_in_advertise = 12;
+    this->is_server_mode_enabled = false;
 }
 
 int HardwareManager::initialize()
@@ -27,11 +26,14 @@ int HardwareManager::initialize()
     }
 
     LOG_TRACE(logger, "Configuring GPIO pins");
-    pinMode(this->gpio_in_server_mode, INPUT_PULLUP);
-    pinMode(this->gpio_in_advertise, INPUT_PULLUP);
+    this->server_mode_input = new DebouncedInput(14, 100);
+    this->advertise_input = new DebouncedInput(12, 3000);
 
     LOG_DEBUG(logger, "Reading inital pin values");
-    this->server_mode_pin_value = digitalRead(this->gpio_in_server_mode);
+    this->server_mode_input->is_triggered();
+    // Sleep for a bit to allow the debounce checker to work.
+    delay(105);
+    this->is_server_mode_enabled = this->server_mode_input->is_triggered();
 
     LOG_TRACE(logger, "Setting initialization flag");
     this->is_initialized = true;
@@ -48,17 +50,17 @@ int HardwareManager::update()
         return HW_MGR_ERR_NOT_INITIALIZED;
     }
 
-    this->advertise_pin_value = digitalRead(this->gpio_in_advertise);
+    this->is_advertise_triggered = this->advertise_input->is_triggered();
 
     return thingnet::RESULT_OK;
 }
 
 bool HardwareManager::is_server_mode()
 {
-    return this->server_mode_pin_value == LOW;
+    return this->is_server_mode_enabled;
 }
 
 bool HardwareManager::send_advertisement()
 {
-    return this->is_server_mode() && this->advertise_pin_value == LOW;
+    return this->is_server_mode() && this->is_advertise_triggered;
 }

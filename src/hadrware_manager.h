@@ -2,6 +2,9 @@
 #define HARDWARE_MANAGER_H
 
 #include <Arduino.h>
+#include "debounced_input.h"
+
+using namespace thingnet::utils;
 
 const int HW_MGR_ERR_NOT_INITIALIZED = 0x70;
 
@@ -12,11 +15,11 @@ const int HW_MGR_ERR_NOT_INITIALIZED = 0x70;
 class HardwareManager
 {
 private:
-    uint8_t gpio_in_server_mode;
-    uint8_t gpio_in_advertise;
+    DebouncedInput *server_mode_input;
+    DebouncedInput *advertise_input;
 
-    uint8_t server_mode_pin_value;
-    uint8_t advertise_pin_value;
+    bool is_server_mode_enabled;
+    bool is_advertise_triggered;
     bool is_initialized;
 
 public:
