@@ -47,6 +47,14 @@ namespace thingnet::utils
         bool is_complete();
 
         /**
+         * @brief Determines whether or not the timer is ticking.
+         * 
+         * @return true The timer has been started
+         * @return false The timer has not been started
+         */
+        bool is_running();
+
+        /**
          * @brief Starts the timer. If the timer has been started, this method will
          * have no effect.
          * 

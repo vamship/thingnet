@@ -27,6 +27,11 @@ namespace thingnet::utils
         return false;
     }
 
+    bool Timer::is_running()
+    {
+        return this->is_started;
+    }
+
     int Timer::start()
     {
         if (this->is_started)
