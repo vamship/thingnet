@@ -15,6 +15,7 @@ HardwareManager::HardwareManager()
 {
     this->is_initialized = false;
     this->is_server_mode_enabled = false;
+    this->is_advertise_triggered = false;
 }
 
 int HardwareManager::initialize()
