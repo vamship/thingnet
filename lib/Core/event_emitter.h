@@ -44,10 +44,9 @@ namespace thingnet
          * to be invoked.
          * 
          * @param listener Pointer to a function that will be invoked when the
-         *        event occurs.
-         * 
+         * event occurs.
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int add_listener(void (*listener)(int event_type, T event_data));
 
@@ -56,9 +55,8 @@ namespace thingnet
          * do nothing if the listener had previously not been registered.
          * 
          * @param listener Pointer to the listener function to be removed.
-         * 
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int remove_listener(void (*listener)(int event_type, T event_data));
     };
@@ -83,7 +81,7 @@ namespace thingnet
          * @brief Construct a new event emitter object
          * 
          * @param event_type The type of event that this event emitter is
-         *        defined for
+         * defined for
          */
         EventEmitter(int event_type);
 

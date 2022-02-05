@@ -29,7 +29,7 @@ namespace thingnet::message_handlers
          * @brief Construct a new Generic Message Handler object
          * 
          * @param processor A processor function that will perform the
-         *        actual message processing.
+         * actual message processing.
          */
         GenericMessageHandler(message_processor_t processor);
 
@@ -38,15 +38,13 @@ namespace thingnet::message_handlers
          * result of the processing.
          *
          * @param message A pointer to the message that the handler will
-         *        receive.
+         * receive.
          * @return ProcessingResult::handled If the message was completely
-         *         handled by the processor and no further processing is
-         *         required.
+         * handled by the processor and no further processing is required.
          * @return ProcessingResult::chain If the message was processed
-         *         successfully, but can be handled by other processors in
-         *         the chain.
+         * successfully, but can be handled by other processors in the chain.
          * @return ProcessingResult::error If there was an error processing
-         *         the message.
+         * the message.
          */
         ProcessingResult process(PeerMessage *message);
     };

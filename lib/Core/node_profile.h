@@ -69,7 +69,7 @@ namespace thingnet
          * requirements.
          * 
          * @param message A pointer to the message that was received from the
-         *        peer.
+         * peer.
          * @return Peer* Pointer to a newly created peer object.
          */
         virtual Peer *create_peer(PeerMessage *message) = 0;
@@ -79,7 +79,7 @@ namespace thingnet
          * @brief Construct a new Node Profile object
          * 
          * @param node Reference to the node object that will be used for low
-         *        level peer communication and management.
+         * level peer communication and management.
          */
         NodeProfile(Node *node);
 
@@ -87,9 +87,9 @@ namespace thingnet
          * @brief Sets the inactive peer prune duration for the node.
          * 
          * @param timeout The period at which the profile checks for inactive
-         *        peers.
+         * peers.
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int set_prune_period(u32 timeout);
 
@@ -107,15 +107,14 @@ namespace thingnet
          * peers.
          *
          * @param message A pointer to the message that the handler will
-         *        receive.
+         * receive.
          * @return ProcessingResult::handled If the message was completely
-         *         handled by the processor and no further processing is
-         *         required.
+         * handled by the processor and no further processing is required.
          * @return ProcessingResult::chain If the message was processed
-         *         successfully, but can be handled by other processors in the
-         *         chain.
+         * successfully, but can be handled by other processors in the
+         * chain.
          * @return ProcessingResult::error If there was an error processing the
-         *         message.
+         * message.
          */
         virtual ProcessingResult process(PeerMessage *message);
 
@@ -130,7 +129,7 @@ namespace thingnet
          * will be called once at the start of the program.
          * 
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         virtual int init();
 
@@ -140,7 +139,7 @@ namespace thingnet
          * non blocking.
          * 
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         virtual int update();
 

@@ -23,12 +23,12 @@ namespace thingnet::peers
     public:
         /**
          * @brief Construct a new basic peer object. Sets the timeout to a
-         *        default value of 300s.
+         * default value of 300s.
          * 
          * @param node Reference to the node object that will be used for low
-         *        level peer communication and management.
+         * level peer communication and management.
          * @param peer_mac_address The mac address of the peer that is
-         *        represented by this object
+         * represented by this object
          */
         Peer(Node *node, u8 *peer_mac_address);
 
@@ -43,7 +43,7 @@ namespace thingnet::peers
          * 
          * @param buffer A buffer into which the mac address will be copied.
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int read_mac_address(u8 *buffer);
 
@@ -52,7 +52,7 @@ namespace thingnet::peers
          * handler is configured for.
          *
          * @param message A pointer to the message that the handler will
-         *        receive.
+         * receive.
          * @return true If the handler wants to handle the message.
          * @return false If the handler does not want to handle the message.
          */
@@ -62,7 +62,7 @@ namespace thingnet::peers
          * @brief Allows the peer to run periodic updates.
          * 
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         virtual int update();
 

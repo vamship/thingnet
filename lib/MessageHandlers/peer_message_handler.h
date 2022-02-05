@@ -21,7 +21,7 @@ namespace thingnet::message_handlers
          * @brief Construct a new Peer Message Handler object
          * 
          * @param peer_mac_address The mac address of the peer whose messages
-         *        will be handled by this handler.
+         * will be handled by this handler.
          */
         PeerMessageHandler(u8 *peer_mac_address);
 
@@ -30,7 +30,7 @@ namespace thingnet::message_handlers
          * handler is configured for.
          *
          * @param message A pointer to the message that the handler will
-         *        receive.
+         * receive.
          * @return true If the handler wants to handle the message.
          * @return false If the handler does not want to handle the message.
          */
@@ -41,15 +41,13 @@ namespace thingnet::message_handlers
          * result of the processing.
          *
          * @param message A pointer to the message that the handler will
-         *        receive.
+         * receive.
          * @return ProcessingResult::handled If the message was completely
-         *         handled by the processor and no further processing is
-         *         required.
+         * handled by the processor and no further processing is required.
          * @return ProcessingResult::chain If the message was processed
-         *         successfully, but can be handled by other processors in
-         *         the chain.
+         * successfully, but can be handled by other processors in the chain.
          * @return ProcessingResult::error If there was an error processing
-         *         the message.
+         * the message.
          */
         ProcessingResult process(PeerMessage *message);
     };

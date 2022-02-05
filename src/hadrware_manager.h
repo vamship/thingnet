@@ -33,7 +33,7 @@ public:
      * typically invoked once at the start of the program.
      *
      * @return int A non success value will be returned if the add operation
-     *         resulted in an error. See error codes for more information.
+     * resulted in an error. See error codes for more information.
      */
     int initialize();
 
@@ -42,7 +42,7 @@ public:
      * manager to read inputs and set output pins based on its state.
      *
      * @return int A non success value will be returned if the add operation
-     *         resulted in an error. See error codes for more information.
+     * resulted in an error. See error codes for more information.
      */
     int update();
 

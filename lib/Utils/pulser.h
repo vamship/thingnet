@@ -25,7 +25,7 @@ namespace thingnet::utils
          * 
          * @param pin The GPIO pin on which the pulses will be generated
          * @param duration The duration of the pulse. The pulser will be initialized
-         *        with a duty cycle of 0.5.
+         * with a duty cycle of 0.5.
          */
         Pulser(uint8_t pin, u64 duration);
 
@@ -33,7 +33,7 @@ namespace thingnet::utils
          * @brief Initializes the pulser object
          * 
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int init();
 
@@ -42,7 +42,7 @@ namespace thingnet::utils
          * 
          * @param duty_cycle The duty cycle as a number from 1 to 100
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int set_duty_cycle(u8 duty_cycle);
 
@@ -51,7 +51,7 @@ namespace thingnet::utils
          * 
          * @param duration The duration in milliseconds.
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int set_duration(u64 duration);
 
@@ -61,7 +61,7 @@ namespace thingnet::utils
          * based on the current time and the duty cycle of the pulser.
          * 
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int update();
     };

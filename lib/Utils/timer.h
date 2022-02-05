@@ -24,8 +24,8 @@ namespace thingnet::utils
          * 
          * @param duration The duration of the timer
          * @param auto_restart If set to true, automatically restart the timer once
-         *        it has been completed. Note that the restart will occur when
-         *        `is_complete()` is invoked and not when the timer expires.
+         * it has been completed. Note that the restart will occur when
+         * `is_complete()` is invoked and not when the timer expires.
          */
         Timer(u64 duration, bool auto_restart);
 
@@ -59,7 +59,7 @@ namespace thingnet::utils
          * have no effect.
          * 
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int start();
 
@@ -67,7 +67,7 @@ namespace thingnet::utils
          * @brief Starts the timer.
          * 
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int stop();
 
@@ -76,7 +76,7 @@ namespace thingnet::utils
          * started, and if it has been stopped, it will be started again.
          * 
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int restart();
     };

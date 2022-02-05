@@ -31,7 +31,7 @@ namespace thingnet::utils
          * @brief Construct a new Logger object
          * 
          * @param module_name The name of the module. This value will be
-         *        included in the emitted log messages.
+         * included in the emitted log messages.
          */
         Logger(const char *module_name);
 
@@ -52,7 +52,7 @@ namespace thingnet::utils
      * macros, and should not be used directly.
      * 
      * @param mac_addr A byte array that represents the mac address. Only the
-     *        first six bytes of this array will be used.
+     * first six bytes of this array will be used.
      * @return char* A pointer to a formatted mac address string. Note that the
      * data referenced by the pointer will be overwritten on subsequent calls.
      */

@@ -52,7 +52,7 @@ namespace thingnet
          * initialization fails.
          *
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int init();
 
@@ -68,8 +68,7 @@ namespace thingnet
          * @brief Gets the node profile currently associated with the node.
          * 
          * @return NodeProfile* A pointer to the current node profile. A null
-         *         value will be returned if the node profile has not been
-         *         configured.
+         * value will be returned if the node profile has not been configured.
          */
         NodeProfile *get_profile();
 
@@ -79,7 +78,7 @@ namespace thingnet
          * 
          * @param handler The handler to add
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int add_handler(MessageHandler *handler);
 
@@ -89,7 +88,7 @@ namespace thingnet
          * 
          * @param handler The handler to remove
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int remove_handler(MessageHandler *handler);
 
@@ -102,7 +101,7 @@ namespace thingnet
          * 
          * @param profile The profile to set
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int set_node_profile(NodeProfile *profile);
 
@@ -112,7 +111,7 @@ namespace thingnet
          * @param input_mac The mac address to compare with the current node.
          * @return true If the input mac address matches the node's mac address
          * @return false If the input mac address odes not match, or if the node
-         *         has not been initialized.
+         * has not been initialized.
          */
         bool has_mac_address(u8 *input_mac);
 
@@ -121,7 +120,7 @@ namespace thingnet
          * be called from within a processing loop, and must be non blocking.
          * 
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int update();
 
@@ -130,7 +129,7 @@ namespace thingnet
          * 
          * @param buffer A buffer into which the mac address will be copied.
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int read_mac_address(u8 *buffer);
 
@@ -141,7 +140,7 @@ namespace thingnet
          * @param peer_address The mac address of the peer.
          * @param role The role to register the peer as.
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int register_peer(u8 *peer_address, esp_now_role role);
 
@@ -151,7 +150,7 @@ namespace thingnet
          * 
          * @param peer_address The mac address of the peer.
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int unregister_peer(u8 *peer_address);
 
@@ -162,7 +161,7 @@ namespace thingnet
          * @param payload A pointer to the message payload
          * @param data_size The length of the payload, not including headers
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int send_message(u8 *destination, MessagePayload *payload, u8 data_size);
 

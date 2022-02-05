@@ -30,7 +30,7 @@ namespace thingnet
          * from the peer.
          * 
          * @param message A pointer to the message that was received from the
-         *        peer.
+         * peer.
          * @return Peer* Pointer to a newly created peer object.
          */
         virtual Peer *create_peer(PeerMessage *message);
@@ -45,7 +45,7 @@ namespace thingnet
          * @brief Broadcasts an advertisement message to all peers.
          * 
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int advertise();
 

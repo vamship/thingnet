@@ -35,7 +35,7 @@ namespace thingnet
          * requirements.
          * 
          * @param message A pointer to the message that was received from the
-         *        peer.
+         * peer.
          * @return Peer* Pointer to a newly created peer object.
          */
         virtual Peer *create_peer(PeerMessage *message);
@@ -50,10 +50,10 @@ namespace thingnet
          * @brief Sets the peer update duration for the node.
          * 
          * @param timeout The period at which peers will be updated, allowing
-         *        them to execute the functionality defined within their
-         *        update() method.
+         * them to execute the functionality defined within their update()
+         * method.
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int set_update_period(u32 timeout);
 
@@ -72,7 +72,7 @@ namespace thingnet
          * such as pruning peer references that are no longer active, etc.
          * 
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         int update();
     };

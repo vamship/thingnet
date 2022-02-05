@@ -26,22 +26,22 @@ namespace thingnet::peers
          * @brief Construct a new basic peer object
          * 
          * @param node Reference to the node object that will be used for low
-         *        level peer communication and management.
+         * level peer communication and management.
          * @param peer_mac_address The mac address of the peer that is
-         *        represented by this object
+         * represented by this object
          * @param timeout The number of milliseconds since the last message was
-         *         received after which the peer will be deemed to be inactive.
+         * received after which the peer will be deemed to be inactive.
          */
         BasicPeer(Node *node, u8 *peer_mac_address, u32 timeout);
 
         /**
          * @brief Construct a new basic peer object. Sets the timeout to a
-         *        default value of 300s.
+         * default value of 300s.
          * 
          * @param node Reference to the node object that will be used for low
-         *        level peer communication and management.
+         * level peer communication and management.
          * @param peer_mac_address The mac address of the peer that is
-         *        represented by this object
+         * represented by this object
          */
         BasicPeer(Node *node, u8 *peer_mac_address);
 
@@ -66,7 +66,7 @@ namespace thingnet::peers
          * @brief Allows the peer to run periodic updates.
          * 
          * @return int A non success value will be returned if the add operation
-         *         resulted in an error. See error codes for more information.
+         * resulted in an error. See error codes for more information.
          */
         virtual int update();
 
