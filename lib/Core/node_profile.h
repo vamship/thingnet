@@ -58,8 +58,6 @@ namespace thingnet
 
     protected:
         bool is_initialized;
-
-    protected:
         Node *node;
         Peer *peer_list[__MAX_PEER_COUNT];
         u8 peer_count;
