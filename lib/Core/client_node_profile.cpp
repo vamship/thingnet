@@ -68,12 +68,6 @@ namespace thingnet
 
     Peer *ClientNodeProfile::create_peer(PeerMessage *message)
     {
-        if (!this->is_initialized)
-        {
-            LOG_WARN(logger, "Node profile has not been initialized");
-            return 0;
-        }
-
         if (message->payload.type != MSG_TYPE_ADVERTISEMENT)
         {
             LOG_DEBUG(logger, "Unexpected message [%02x] from [%s]. Ignoring.",
