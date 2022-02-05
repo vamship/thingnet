@@ -25,7 +25,7 @@ namespace thingnet::utils
          * @param pin The GPIO pin number to use to capture the input.
          * @param duration The debounce duration in milliseconds
          * @param trigger_low If set to true, detects a trigger if the input
-         *        is low.
+         * is low.
          */
         DebouncedInput(uint8_t pin, u64 duration, bool trigger_low);
 
